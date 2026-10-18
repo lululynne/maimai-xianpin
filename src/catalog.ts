@@ -1,7 +1,8 @@
 import type { McpReader } from './mcp/client.js';
+import { menuDaypart, type MenuDaypart } from './dayparts.js';
 
 export interface Store { code: string; name: string; address: string; open: boolean; reservationTimeOptions: unknown[] }
-export interface MenuItem { code: string; name: string; image: string; menuPriceCents: number | null; tags: string[] }
+export interface MenuItem { code: string; name: string; image: string; menuPriceCents: number | null; tags: string[]; availableDayparts?: MenuDaypart[] }
 export interface Part { id: string; code: string; name: string; unitPriceCents: number | null; supportModify: boolean }
 export interface Meal extends MenuItem { priceCents: number; parts: Part[]; verifiedAt: number }
 export const STORE_CODES = ['1420082', '1420800', '1420277', '1421248'];
@@ -70,21 +71,27 @@ export class Catalog {
 
   menu(store: string): Promise<MenuItem[]> {
     this.validateStore(store);
-    return this.cached(`menu:${store}`, async () => {
-      const data = unwrap(await this.reader.call('query-meals', { storeCode: store, beType: 1, orderType: 1 }));
+    return this.cached(`menu:${store}:${menuDaypart(this.now())}`, async () => {
+      const result = await this.reader.call('query-meals', { storeCode: store, beType: 1, orderType: 1 });
+      const data = unwrap(result);
+      const availability = (result as any)?._availableDayparts as Record<string, MenuDaypart[]> | undefined;
       const tags = new Map<string, string[]>();
       for (const c of data.categories ?? []) for (const item of c.meals ?? []) tags.set(item.code, item.tags ?? []);
-      return Object.entries(data.meals ?? {}).filter(([, v]: [string, any]) => !v.canWithOrder).map(([code, v]: [string, any]) => ({ code, name: String(v.name), image: /^https:\/\/(menu-img|img)\.mcd\.cn\//.test(v.image) ? v.image : '', menuPriceCents: yuanToCents(v.currentPrice), tags: tags.get(code) ?? [] }));
+      return Object.entries(data.meals ?? {}).filter(([, v]: [string, any]) => !v.canWithOrder).map(([code, v]: [string, any]) => ({ code, name: String(v.name), image: /^https:\/\/(menu-img|img)\.mcd\.cn\//.test(v.image) ? v.image : '', menuPriceCents: yuanToCents(v.currentPrice), tags: tags.get(code) ?? [], ...(availability?.[code] ? { availableDayparts: availability[code] } : {}) }));
     });
   }
 
   async shareableMenu(store: string): Promise<MenuItem[]> {
-    return (await this.menu(store)).filter(m => /双人|多人|组合|件套|分享/.test(m.name + m.tags.join(' ')) || (m.menuPriceCents ?? 0) >= this.minPriceCents);
+    const all = (await this.menu(store)).filter(m => /双人|多人|组合|件套|分享|桶|盒|套餐/.test(m.name + m.tags.join(' ')) || (m.menuPriceCents ?? 0) >= this.minPriceCents);
+    const current = all.filter(m => m.availableDayparts?.includes(menuDaypart(this.now())));
+    // Live menus have no snapshot metadata. Missing demo periods fall back to
+    // all recorded, fully replayable meals without inventing availability.
+    return current.length ? current : all;
   }
 
   private price(store: string, item: Record<string, unknown>): Promise<{ cents: number | null; verifiedAt: number }> {
     const code = String(item.productCode);
-    return this.cached(`price:${store}:${JSON.stringify(item)}`, async () => {
+    return this.cached(`price:${store}:${menuDaypart(this.now())}:${JSON.stringify(item)}`, async () => {
       const result = await this.reader.call('calculate-price', { storeCode: store, beType: 1, orderType: 1, items: [item] });
       return { cents: readProductPrice(unwrap(result), code), verifiedAt: (result as any)._sourceTimestamp ?? this.now() };
     });
@@ -93,7 +100,7 @@ export class Catalog {
   meal(store: string, code: string): Promise<Meal> {
     this.validateStore(store);
     if (!/^\d{1,20}$/.test(code)) throw new Error('INVALID_MEAL');
-    return this.cached(`meal:${store}:${code}`, async () => {
+    return this.cached(`meal:${store}:${code}:${menuDaypart(this.now())}`, async () => {
       const menu = (await this.menu(store)).find(m => m.code === code);
       if (!menu) throw new Error('MEAL_NOT_AVAILABLE');
       const detail = unwrap(await this.reader.call('query-meal-detail', { storeCode: store, beType: 1, orderType: 1, code }));

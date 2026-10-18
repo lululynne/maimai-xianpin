@@ -16,7 +16,7 @@ const speed = mode === 'demo' ? Number(process.env.DEMO_SPEED ?? 1) : 1;
 if (!Number.isFinite(speed) || speed < 1 || speed > 60) throw new Error('INVALID_DEMO_SPEED');
 const base = Date.now();
 const now = () => base + (Date.now() - base) * speed;
-const reader = mode === 'demo' ? new DemoMcpClient(snapshot) : new McdMcpClient(process.env.MCD_MCP_TOKEN ?? '');
+const reader = mode === 'demo' ? new DemoMcpClient(snapshot, now) : new McdMcpClient(process.env.MCD_MCP_TOKEN ?? '');
 const catalog = new Catalog(reader, now, Number(process.env.MIN_SHARE_PRICE_CENTS ?? 3000));
 const repo = new Repository(process.env.DATABASE_PATH || `data/${mode}.sqlite`, mode);
 const groups = new Groups(repo, now);

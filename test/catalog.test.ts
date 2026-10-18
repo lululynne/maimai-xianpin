@@ -3,6 +3,8 @@ import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { Catalog, defaultRounds, readProductPrice, STORE_CODES, yuanToCents } from '../src/catalog.js';
 import { DemoMcpClient } from '../src/mcp/demo.js';
+import { menuDaypart } from '../src/dayparts.js';
+import type { Capture } from '../src/mcp/demo.js';
 
 test('menu yuan strings convert to exact cents', () => {
   assert.equal(yuanToCents('39.9'), 3990);
@@ -22,10 +24,11 @@ test('actual selected quantities take priority over inconsistent default flags',
 
 test('four real store captures replay full combo and unknown individual price faithfully', async () => {
   const snapshot = JSON.parse(await readFile('fixtures/mcp-calls.json', 'utf8'));
-  const demo = new DemoMcpClient(snapshot);
+  const now = () => Date.parse('2026-10-18T00:30:00Z');
+  const demo = new DemoMcpClient(snapshot, now);
   let reads = 0;
   const reader = { call: async (...args: Parameters<typeof demo.call>) => { reads++; return demo.call(...args); } };
-  const catalog = new Catalog(reader);
+  const catalog = new Catalog(reader, now);
   assert.equal((await catalog.stores()).length, 4);
   for (const store of STORE_CODES) {
     const meal = await catalog.meal(store, '9900016136');
@@ -36,4 +39,68 @@ test('four real store captures replay full combo and unknown individual price fa
     assert.deepEqual(await catalog.meal(store, '9900016136'), meal);
     assert.equal(reads, before);
   }
+});
+
+function captureMeal(code: string, name: string, capturedAt: string, cents = 3990, store = STORE_CODES[0]!): Capture[] {
+  const args = { storeCode: store, beType: 1, orderType: 1 };
+  const rounds = [{ id: 1, quantity: 2, choices: [{ code: code + '1', name: '汉堡', quantity: 2 }] }];
+  const make = (tool: string, arguments_: Record<string, unknown>, data: unknown): Capture => ({ name: tool, arguments: arguments_, capturedAt, result: { structuredContent: { success: true, data } } });
+  return [
+    make('query-meals', args, { meals: { [code]: { name, currentPrice: String(cents / 100) } }, categories: [] }),
+    make('query-meal-detail', { ...args, code }, { rounds }),
+    make('calculate-price', { ...args, items: [{ productCode: code, quantity: 1, roundList: defaultRounds({ rounds }) }] }, { productList: [{ productCode: code, quantity: 1, subtotal: cents }] }),
+    make('calculate-price', { ...args, items: [{ productCode: code + '1', quantity: 1 }] }, { productList: [{ productCode: code + '1', quantity: 1, subtotal: 1800 }] }),
+  ];
+}
+
+test('breakfast ends at 10:30 Beijing, regardless of machine timezone', () => {
+  assert.equal(menuDaypart(Date.parse('2026-10-19T02:29:59Z')), 'breakfast');
+  assert.equal(menuDaypart(Date.parse('2026-10-19T02:30:00Z')), 'regular');
+  assert.equal(menuDaypart(Date.parse('2026-10-18T16:00:00Z')), 'breakfast');
+});
+
+test('demo merges periods and filters each store independently, falling back only when needed', async () => {
+  const calls = [
+    ...captureMeal('101', '早餐组合', '2026-10-18T00:12:00Z'),
+    ...captureMeal('102', '拼团全家桶套餐', '2026-10-19T04:00:00Z'),
+    ...captureMeal('103', '麦乐鸡分享盒', '2026-10-19T11:00:00Z'),
+    ...captureMeal('201', '另一店早餐组合', '2026-10-18T00:12:00Z', 3990, STORE_CODES[1]),
+  ];
+  let at = Date.parse('2026-10-19T00:00:00Z');
+  const catalog = new Catalog(new DemoMcpClient({ calls }, () => at), () => at);
+  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['101']);
+  at = Date.parse('2026-10-19T04:00:00Z');
+  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['102', '103']);
+  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[1]!)).map(m => m.code), ['201']);
+  assert.equal((await catalog.meal(STORE_CODES[0]!, '102')).parts.length, 2);
+});
+
+test('same code keeps its period price and invalidates cached detail at the breakfast boundary', async () => {
+  let at = Date.parse('2026-10-19T02:29:00Z');
+  const calls = [...captureMeal('101', '双人餐', '2026-10-18T00:12:00Z', 3900), ...captureMeal('101', '双人餐', '2026-10-19T04:00:00Z', 4900)];
+  const catalog = new Catalog(new DemoMcpClient({ calls }, () => at), () => at);
+  assert.equal((await catalog.meal(STORE_CODES[0]!, '101')).priceCents, 3900);
+  at += 60_000;
+  assert.equal((await catalog.meal(STORE_CODES[0]!, '101')).priceCents, 4900);
+});
+
+test('incomplete detail and empty zero quote never become offered meals', async () => {
+  const complete = captureMeal('101', '早餐组合', '2026-10-18T00:12:00Z');
+  const unfinished = captureMeal('102', '全家桶套餐', '2026-10-19T04:00:00Z').slice(0, 2);
+  const empty = captureMeal('103', '分享盒', '2026-10-19T04:00:00Z');
+  empty[2]!.result.structuredContent.data = { productList: [], price: 0 };
+  const at = () => Date.parse('2026-10-19T04:00:00Z');
+  const catalog = new Catalog(new DemoMcpClient({ calls: [...complete, ...unfinished, ...empty] }, at), at);
+  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['101']);
+});
+
+test('a later partial re-capture cannot hide a previously complete meal or turn unknown price free', async () => {
+  const calls = captureMeal('101', '双人餐', '2026-10-19T04:00:00Z');
+  const partial = captureMeal('101', '双人餐', '2026-10-19T11:00:00Z');
+  partial[1]!.result.structuredContent.data.rounds[0].quantity = 3;
+  partial[1]!.result.structuredContent.data.rounds[0].choices[0].quantity = 3;
+  partial[2]!.result.structuredContent.data = { productList: [], price: 0 };
+  const at = () => Date.parse('2026-10-19T11:30:00Z');
+  const catalog = new Catalog(new DemoMcpClient({ calls: [...calls, ...partial] }, at), at);
+  assert.equal((await catalog.meal(STORE_CODES[0]!, '101')).priceCents, 3990);
 });

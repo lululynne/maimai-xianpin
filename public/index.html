@@ -14,7 +14,7 @@
   <header class="topbar"><a class="wordmark" href="/"><img src="/assets/theme/pindan-icon.png" alt=""><span class="wm-text"><b>麦麦<span>现拼</span></b><small>新鲜拼单 · 省钱满足 · 现场即取</small></span></a><span id="mode-badge" class="badge">连接中</span></header>
   <main>
     <section class="hero">
-      <div><p class="eyebrow">一份大套餐，两份好胃口</p><h1>刚好同一家店，<br>一起吃<span>刚刚好。</span></h1><p class="intro">大套餐一个人吃不完？<br>和同店的人拼一份，各取所需，少一点浪费。</p><div class="hero-notes"><span class="hang y">只到店自取</span><span class="hang r">各自选餐品</span><span class="hang c">算清每人那份</span></div></div>
+      <div><p class="eyebrow">一份大套餐，两份好胃口</p><h1>刚好同一家店，<br>一起拼<span>刚刚好。</span></h1><p class="intro">大套餐一个人吃不完？<br>和同店的人拼一份，各取所需，少一点浪费。</p><div class="hero-notes"><span class="hang y">只到店自取</span><span class="hang r">各自选餐品</span><span class="hang c">算清每人那份</span></div></div>
       <div class="hero-art" aria-label="戴小帽子拿薯条的小粉水母"><img class="mascot" src="/assets/theme/jelly-cap.png" alt=""><span class="art-note hang r">一人吃不完，两人刚刚好</span></div>
     </section>
     <div id="demo-note" class="notice" hidden></div>
@@ -25,7 +25,15 @@
     <section class="how"><h2>现场拼，就三步</h2><div><p><b>01</b><strong>找同店的人</strong><span>选好套餐，留一份给刚好也在的人。</span></p><p><b>02</b><strong>确认各自那份</strong><span>按单点价比例算钱；缺价格时会明确说明。</span></p><p><b>03</b><strong>到店对卡片取餐</strong><span>发起人在官方 App 下单，取到后在这里提醒大家。</span></p></div></section>
     <footer>麦麦现拼 · 独立参赛作品<br>网页不收款、不代下单、不发券。请在官方渠道核对实际价格，线下交接前确认餐品和金额。</footer>
   </main>
-  <dialog id="compose"><div class="dialog-head"><h2>发起一单，留一份刚刚好</h2><button class="close" aria-label="关闭">×</button></div><form id="compose-form"><label>想拼哪个套餐<select id="meal-select" required></select></label><div id="meal-info"></div><div class="form-row"><label>昵称<input name="nickname" maxlength="20" placeholder="起个昵称" required></label><label>手机尾号后四位<input name="tail4" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="仅后四位" required></label></div><div class="form-row"><label>允许几人一起拼<select name="people"><option value="2">最多允许 1 人一起拼单（赶时间）</option><option value="3">最多允许 2 人一起拼单（等得起，更容易拼成）</option></select></label><label>多久后截止<select name="minutes"><option value="10">10 分钟</option><option value="15">15 分钟</option><option value="20">20 分钟</option><option value="30" selected>30 分钟</option><option value="40">40 分钟</option><option value="50">50 分钟</option><option value="60">60 分钟</option></select></label></div><p class="muted">发起后不能延长；到点自动结束招募。</p><button type="submit" class="primary wide">看看有没有相似拼单</button></form></dialog>
+  <dialog id="compose" class="sheet"><div class="dialog-head"><h2>发起拼单</h2><button class="close" aria-label="关闭">×</button></div><form id="compose-form">
+    <input type="hidden" id="meal-select">
+    <section class="step"><h3><b>1</b>选一个想拼的套餐</h3><div id="meal-grid" class="meal-grid"></div></section>
+    <section class="step"><h3><b>2</b>点选你自己要的那几样</h3><p class="muted">没点到的留给拼友。每位拼友至少要留一件。</p><div id="meal-info"></div></section>
+    <section class="step"><h3><b>3</b>最多允许几人一起拼</h3><div class="opt-grid" id="people-grid"><label class="opt"><input type="radio" name="people" value="2" checked><span><b>最多 1 人</b><small>赶时间，拼满就走</small></span></label><label class="opt"><input type="radio" name="people" value="3"><span><b>最多 2 人</b><small>等得起，更容易拼成</small></span></label></div></section>
+    <section class="step"><h3><b>4</b>多久后截止</h3><div class="chip-row"><label class="chip"><input type="radio" name="minutes" value="10"><span>10 分钟</span></label><label class="chip"><input type="radio" name="minutes" value="15"><span>15 分钟</span></label><label class="chip"><input type="radio" name="minutes" value="20"><span>20 分钟</span></label><label class="chip"><input type="radio" name="minutes" value="30" checked><span>30 分钟</span></label><label class="chip"><input type="radio" name="minutes" value="40"><span>40 分钟</span></label><label class="chip"><input type="radio" name="minutes" value="50"><span>50 分钟</span></label><label class="chip"><input type="radio" name="minutes" value="60"><span>60 分钟</span></label></div><p class="muted">发起后不能延长，到点自动结束招募。</p></section>
+    <section class="step"><h3><b>5</b>留个昵称</h3><div class="form-row"><label>昵称<input name="nickname" maxlength="20" placeholder="起个昵称" required></label><label>手机尾号后四位<input name="tail4" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="只防重复，谁都看不到" required></label></div></section>
+    <div class="sheet-bar"><div id="compose-sum"><b>先选一个套餐</b><small>选好后这里算你出多少</small></div><button type="submit" class="primary">看看有没有相似拼单</button></div>
+  </form></dialog>
   <dialog id="similar"><div class="dialog-head ph2"><h2>是否确认下单？</h2><button class="close" aria-label="关闭">×</button></div><div id="similar-content"></div><p class="muted">这里只创建拼单。实际下单由发起人在官方 App / 小程序完成。</p><div class="ft"><button id="similar-back" class="btn-y">再看看</button><button id="confirm-create" class="primary">确认下单</button></div></dialog>
   <dialog id="detail"><div class="dialog-head"><h2>我的小卡片</h2><button class="close" aria-label="关闭">×</button></div><div id="detail-content"></div></dialog>
   <div id="toast" role="status" aria-live="polite" hidden></div>

@@ -129,6 +129,47 @@ footer{font-size:14px}
 .tabs button{font-size:16px}
 #toast{background:var(--ink);border-radius:99px}
 
+/* 发起拼单：分步、可点、带图 */
+dialog.sheet{width:min(560px,100%);max-height:100dvh;height:min(900px,100dvh);margin:auto;padding:0;display:none;flex-direction:column}
+dialog.sheet[open]{display:flex}
+dialog.sheet>form{flex:1;overflow:auto;padding:6px 16px 0}
+.step{padding:12px 0 6px;border-bottom:2px dashed var(--yel-l)}
+.step:last-of-type{border:0}
+.step h3{font-size:17px;margin:4px 0 10px;display:flex;align-items:center;gap:8px}
+.step h3 b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:14px}
+.meal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.meal-tile{background:#fff;border:2px solid var(--yel-l);border-radius:16px;padding:10px;text-align:left;display:flex;flex-direction:column;gap:2px;box-shadow:0 3px 0 var(--yel-l);transition:transform .12s,border-color .12s}
+.meal-tile .pic{display:grid;place-items:center;height:92px;background:#FFF8EC;border-radius:12px;margin-bottom:6px}
+.meal-tile .pic img{max-width:100%;max-height:88px;object-fit:contain}
+.meal-tile b{font-size:14px;line-height:1.35}.meal-tile small{font-size:12px;color:var(--red);font-weight:700}
+.meal-tile.on{border-color:var(--red);box-shadow:0 3px 0 var(--red-d);transform:translateY(-2px)}
+.meal-tile:active,.item-card:active,.opt span:active{transform:scale(.96)}
+.item-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:6px 0 8px}
+.item{margin:0;display:block}
+.item input,.opt input,.chip input{position:absolute;opacity:0;pointer-events:none}
+.item-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;background:#fff;border:2px solid var(--yel-l);border-radius:14px;padding:8px 6px;min-height:118px;transition:transform .12s,border-color .12s,background .12s;cursor:pointer}
+.item-card img{width:52px;height:52px;object-fit:contain}
+.item-card b{font-size:12px;line-height:1.3;color:var(--ink);margin-top:4px}
+.item-card small{font-size:11px;color:var(--mut)}
+.item-card .tick{position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--yel-l);color:transparent;font-style:normal;font-size:13px;font-weight:900;display:grid;place-items:center}
+.item input:checked+.item-card{border-color:var(--red);background:#FFF4F2;animation:pop .25s}
+.item input:checked+.item-card .tick{background:var(--red);border-color:var(--red);color:#fff}
+@keyframes pop{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:none}}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{margin:0;position:relative}
+.opt span{display:flex;flex-direction:column;background:#fff;border:2px solid var(--yel-l);border-radius:14px;padding:12px;cursor:pointer;transition:transform .12s}
+.opt b{font-size:16px;color:var(--ink)}.opt small{font-size:12px;color:var(--mut)}
+.opt input:checked+span{background:var(--yel);border-color:var(--yel);box-shadow:0 3px 0 var(--yel-d)}
+.opt input:disabled+span{opacity:.4}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{margin:0;position:relative}
+.chip span{display:inline-block;background:#fff;border:2px solid var(--yel-l);border-radius:99px;padding:6px 12px;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer}
+.chip input:checked+span{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 3px 0 var(--red-d)}
+.sheet-bar{position:sticky;bottom:0;margin:8px -16px 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:2px solid var(--yel-l);display:flex;align-items:center;gap:10px}
+.sheet-bar #compose-sum{flex:1;min-width:0}.sheet-bar b{display:block;font-size:16px;color:var(--red)}.sheet-bar small{font-size:12px;color:var(--mut)}
+.sheet-bar button{flex-shrink:0}
+@media(max-width:560px){dialog.sheet{width:100%;max-width:100%;height:100dvh;max-height:100dvh;border-radius:0}}
+
 /* 拼友卡：只露昵称、餐品、金额 */
 .mate{display:grid;grid-template-columns:1fr auto;gap:2px 10px;background:#FFF8EC;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:13px}
 .mate b{font-size:14px}.mate span:not(.tag){grid-column:1}.mate .tag{grid-column:2;grid-row:1/3;align-self:center}.mate small{grid-column:1/-1;color:var(--mut);font-size:12px}

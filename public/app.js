@@ -42,7 +42,7 @@ function similarPartsText(parts) {
 const ICON = '/assets/theme/';
 function mealIcon(name = '') {
   // 按剩下的主要餐品配纳纳的食物图标；没有对应的就用拼单图标。
-  const rules = [[/桶|分享|家庭/, 'pindan-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡|麦满分/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
+  const rules = [[/桶|分享|家庭|双人|三人|组合|套/, 'pindan-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡|麦满分/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
   return ICON + (rules.find(([re]) => re.test(name))?.[1] ?? 'pindan-icon') + '.png';
 }
 function friesLoader(text = '正在查看这家店的拼单…') { return `<div class="fries-ld" role="status"><div class="box"><img class="grey" src="${ICON}fries-game-icon.png" alt=""><img class="color" src="${ICON}fries-game-icon.png" alt=""><span class="sp">✦</span><span class="sp">✦</span><span class="sp">✦</span></div><div class="bar"><i></i></div><p>${escape(text)}</p></div>`; }
@@ -109,28 +109,45 @@ async function refreshMine() {
   if ($('#detail').open && state.detail?.viewerId) { const fresh = data.groups.find(g => g.id === state.detail.id); if (fresh) renderDetail(fresh); }
 }
 function checks(parts, selected = [], name = 'partIds') {
-  return `<div class="checks">${parts.map(p => `<label><input type="checkbox" name="${name}" value="${escape(p.id)}" ${selected.includes(p.id) ? 'checked' : ''}><span>${escape(p.name)}${p.supportModify ? '【可特调】' : ''}<small> · 单点 ${p.unitPriceCents === null ? '价格暂缺' : money(p.unitPriceCents)}</small></span></label>`).join('')}</div>`;
+  return `<div class="item-grid">${parts.map(p => `<label class="item"><input type="checkbox" name="${name}" value="${escape(p.id)}" ${selected.includes(p.id) ? 'checked' : ''}><span class="item-card"><i class="tick">✓</i><img src="${mealIcon(p.name)}" alt=""><b>${escape(p.name)}</b><small>${p.unitPriceCents === null ? '单点价暂缺' : '单点 ' + money(p.unitPriceCents)}${p.supportModify ? ' · 可特调' : ''}</small></span></label>`).join('')}</div>`;
+}
+// 发起页底栏：按单点价比例估算我出多少（最终以服务端分摊为准；缺价时按件均分）。
+function updateSum() {
+  const meal = state.selectedMeal; if (!meal) return;
+  const form = $('#compose-form'); const ids = new FormData(form).getAll('partIds');
+  const people = Number(new FormData(form).get('people') ?? 2);
+  const mine = meal.parts.filter(p => ids.includes(p.id));
+  const known = meal.parts.every(p => p.unitPriceCents !== null);
+  const est = known ? Math.round(meal.priceCents * mine.reduce((a, p) => a + p.unitPriceCents, 0) / meal.parts.reduce((a, p) => a + p.unitPriceCents, 0)) : Math.round(meal.priceCents * mine.length / meal.parts.length);
+  const left = meal.parts.length - mine.length;
+  const ok = mine.length && left >= people - 1;
+  $('#compose-sum').innerHTML = ok ? `<b>我出约 ${money(est)}</b><small>拿 ${mine.length} 件 · 留 ${left} 件给最多 ${people - 1} 位拼友</small>` : `<b>${mine.length ? '给拼友多留一件' : '点选你要的'}</b><small>${mine.length ? `允许 ${people - 1} 人时至少留 ${people - 1} 件` : '至少选一件'}</small>`;
+  $('#compose-form button[type="submit"]').disabled = !ok;
 }
 async function selectMeal() {
   $('#meal-info').innerHTML = friesLoader('正在核对套餐和单件价格…');
   const button = $('#compose-form button[type="submit"]'); button.disabled = true;
   state.selectedMeal = null;
+  document.querySelectorAll('.meal-tile').forEach(t => t.classList.toggle('on', t.dataset.code === $('#meal-select').value));
   try {
     const code = $('#meal-select').value;
     const data = await api(`/stores/${$('#store').value}/meals/${code}`);
     if (code !== $('#meal-select').value) return;
     state.selectedMeal = data.meal;
     const meal = data.meal;
-    $('#meal-info').innerHTML = `<p>套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件</p><p class="muted">选你自己要的，剩下的留给拼单的人。当前拼的是下面这份默认搭配。</p>${checks(meal.parts, meal.parts.slice(0, 2).map(p => p.id))}${meal.parts.some(p => p.unitPriceCents === null) ? '<p class="hint">部分单件没有可核对的单点价，这单将整体按餐品件数均分，零头归发起人。</p>' : '<p class="muted">按各自单点价占比分摊套餐价，算到分，零头归发起人。</p>'}`;
-    $('#compose-form [name="people"]').innerHTML = Array.from({ length: Math.min(3, meal.parts.length) - 1 }, (_, i) => `<option value="${i + 2}">最多允许 ${i + 1} 人一起拼单${i ? '（等得起，更容易拼成）' : '（赶时间）'}</option>`).join('');
-  } finally { button.disabled = !state.selectedMeal; }
+    $('#meal-info').innerHTML = `${checks(meal.parts, meal.parts.slice(0, 2).map(p => p.id))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
+    const max = Math.min(3, meal.parts.length);
+    document.querySelectorAll('#people-grid input').forEach(r => { r.disabled = Number(r.value) > max; if (r.disabled && r.checked) document.querySelector('#people-grid input[value="2"]').checked = true; });
+  } catch (e) { $('#meal-info').innerHTML = `<p class="hint">${escape(e.message)}</p>`; }
+  finally { updateSum(); }
 }
 async function compose() {
-  $('#compose').showModal(); $('#meal-info').innerHTML = friesLoader('正在查看这家店的套餐…');
+  $('#compose').showModal(); $('#meal-grid').innerHTML = friesLoader('正在查看这家店的套餐…'); $('#meal-info').innerHTML = '';
   const data = await api(`/stores/${$('#store').value}/meals`); state.meals = data.meals;
-  $('#meal-select').innerHTML = data.meals.map(m => `<option value="${escape(m.code)}">${escape(m.name)}${m.menuPriceCents === null ? '' : ' · ' + money(m.menuPriceCents)}</option>`).join('');
-  if (!data.meals.length) { $('#meal-info').textContent = '这个时段还没有适合拆分的套餐，稍后再看看。'; return; }
-  if (data.meals.some(m => m.code === '9900016136')) $('#meal-select').value = '9900016136';
+  if (!data.meals.length) { $('#meal-grid').innerHTML = '<p class="muted">这个时段还没有适合拆分的套餐，稍后再看看。</p>'; return; }
+  $('#meal-grid').innerHTML = data.meals.map(m => `<button type="button" class="meal-tile" data-code="${escape(m.code)}"><span class="pic"><img src="${mealIcon(m.name)}" alt=""></span><b>${escape(m.name)}</b><small>${m.menuPriceCents === null ? '价格待核' : money(m.menuPriceCents)}${m.tags?.[0] ? ' · ' + escape(m.tags[0]) : ''}</small></button>`).join('');
+  document.querySelectorAll('.meal-tile').forEach(t => t.addEventListener('click', guard(async () => { $('#meal-select').value = t.dataset.code; await selectMeal(); })));
+  $('#meal-select').value = data.meals.some(m => m.code === '9900016136') ? '9900016136' : data.meals[0].code;
   await selectMeal();
 }
 async function reviewDraft(event) {
@@ -179,7 +196,7 @@ document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click',
 $('#store').addEventListener('change', guard(async () => { state.board = []; renderStoreChips(); const s = state.stores.find(s => s.code === $('#store').value); $('#store-address').textContent = s.address + (s.open ? '' : ' · 当前暂停营业'); await refreshBoard(); }));
 $('#refresh').addEventListener('click', guard(() => Promise.all([refreshBoard(), refreshMine()])));
 $('#new-group').addEventListener('click', guard(compose));
-$('#meal-select').addEventListener('change', guard(selectMeal));
+$('#compose-form').addEventListener('change', event => { if (event.target.name === 'partIds' || event.target.name === 'people') updateSum(); });
 $('#compose-form').addEventListener('submit', guard(reviewDraft));
 $('#confirm-create').addEventListener('click', guard(createGroup));
 $('#similar-back').addEventListener('click', () => { $('#similar').close(); $('#compose').showModal(); });

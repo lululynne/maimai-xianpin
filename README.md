@@ -25,6 +25,16 @@ npm run dev
 
 [步骤动图](docs/images/demo-walkthrough.gif) · [多套餐手机广场](docs/images/varied-plaza-mobile-390.jpg) · [桌面截图](docs/images/demo-desktop.jpg) · [手机截图](docs/images/demo-mobile.jpg) · [界面步骤视频](docs/images/demo-walkthrough.mp4)。动图和视频由真实界面状态截图序列组成，非连续屏幕录像。
 
+## 页面预览
+
+[首页与小水母](docs/images/demo-desktop.jpg) · [随机多套餐广场](docs/images/varied-plaza-desktop.jpg) · [完整步骤动图](docs/images/demo-walkthrough.gif)
+
+| 我的拼单 | 等拼补偿（理想版模拟） |
+| --- | --- |
+| ![我的拼单和个人取餐卡](docs/images/my-groups-demo.jpg) | ![等拼补偿和继续等待立减](docs/images/waiting-perks-demo.jpg) |
+
+截图来自当前演示界面。补偿券、继续等待立减和下单付款均为模拟，不发券、不扣款；旧早餐截图不作为当前菜单展示。
+
 ## 真实菜单模式
 
 仅在本地服务端配置自己的 Token：

@@ -28,6 +28,10 @@
 - 另起 demo 专库并设置 60 倍计时，真实运行 47 秒后检查到广场和个人卡片均自动补新，旧卡保持原截止并变 expired；客户端一秒到点检测及常规轮询继续补位；Chrome 不刷新页面也观测到个人卡片两次更换新 ID，控制台无异常。进行中的卡片排在结束记录前面。
 - 当前截图：`docs/images/varied-plaza-desktop.jpg`、`varied-plaza-mobile-390.jpg`、`looping-mine-demo.jpg`。原步骤 GIF/MP4 仍保留为完整取餐流程记录。
 
+## README 关键页面
+
+梅宝提供的四张旧早餐截图仅用于对照。本次 README 展示当前首页、多套餐广场、个人拼单及等拼补偿；新增 `my-groups-demo.jpg`、`waiting-perks-demo.jpg`。后者在真实 Chrome 演示中选择继续等待，3 件 × ¥1.50 = ¥4.50，个人份额由 ¥22.32 显示为 ¥17.82，仍明确标理想版模拟。没有修改单子的原截止时间。
+
 ## 来源与范围
 
 代码和图片许可证官方文本、比赛声明原文字节及 fixture manifest 均按 SHA-256 校验。提交前检查实际 Token 和私密文件未入 Git。真实米末仅作五件文件有限审阅，Codex 逐条裁决，见 [审阅原文和处置](reviews/20261019-mimo-reservation-review.md)。

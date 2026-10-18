@@ -70,6 +70,13 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     }
     return c.json({ group: groups.view(g, c.get('device')) });
   });
+  // 演示发起人名字：最多五个字，同一家店正在拼的单里不重名（梅宝 10-19）
+  const DEMO_NAMES = ['午休水母', '加班猫猫', '等饭小鹿', '路过狐狸', '奶茶续命', '小番茄', '早八人', '阿乌', '芝士', '可乐冰', '薯条控', '麦旋风'];
+  const demoHostName = (store: string) => {
+    const taken = new Set(groups.list(store).flatMap(g => g.members.filter(m => m.id === g.hostId).map(m => m.nickname)));
+    const free = DEMO_NAMES.filter(n => !taken.has(n));
+    return free.length ? free[Math.floor(Math.random() * free.length)] : `拼友${Math.floor(100 + Math.random() * 900)}`;
+  };
   // 演示：给每台设备在「我的拼单」里放一单自己发起、已等了 18 分钟的单；以及把自己那单快进到等满 31 分钟。
   if (mode === 'demo') app.post('/api/demo/mine/seed', async c => {
     const device = c.get('device');
@@ -77,7 +84,7 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     const body = await c.req.json().catch(() => ({}));
     const store = typeof body?.storeCode === 'string' ? body.storeCode : '1420082';
     const meal = await catalog.meal(store, '9900016136');
-    groups.create(device, store, meal, { nickname: ['路过的小狐狸', '午休的水母', '加班的猫猫', '等饭的小鹿'][Math.floor(Math.random() * 4)], tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal), people: 2, minutes: 60 }, now() - 18 * 60_000);
+    groups.create(device, store, meal, { nickname: demoHostName(store), tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal), people: 2, minutes: 60 }, now() - 18 * 60_000);
     return c.json({ seeded: true });
   });
   if (mode === 'demo') app.post('/api/demo/groups/:id/age', c => {

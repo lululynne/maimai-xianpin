@@ -8,6 +8,7 @@ import { Repository } from './db.js';
 import { Groups, pickHostDefault } from './domain/groups.js';
 import { McdMcpClient } from './mcp/client.js';
 import { DemoMcpClient } from './mcp/demo.js';
+import { sampleMeals } from './sample-meals.js';
 
 const mode = process.env.MCD_MODE ?? 'demo';
 if (mode !== 'demo' && mode !== 'live') throw new Error('INVALID_MCD_MODE');
@@ -17,7 +18,7 @@ if (!Number.isFinite(speed) || speed < 1 || speed > 60) throw new Error('INVALID
 const base = Date.now();
 const now = () => base + (Date.now() - base) * speed;
 const reader = mode === 'demo' ? new DemoMcpClient(snapshot, now) : new McdMcpClient(process.env.MCD_MCP_TOKEN ?? '');
-const catalog = new Catalog(reader, now, Number(process.env.MIN_SHARE_PRICE_CENTS ?? 3000));
+const catalog = new Catalog(reader, now, Number(process.env.MIN_SHARE_PRICE_CENTS ?? 3000), mode === 'demo' ? sampleMeals : undefined);
 const repo = new Repository(process.env.DATABASE_PATH || `data/${mode}.sqlite`, mode);
 const groups = new Groups(repo, now);
 repo.sweep(now());

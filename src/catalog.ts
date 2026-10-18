@@ -2,7 +2,7 @@ import type { McpReader } from './mcp/client.js';
 import { menuDaypart, type MenuDaypart } from './dayparts.js';
 
 export interface Store { code: string; name: string; address: string; open: boolean; reservationTimeOptions: unknown[] }
-export interface MenuItem { code: string; name: string; image: string; menuPriceCents: number | null; tags: string[]; availableDayparts?: MenuDaypart[] }
+export interface MenuItem { code: string; name: string; image: string; menuPriceCents: number | null; tags: string[]; availableDayparts?: MenuDaypart[]; sample?: boolean }
 export interface Part { id: string; code: string; name: string; unitPriceCents: number | null; supportModify: boolean }
 export interface Meal extends MenuItem { priceCents: number; parts: Part[]; verifiedAt: number }
 export const STORE_CODES = ['1420082', '1420800', '1420277', '1421248'];
@@ -48,7 +48,7 @@ export function readProductPrice(data: any, code: string): number | null {
 
 export class Catalog {
   private cache = new Map<string, { until: number; value: Promise<any> }>();
-  constructor(private readonly reader: McpReader, private readonly now = Date.now, readonly minPriceCents = 3000) {
+  constructor(private readonly reader: McpReader, private readonly now = Date.now, readonly minPriceCents = 3000, private readonly samples?: (now: number) => Meal[]) {
     if (!Number.isSafeInteger(minPriceCents) || minPriceCents < 0 || minPriceCents > 10_000_000) throw new Error('INVALID_PRICE_THRESHOLD');
   }
 
@@ -82,6 +82,13 @@ export class Catalog {
   }
 
   async shareableMenu(store: string): Promise<MenuItem[]> {
+    const real = await this.realShareableMenu(store);
+    // 演示：真实可拼套餐不足 10 个时补上标「示例」的套餐（见 sample-meals.ts）。
+    if (!this.samples || real.length >= 10) return real;
+    return [...real, ...this.samples(this.now()).filter(s => !real.some(r => r.name === s.name)).map(({ parts, priceCents, verifiedAt, ...item }) => item)];
+  }
+
+  private async realShareableMenu(store: string): Promise<MenuItem[]> {
     const all = (await this.menu(store)).filter(m => /双人|多人|组合|件套|分享|桶|盒|套餐/.test(m.name + m.tags.join(' ')) || (m.menuPriceCents ?? 0) >= this.minPriceCents);
     const current = all.filter(m => m.availableDayparts?.includes(menuDaypart(this.now())));
     // Live menus have no snapshot metadata. Missing demo periods fall back to
@@ -99,6 +106,8 @@ export class Catalog {
 
   meal(store: string, code: string): Promise<Meal> {
     this.validateStore(store);
+    const sample = this.samples?.(this.now()).find(m => m.code === code);
+    if (sample) return Promise.resolve(sample);
     if (!/^\d{1,20}$/.test(code)) throw new Error('INVALID_MEAL');
     return this.cached(`meal:${store}:${code}:${menuDaypart(this.now())}`, async () => {
       const menu = (await this.menu(store)).find(m => m.code === code);

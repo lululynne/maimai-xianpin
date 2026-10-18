@@ -357,3 +357,7 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 .detail-head h3{margin:0 0 4px}
 .detail-head p{margin:0;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .detail-head .clock-ico{width:20px;height:20px;object-fit:contain}
+
+/* 示例套餐标记：演示里补的套餐一律标「示例」（10-19 02:3x） */
+.sample-tag{display:inline-block;font-style:normal;font-size:11px;font-weight:800;line-height:1.5;color:#fff;background:var(--ink);border-radius:6px;padding:0 6px;margin:0 0 0 6px;vertical-align:3px}
+.meal-tile{position:relative}.meal-tile .sample-tag{position:absolute;top:6px;right:6px;margin:0}

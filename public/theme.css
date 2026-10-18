@@ -350,3 +350,10 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 .how>div p .how-ico{justify-self:center}
 .how>div p:nth-child(1) .how-ico,.how>div p:nth-child(3) .how-ico{width:136px;height:136px}
 .how>div p:nth-child(2) .how-ico{width:108px;height:108px}
+
+/* 小卡片弹窗顶部：左边麦麦现拼纸袋图标，右边套餐名和状态；倒计时前加计时器图标（梅宝 10-19 01:57） */
+.detail-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.detail-head>img{width:72px;height:66px;object-fit:contain;flex-shrink:0}
+.detail-head h3{margin:0 0 4px}
+.detail-head p{margin:0;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.detail-head .clock-ico{width:20px;height:20px;object-fit:contain}

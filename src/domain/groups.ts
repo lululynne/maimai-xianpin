@@ -182,7 +182,7 @@ export class Groups {
           const used = new Set<string>();
           for (const m of g.members) { let code; do code = String(randomInt(1000, 10000)); while (used.has(code)); used.add(code); m.pickupCode = code; }
         } else {
-          if (g.state !== 'ordered') fail('请先在官方渠道下单并标记已下单', 409);
+          if (g.state !== 'ordered') fail('发起人还没下单', 409);
           g.state = 'picked-up';
           g.pickedUpAt = this.now();
           for (const m of g.members) m.collectedAt ??= this.now();

@@ -1,0 +1,24 @@
+{
+  "name": "maimai-xianpin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "test": "node --import tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "probe:mcp": "node --env-file-if-exists=.env --import tsx scripts/probe-mcp.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "2.1.5",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "hono": "4.13.13"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

@@ -349,3 +349,4 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 .how>div p{grid-template-columns:136px 1fr}
 .how>div p .how-ico{justify-self:center}
 .how>div p:nth-child(1) .how-ico,.how>div p:nth-child(3) .how-ico{width:136px;height:136px}
+.how>div p:nth-child(2) .how-ico{width:108px;height:108px}

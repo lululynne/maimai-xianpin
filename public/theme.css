@@ -64,6 +64,14 @@ button{border-radius:99px;font-weight:800}
 .card.mine{border-color:var(--yel)}
 .card img.food{width:66px;height:56px;object-fit:contain;mix-blend-mode:normal;align-self:center;flex-shrink:0}
 .card .t{flex:1;min-width:0}
+.card{position:relative;padding-top:46px}
+.card .t b{padding-right:0}
+.corner{position:absolute;top:10px;right:12px;display:inline-flex;align-items:center;gap:4px;background:#FFF1F0;color:var(--red);border:2px solid #F6B3AC;border-radius:99px;padding:2px 10px 2px 4px;font-size:14px;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.corner img{width:24px;height:24px;object-fit:contain}
+.corner.ready{background:#FFF8E1;color:var(--ink);border-color:var(--yel)}
+.corner.done{background:#EEF7EE;color:#2e7d32;border-color:#b7dfb9;padding-left:10px}
+.card.urgent .corner{background:var(--red);color:#fff;border-color:var(--red);animation:tick 1s infinite}
+@keyframes tick{50%{transform:scale(1.06)}}
 .card .t b{display:block;font-size:15px}
 .card .t b em{font-style:normal;white-space:nowrap;display:inline-block;font-size:11px;font-weight:700;background:var(--yel);border-radius:99px;padding:1px 7px;margin-left:6px;vertical-align:2px}
 .card .t .meal-name{color:var(--ink);font-weight:600}

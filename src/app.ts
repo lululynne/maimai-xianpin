@@ -77,7 +77,7 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     const body = await c.req.json().catch(() => ({}));
     const store = typeof body?.storeCode === 'string' ? body.storeCode : '1420082';
     const meal = await catalog.meal(store, '9900016136');
-    groups.create(device, store, meal, { nickname: '我', tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal), people: 2, minutes: 60 }, now() - 18 * 60_000);
+    groups.create(device, store, meal, { nickname: ['路过的小狐狸', '午休的水母', '加班的猫猫', '等饭的小鹿'][Math.floor(Math.random() * 4)], tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal), people: 2, minutes: 60 }, now() - 18 * 60_000);
     return c.json({ seeded: true });
   });
   if (mode === 'demo') app.post('/api/demo/groups/:id/age', c => {

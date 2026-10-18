@@ -137,10 +137,18 @@ const DRINK = /可乐|雪碧|芬达|咖|美式|拿铁|奶铁|卡布|浓缩|茶|�
 const MAIN = /堡|麦满分|营养卷|卷|鸡腿|鸡翅|鸡块|麦乐鸡|鸡排|粥|饭|面|扒|肠/;
 const kindOf = name => DRINK.test(name) ? 'drink' : MAIN.test(name) ? 'main' : 'other';
 const KIND_LABEL = { drink: '饮料', main: '主食', other: '小食' };
-const hostRule = meal => meal.parts.length >= 4 && meal.parts.some(p => kindOf(p.name) === 'drink') && meal.parts.some(p => kindOf(p.name) === 'main');
+// 4 件以上至少 1 饮料 + 1 主食；6 件以上至少 2 + 2；主食两份以上时给拼友留一份。
+function hostNeeds(meal) {
+  const drinks = meal.parts.filter(p => kindOf(p.name) === 'drink').length, mains = meal.parts.filter(p => kindOf(p.name) === 'main').length;
+  if (meal.parts.length < 4 || !drinks || !mains) return { drink: 0, main: 0 };
+  const need = meal.parts.length >= 6 ? 2 : 1;
+  return { drink: Math.min(need, drinks), main: mains >= 2 ? Math.max(1, Math.min(need, mains - 1)) : 1 };
+}
+const hostRule = meal => hostNeeds(meal).main > 0;
 function hostDefault(meal) {
-  const main = meal.parts.find(p => kindOf(p.name) === 'main'), drink = meal.parts.find(p => kindOf(p.name) === 'drink');
-  return hostRule(meal) && main && drink ? [main.id, drink.id] : meal.parts.slice(0, 2).map(p => p.id);
+  const n = hostNeeds(meal);
+  if (!n.main) return meal.parts.slice(0, 2).map(p => p.id);
+  return [...meal.parts.filter(p => kindOf(p.name) === 'main').slice(0, n.main), ...meal.parts.filter(p => kindOf(p.name) === 'drink').slice(0, n.drink)].map(p => p.id);
 }
 function checks(parts, selected = [], name = 'partIds') {
   return `<div class="item-grid">${parts.map(p => `<label class="item"><input type="checkbox" name="${name}" value="${escape(p.id)}" ${selected.includes(p.id) ? 'checked' : ''}><span class="item-card"><i class="tick">✓</i><em class="kind ${kindOf(p.name)}">${KIND_LABEL[kindOf(p.name)]}</em><img src="${mealIcon(p.name)}" alt=""><b>${escape(p.name)}</b><small>${p.unitPriceCents === null ? '单点价暂缺' : '单点 ' + money(p.unitPriceCents)}${p.supportModify ? ' · 可特调' : ''}</small></span></label>`).join('')}</div>`;
@@ -154,11 +162,12 @@ function updateSum() {
   const known = meal.parts.every(p => p.unitPriceCents !== null);
   const est = known ? Math.round(meal.priceCents * mine.reduce((a, p) => a + p.unitPriceCents, 0) / meal.parts.reduce((a, p) => a + p.unitPriceCents, 0)) : Math.round(meal.priceCents * mine.length / meal.parts.length);
   const left = meal.parts.length - mine.length;
-  const needMix = hostRule(meal) && !(mine.some(p => kindOf(p.name) === 'drink') && mine.some(p => kindOf(p.name) === 'main'));
+  const nd = hostNeeds(meal);
+  const needMix = nd.main > 0 && (mine.filter(p => kindOf(p.name) === 'drink').length < nd.drink || mine.filter(p => kindOf(p.name) === 'main').length < nd.main);
   const mainsAll = meal.parts.filter(p => kindOf(p.name) === 'main').length;
   const tookAllMains = hostRule(meal) && mainsAll >= 2 && mine.filter(p => kindOf(p.name) === 'main').length >= mainsAll;
   const ok = mine.length && left >= people - 1 && !needMix && !tookAllMains;
-  $('#compose-sum').innerHTML = ok ? `<b>我出约 ${money(est)}</b><small>拿 ${mine.length} 件 · 留 ${left} 件给最多 ${people - 1} 位拼友</small>` : `<b>${!mine.length ? '点选你要的' : needMix ? '还差饮料或主食' : tookAllMains ? '给拼友留一份主食' : '给拼友多留一件'}</b><small>${!mine.length ? '至少选一件' : needMix ? '发起人至少 1 饮料 + 1 主食' : tookAllMains ? '主食不能全拿走' : `允许 ${people - 1} 人时至少留 ${people - 1} 件`}</small>`;
+  $('#compose-sum').innerHTML = ok ? `<b>我出约 ${money(est)}</b><small>拿 ${mine.length} 件 · 留 ${left} 件给最多 ${people - 1} 位拼友</small>` : `<b>${!mine.length ? '点选你要的' : needMix ? '还差饮料或主食' : tookAllMains ? '给拼友留一份主食' : '给拼友多留一件'}</b><small>${!mine.length ? '至少选一件' : needMix ? `发起人至少 ${nd.drink} 饮料 + ${nd.main} 主食` : tookAllMains ? '主食不能全拿走' : `允许 ${people - 1} 人时至少留 ${people - 1} 件`}</small>`;
   $('#compose-form button[type="submit"]').disabled = !ok;
 }
 async function selectMeal() {
@@ -172,7 +181,7 @@ async function selectMeal() {
     if (code !== $('#meal-select').value) return;
     state.selectedMeal = data.meal;
     const meal = data.meal;
-    $('#meal-info').innerHTML = `${hostRule(meal) ? '<p class="rule">这是 4 件以上的套餐：发起人至少拿 <b>1 份饮料 + 1 份主食</b>。等待补偿归你，饮料的溢价也由你担；主食不能全拿走，给拼友留一份。</p>' : ''}${checks(meal.parts, hostDefault(meal))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
+    $('#meal-info').innerHTML = `${hostRule(meal) ? `<p class="rule">这是 ${meal.parts.length} 件的套餐：发起人至少拿 <b>${hostNeeds(meal).drink} 份饮料 + ${hostNeeds(meal).main} 份主食</b>。等待补偿归你，饮料的溢价也由你担；主食不能全拿走，给拼友留一份。</p>` : ''}${checks(meal.parts, hostDefault(meal))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
     const max = Math.min(3, meal.parts.length);
     document.querySelectorAll('#people-grid input').forEach(r => { r.disabled = Number(r.value) > max; if (r.disabled && r.checked) document.querySelector('#people-grid input[value="2"]').checked = true; });
   } catch (e) { $('#meal-info').innerHTML = `<p class="hint">${escape(e.message)}</p>`; }

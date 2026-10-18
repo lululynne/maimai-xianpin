@@ -4,7 +4,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Repository } from '../src/db.js';
-import { Groups, identity, windowAt, hostPickRule, pickHostDefault } from '../src/domain/groups.js';
+import { Groups, identity, windowAt, hostPickRule, pickHostDefault, hostNeeds } from '../src/domain/groups.js';
 import type { Meal } from '../src/catalog.js';
 
 const repos: Repository[] = [];
@@ -229,4 +229,19 @@ test('host of a 4+ item meal must take at least one drink and one main', () => {
   assert.deepEqual(pickHostDefault(named), ['n0', 'n3']);
   const small: Meal = { ...named, parts: named.parts.slice(0, 3) };
   assert.equal(hostPickRule(small), false);
+});
+
+test('6+ item meals require 2 drinks + 2 mains, still leaving a main for joiners', () => {
+  const s = setup();
+  const mk = (names: string[]): Meal => ({ ...meal, parts: names.map((name, i) => ({ id: `b${i}`, name, code: String(i), unitPriceCents: 1000, supportModify: false })) });
+  const bucket = mk(['麦辣鸡腿堡', '板烧鸡腿堡', '麦乐鸡', '薯条', '可乐', '可乐', '雪碧', '派']);
+  assert.deepEqual(hostNeeds(bucket), { drink: 2, main: 2 });
+  const make = (m: Meal, partIds: string[]) => s.groups.create('h', '1420082', m, { nickname: '小林', tail4: '1000', partIds, people: 3 });
+  assert.throws(() => make(bucket, ['b0', 'b4']), /至少要拿 2 份饮料 \+ 2 份主食/);
+  assert.throws(() => make(bucket, ['b0', 'b1', 'b2', 'b4', 'b5']), /至少给拼友留一份主食/);
+  assert.ok(make(bucket, ['b0', 'b1', 'b4', 'b5']));
+  assert.deepEqual(pickHostDefault(bucket), ['b0', 'b1', 'b4', 'b5']);
+  const twoMains = mk(['麦辣鸡腿堡', '板烧鸡腿堡', '薯条', '可乐', '可乐', '派']);
+  assert.deepEqual(hostNeeds(twoMains), { drink: 2, main: 1 }, '只有两份主食时只要求 1 份，另一份留给拼友');
+  assert.deepEqual(hostNeeds(mk(['堡', '可乐', '薯条', '派'])), { drink: 1, main: 1 });
 });

@@ -30,13 +30,18 @@ export const MAX_PEOPLE = 3;
 export const DRINK = /可乐|雪碧|芬达|咖|美式|拿铁|奶铁|卡布|浓缩|茶|饮|豆浆|牛奶|奶昔|果汁|橙|柠|水|怡泉/;
 export const MAIN = /堡|麦满分|营养卷|卷|鸡腿|鸡翅|鸡块|麦乐鸡|鸡排|粥|饭|面|扒|肠/;
 export const kindOf = (name: string): 'drink' | 'main' | 'other' => DRINK.test(name) ? 'drink' : MAIN.test(name) ? 'main' : 'other';
-export function hostPickRule(meal: Meal) {
-  const kinds = meal.parts.map(p => kindOf(p.name));
-  return meal.parts.length >= 4 && kinds.includes('drink') && kinds.includes('main');
+// 6 件及以上的大套餐升级为至少「2 饮料 + 2 主食」（梅宝 10-19 00:4x：不让发起人只点最少的东西蹭整套优惠、还不点饮料，拼友不被迫买单）。
+// 主食两份以上时至少给拼友留一份主食，所以主食要求最多到「主食总数 − 1」。
+export function hostNeeds(meal: Meal): { drink: number; main: number } {
+  const drinks = meal.parts.filter(p => kindOf(p.name) === 'drink').length, mains = meal.parts.filter(p => kindOf(p.name) === 'main').length;
+  if (meal.parts.length < 4 || !drinks || !mains) return { drink: 0, main: 0 };
+  const need = meal.parts.length >= 6 ? 2 : 1;
+  return { drink: Math.min(need, drinks), main: mains >= 2 ? Math.max(1, Math.min(need, mains - 1)) : 1 };
 }
+export function hostPickRule(meal: Meal) { return hostNeeds(meal).main > 0; }
 export function pickHostDefault(meal: Meal, count = 2): string[] {
-  const main = meal.parts.find(p => kindOf(p.name) === 'main'); const drink = meal.parts.find(p => kindOf(p.name) === 'drink');
-  const first = hostPickRule(meal) && main && drink ? [main.id, drink.id] : [];
+  const n = hostNeeds(meal);
+  const first = [...meal.parts.filter(p => kindOf(p.name) === 'main').slice(0, n.main), ...meal.parts.filter(p => kindOf(p.name) === 'drink').slice(0, n.drink)].map(p => p.id);
   return [...first, ...meal.parts.map(p => p.id).filter(id => !first.includes(id))].slice(0, Math.max(count, first.length));
 }
 // 梅宝定的等待补偿（理想版，只给发起人）：等满 15 分钟送 2 元券（10-19 并档：原 30 分钟 5 元档并入 30 分钟弹窗）；
@@ -76,12 +81,14 @@ export class Groups {
     if (!Number.isInteger(people) || people < 2 || people > Math.min(MAX_PEOPLE, meal.parts.length)) fail('一份套餐最多三人拼：发起人最多再允许 2 人加入');
     const partIds = choose(input.partIds, meal.parts.map(p => p.id));
     if (partIds.length > meal.parts.length - people + 1) fail('请为其他每个人至少留一件餐品');
-    if (hostPickRule(meal)) {
+    const needs = hostNeeds(meal);
+    if (needs.main) {
       const kinds = partIds.map(id => kindOf(meal.parts.find(p => p.id === id)!.name));
-      if (!kinds.includes('drink') || !kinds.includes('main')) fail('4 件以上的套餐，发起人至少要拿 1 份饮料 + 1 份主食');
-      // 对称的另一半（阿景补）：套餐里主食有两份以上时，发起人不能把主食全拿走，剩给拼友的那份里至少留一份主食。
+      const took = { drink: kinds.filter(k => k === 'drink').length, main: kinds.filter(k => k === 'main').length };
+      if (took.drink < needs.drink || took.main < needs.main) fail(`${meal.parts.length} 件的套餐，发起人至少要拿 ${needs.drink} 份饮料 + ${needs.main} 份主食`);
+      // 对称的另一半（阿景补）：主食两份以上时不能全拿走，至少给拼友留一份。
       const mains = meal.parts.filter(p => kindOf(p.name) === 'main').length;
-      if (mains >= 2 && kinds.filter(k => k === 'main').length >= mains) fail('主食不能全拿走，至少给拼友留一份主食');
+      if (mains >= 2 && took.main >= mains) fail('主食不能全拿走，至少给拼友留一份主食');
     }
     return this.repo.transaction(() => {
       this.repo.sweep(this.now());

@@ -123,6 +123,9 @@ input,form select,.checks{border:1.5px solid var(--yel-l);border-radius:12px;bac
 .actions button:not(.primary):not(.btn-y){background:#fff;border:1.5px solid var(--yel)}
 
 .how b{color:var(--red);font-size:16px}
+.how>div p{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;column-gap:14px;align-items:start;padding-left:0!important}
+.how>div p .how-ico{grid-row:1/4;width:72px;height:72px;object-fit:contain;align-self:center}
+.how>div p b,.how>div p strong,.how>div p span{grid-column:2;position:static!important}
 .how h2{font-size:24px}.how strong{font-size:18px}.how span{font-size:16px}
 footer{font-size:14px}
 .section-note{font-size:15px}

@@ -155,8 +155,10 @@ function updateSum() {
   const est = known ? Math.round(meal.priceCents * mine.reduce((a, p) => a + p.unitPriceCents, 0) / meal.parts.reduce((a, p) => a + p.unitPriceCents, 0)) : Math.round(meal.priceCents * mine.length / meal.parts.length);
   const left = meal.parts.length - mine.length;
   const needMix = hostRule(meal) && !(mine.some(p => kindOf(p.name) === 'drink') && mine.some(p => kindOf(p.name) === 'main'));
-  const ok = mine.length && left >= people - 1 && !needMix;
-  $('#compose-sum').innerHTML = ok ? `<b>我出约 ${money(est)}</b><small>拿 ${mine.length} 件 · 留 ${left} 件给最多 ${people - 1} 位拼友</small>` : `<b>${!mine.length ? '点选你要的' : needMix ? '还差饮料或主食' : '给拼友多留一件'}</b><small>${!mine.length ? '至少选一件' : needMix ? '发起人至少 1 饮料 + 1 主食' : `允许 ${people - 1} 人时至少留 ${people - 1} 件`}</small>`;
+  const mainsAll = meal.parts.filter(p => kindOf(p.name) === 'main').length;
+  const tookAllMains = hostRule(meal) && mainsAll >= 2 && mine.filter(p => kindOf(p.name) === 'main').length >= mainsAll;
+  const ok = mine.length && left >= people - 1 && !needMix && !tookAllMains;
+  $('#compose-sum').innerHTML = ok ? `<b>我出约 ${money(est)}</b><small>拿 ${mine.length} 件 · 留 ${left} 件给最多 ${people - 1} 位拼友</small>` : `<b>${!mine.length ? '点选你要的' : needMix ? '还差饮料或主食' : tookAllMains ? '给拼友留一份主食' : '给拼友多留一件'}</b><small>${!mine.length ? '至少选一件' : needMix ? '发起人至少 1 饮料 + 1 主食' : tookAllMains ? '主食不能全拿走' : `允许 ${people - 1} 人时至少留 ${people - 1} 件`}</small>`;
   $('#compose-form button[type="submit"]').disabled = !ok;
 }
 async function selectMeal() {
@@ -170,7 +172,7 @@ async function selectMeal() {
     if (code !== $('#meal-select').value) return;
     state.selectedMeal = data.meal;
     const meal = data.meal;
-    $('#meal-info').innerHTML = `${hostRule(meal) ? '<p class="rule">这是 4 件以上的套餐：发起人至少拿 <b>1 份饮料 + 1 份主食</b>。等待补偿归你，饮料的溢价也由你担。</p>' : ''}${checks(meal.parts, hostDefault(meal))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
+    $('#meal-info').innerHTML = `${hostRule(meal) ? '<p class="rule">这是 4 件以上的套餐：发起人至少拿 <b>1 份饮料 + 1 份主食</b>。等待补偿归你，饮料的溢价也由你担；主食不能全拿走，给拼友留一份。</p>' : ''}${checks(meal.parts, hostDefault(meal))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
     const max = Math.min(3, meal.parts.length);
     document.querySelectorAll('#people-grid input').forEach(r => { r.disabled = Number(r.value) > max; if (r.disabled && r.checked) document.querySelector('#people-grid input[value="2"]').checked = true; });
   } catch (e) { $('#meal-info').innerHTML = `<p class="hint">${escape(e.message)}</p>`; }

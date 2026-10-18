@@ -79,6 +79,9 @@ export class Groups {
     if (hostPickRule(meal)) {
       const kinds = partIds.map(id => kindOf(meal.parts.find(p => p.id === id)!.name));
       if (!kinds.includes('drink') || !kinds.includes('main')) fail('4 件以上的套餐，发起人至少要拿 1 份饮料 + 1 份主食');
+      // 对称的另一半（阿景补）：套餐里主食有两份以上时，发起人不能把主食全拿走，剩给拼友的那份里至少留一份主食。
+      const mains = meal.parts.filter(p => kindOf(p.name) === 'main').length;
+      if (mains >= 2 && kinds.filter(k => k === 'main').length >= mains) fail('主食不能全拿走，至少给拼友留一份主食');
     }
     return this.repo.transaction(() => {
       this.repo.sweep(this.now());

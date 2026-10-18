@@ -224,6 +224,7 @@ test('host of a 4+ item meal must take at least one drink and one main', () => {
   const make = (partIds: string[]) => s.groups.create('h', '1420082', named, { nickname: '小林', tail4: '1000', partIds, people: 2 });
   assert.throws(() => make(['n0', 'n1']), /1 份饮料 \+ 1 份主食/);
   assert.throws(() => make(['n3']), /1 份饮料 \+ 1 份主食/);
+  assert.throws(() => make(['n0', 'n1', 'n3']), /至少给拼友留一份主食/);
   assert.ok(make(['n0', 'n3']));
   assert.deepEqual(pickHostDefault(named), ['n0', 'n3']);
   const small: Meal = { ...named, parts: named.parts.slice(0, 3) };

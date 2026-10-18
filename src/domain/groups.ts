@@ -42,7 +42,17 @@ export function hostPickRule(meal: Meal) { return hostNeeds(meal).main > 0; }
 export function pickHostDefault(meal: Meal, count = 2): string[] {
   const n = hostNeeds(meal);
   const first = [...meal.parts.filter(p => kindOf(p.name) === 'main').slice(0, n.main), ...meal.parts.filter(p => kindOf(p.name) === 'drink').slice(0, n.drink)].map(p => p.id);
-  return [...first, ...meal.parts.map(p => p.id).filter(id => !first.includes(id))].slice(0, Math.max(count, first.length));
+  // 补齐到 count 件时先补小食和饮料，主食最多补到「主食总数 − 1」，不违反留主食规则。
+  const mains = meal.parts.filter(p => kindOf(p.name) === 'main').length;
+  const order = [...meal.parts.filter(p => kindOf(p.name) !== 'main'), ...meal.parts.filter(p => kindOf(p.name) === 'main')];
+  const picked = [...first];
+  for (const p of order) {
+    if (picked.length >= count) break;
+    if (picked.includes(p.id)) continue;
+    if (kindOf(p.name) === 'main' && n.main && mains >= 2 && picked.filter(id => kindOf(meal.parts.find(q => q.id === id)!.name) === 'main').length >= mains - 1) continue;
+    picked.push(p.id);
+  }
+  return picked;
 }
 // 梅宝定的等待补偿（理想版，只给发起人）：等满 15 分钟送 2 元券（10-19 并档：原 30 分钟 5 元档并入 30 分钟弹窗）；
 // 等满 30 分钟弹窗：单点 8.5 折，或继续等待按自己那几样每样立减 1.5 元；继续等待后也可「不等了，整套餐下单」。

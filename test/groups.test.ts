@@ -245,3 +245,12 @@ test('6+ item meals require 2 drinks + 2 mains, still leaving a main for joiners
   assert.deepEqual(hostNeeds(twoMains), { drink: 2, main: 1 }, '只有两份主食时只要求 1 份，另一份留给拼友');
   assert.deepEqual(hostNeeds(mk(['堡', '可乐', '薯条', '派'])), { drink: 1, main: 1 });
 });
+
+test('pickHostDefault never takes every main when filling up', () => {
+  const m: Meal = { ...meal, parts: ['猪柳堡', '板烧鸡腿麦满分', '脆薯饼', '鲜萃冰咖', '鲜萃冰咖'].map((name, i) => ({ id: `d${i}`, name, code: String(i), unitPriceCents: 1000, supportModify: false })) };
+  for (const count of [2, 3, 4]) {
+    const ids = pickHostDefault(m, count);
+    assert.ok(ids.includes('d0') && ids.includes('d3'));
+    assert.ok(!(ids.includes('d0') && ids.includes('d1')), `count ${count}`);
+  }
+});

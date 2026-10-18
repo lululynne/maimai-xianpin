@@ -307,7 +307,8 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 /* 拼单卡 v2（10-19 梅宝说「怪怪的」后重排）：头部一行（托盘图标·谁·还差几人·角标）→ 套餐名 → 剩下的餐品小胶囊 → 底部价钱和按钮 */
 .card.v2{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:14px 16px 16px}
 .card.v2 .c-head{display:flex;align-items:center;gap:10px;min-width:0}
-.card.v2 img.food{width:52px;height:44px;flex-shrink:0;margin:0}
+.card.v2 img.food{width:84px;height:68px;flex-shrink:0;margin:0}
+@media(max-width:560px){.card.v2 img.food{width:72px;height:58px}}
 .card.v2 .who{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px}
 .card.v2 .who b{font-size:16px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .card.v2 .who .need{font-size:13px;font-weight:700;color:var(--red-d);white-space:nowrap}

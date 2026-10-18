@@ -27,6 +27,7 @@ export function writeProgress() {
     '# 麦麦现拼 · 20261019 补菜单进度', '',
     `更新：${new Date().toISOString()}。真实采集未完成前不记为完成；390px 发起页截图与新界面媒体仍待真实菜单到齐后验。`, '',
     '分支：ui/nana-mcd-theme；保留 4c68d1d 的主题和 84/72px 托盘。main 尚未合并本批次。', '',
+    `当前本机代码提交：${git('rev-parse', 'HEAD')}。`, '',
   ];
   for (const p of ['lunch', 'dinner']) {
     const report = load(`.local/menu-captures/${date}-${p}.json`);

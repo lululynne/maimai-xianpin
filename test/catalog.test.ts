@@ -24,10 +24,11 @@ test('actual selected quantities take priority over inconsistent default flags',
 
 test('four real store captures replay full combo and unknown individual price faithfully', async () => {
   const snapshot = JSON.parse(await readFile('fixtures/mcp-calls.json', 'utf8'));
-  const demo = new DemoMcpClient(snapshot);
+  const now = () => Date.parse('2026-10-18T00:30:00Z');
+  const demo = new DemoMcpClient(snapshot, now);
   let reads = 0;
   const reader = { call: async (...args: Parameters<typeof demo.call>) => { reads++; return demo.call(...args); } };
-  const catalog = new Catalog(reader);
+  const catalog = new Catalog(reader, now);
   assert.equal((await catalog.stores()).length, 4);
   for (const store of STORE_CODES) {
     const meal = await catalog.meal(store, '9900016136');

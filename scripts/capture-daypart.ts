@@ -117,6 +117,7 @@ export async function captureDaypart(date: string, period: string) {
         const menu = await catalog.shareableMenu(store.storeCode);
         // Count this round's successful meals, never breakfast fallback.
         store.offered = menu.filter(m => store.captured.some((c: any) => c.code === m.code)).map(m => ({ code: m.code, name: m.name }));
+        if (store.offered.length < 10) report.status = 'partial';
       }
     } catch { report.errors.push('MCD_FIXTURE_MERGE_FAILED'); report.status = 'partial'; }
     await saveReport();

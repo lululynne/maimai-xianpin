@@ -64,7 +64,7 @@ function simBlock(g, own) {
   const counter = ['ordered', 'picked-up'].includes(g.state) ? (state.counter?.id === g.id ? `<div class="counter"><div class="counter-head">门店视角 · 一单 ${state.counter.members.length} 个取餐码<em>理想版模拟</em></div>${state.counter.members.map(m => `<div class="code-row ${own && m.nickname === own.nickname ? 'me' : ''}"><b>${escape(m.pickupCode)}</b><span>@${escape(m.nickname)} · ${escape(m.parts.join('、'))}</span><small>尾号 ${escape(m.tail4)} · ${m.collected ? '已取走' : '待取'}</small></div>`).join('')}<p>只有门店能看到这张表。每个码只对应自己那几样，凭一个码拿不走整份。</p></div>` : '<button class="sm-link" data-counter>演示：切到门店视角（只有门店看得到所有尾号和取餐码）</button>') : '';
   if (!g.isHost) return counter;
   const yuan = g.idealCouponYuan;
-  const coupon = yuan ? `<div class="coupon"><div class="c-amt">¥${yuan}</div><div class="c-txt"><b>等拼补偿券 · 发起人专享</b><span>${g.state === 'expired' ? '没拼成也不白等' : '你这单已经等了 ' + Math.floor(g.waitedMs / 60000) + ' 分钟'}</span><small>等满 15 分钟 2 元 · 超过 30 分钟 5 元 · 每人每天一张 · 自己取消不给 · 理想版模拟，不是真券</small></div></div>` : (g.state === 'open' ? `<p class="muted">已等待 ${Math.floor(g.waitedMs / 60000)} 分钟。等满 15 分钟，理想版会给发起人 2 元补偿券；超过 30 分钟 5 元。</p>` : '');
+  const coupon = yuan ? `<div class="coupon"><div class="c-amt">¥${yuan}</div><div class="c-txt"><b>等拼补偿券 · 发起人专享</b><span>${g.state === 'expired' ? '没拼成也不白等' : '你这单已经等了 ' + Math.floor(g.waitedMs / 60000) + ' 分钟'}</span><small>等满 15 分钟送 2 元 · 等满 30 分钟还可选单点 8.5 折或继续等每样立减 1.5 元 · 每人每天一张 · 自己取消不给 · 理想版模拟，不是真券</small></div></div>` : (g.state === 'open' ? `<p class="muted">已等待 ${Math.floor(g.waitedMs / 60000)} 分钟。等满 15 分钟，理想版会给发起人 2 元补偿券；等满 30 分钟会弹窗让你选单点 8.5 折或继续等待立减。</p>` : '');
   const k = g.perk ?? {};
   const hostM = g.members.find(m => m.id === g.hostId);
   const perks = [

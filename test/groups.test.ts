@@ -170,6 +170,7 @@ test('waiting coupons and 30-minute choices belong to the host only', () => {
   const g = s.create('host', '1000', 60, 3);
   s.advance(16 * 60_000);
   assert.equal(s.groups.view(s.groups.get(g.id), 'host').idealCouponYuan, 2);
+  s.advance(0);
   s.groups.join(g.id, 'guest', { nickname: '小圆', tail4: '2000', partIds: ['p2'] });
   assert.equal(s.groups.view(s.groups.get(g.id), 'guest').idealCouponYuan, 0);
   assert.equal(s.groups.view(s.groups.get(g.id), 'guest').perk, undefined);
@@ -177,6 +178,7 @@ test('waiting coupons and 30-minute choices belong to the host only', () => {
   s.advance(15 * 60_000);
   const view = s.groups.view(s.groups.get(g.id), 'host');
   assert.equal(view.perk!.prompt, true);
+  assert.equal(view.idealCouponYuan, 2, '30 分钟不再升 5 元，改走弹窗');
   assert.throws(() => s.groups.action(g.id, 'guest', 'keep-waiting'), /发起人/);
   assert.throws(() => s.groups.action(g.id, 'host', 'solo'), /已经有人加入/);
   const kept = s.groups.action(g.id, 'host', 'keep-waiting');

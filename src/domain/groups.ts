@@ -25,7 +25,7 @@ function choose(ids: unknown, available: string[]): string[] {
 }
 
 export const MAX_PEOPLE = 3;
-// 梅宝定的等待补偿（理想版，只给发起人）：等满 15 分钟 2 元、超 30 分钟 5 元券；
+// 梅宝定的等待补偿（理想版，只给发起人）：等满 15 分钟送 2 元券（10-19 并档：原 30 分钟 5 元档并入 30 分钟弹窗）；
 // 等满 30 分钟弹窗：单点 8.5 折，或继续等待按自己那几样每样立减 1.5 元；继续等待后也可「不等了，整套餐下单」。
 export const WAIT_PROMPT_MS = 30 * 60_000;
 export const PER_ITEM_BONUS_CENTS = 150;
@@ -179,7 +179,7 @@ export class Groups {
       // 尾号和取餐码只给本人；同单的其他人只看到昵称、餐品和金额，防止凭别人的尾号或码把那份领走。
       members: g.members.map(({ device: _device, tail4, pickupCode, collectedAt, ...m }) => ({ ...m, tail4: viewer?.id === m.id ? tail4 : undefined, pickupCode: viewer?.id === m.id ? pickupCode : undefined, collected: Boolean(collectedAt), cents: allocation.shares.find(s => s.id === m.id)!.cents })),
       viewerId: viewer?.id, isHost: viewer?.id === g.hostId, remainingPartIds: unclaimed.map(p => p.id), method: allocation.method,
-      waitedMs, idealCouponYuan: isHost ? (waitedMs > 30 * 60_000 ? 5 : waitedMs >= 15 * 60_000 ? 2 : 0) : 0,
+      waitedMs, idealCouponYuan: isHost && waitedMs >= 15 * 60_000 ? 2 : 0,
       perk: isHost ? { ...perk, hostPayCents: hostPay, soloBaseCents: soloBase, prompt: g.state === 'open' && waitedMs >= WAIT_PROMPT_MS && !perk.waitBonusCents, canSolo: g.members.length === 1 } : undefined,
       pickedUpAt: g.pickedUpAt, serverNow: this.now(),
     };

@@ -344,3 +344,8 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 
 /* 拼单成功卡的「看看」：麦麦棕底白字（梅宝 10-19 01:40） */
 .card.v2 .c-foot button.see{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:0 4px 0 #1f0d06}
+
+/* 三步图：01 门店、03 托盘的图自带留白，看着只有 02 的一半大，放大一倍；三步的图都占 136px 一列，02 保持原大居中，文字列对齐（梅宝 10-19 01:42） */
+.how>div p{grid-template-columns:136px 1fr}
+.how>div p .how-ico{justify-self:center}
+.how>div p:nth-child(1) .how-ico,.how>div p:nth-child(3) .how-ico{width:136px;height:136px}

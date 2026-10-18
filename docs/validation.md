@@ -24,8 +24,14 @@
 
 真实米末完成 T3 起草及三件服务端源码复查；发现与处置见 `COLLABORATION.md`，原文已保留。Cookie 可清除的身份边界与按原截止封顶的留存语义明确交给 mini 复核。
 
+## mini 独立验收
+
+Mac mini 对 `a42abf644bbf2f9d6d2e37070c2b30c50c28f6f4` 新 clone 后，独立完成依赖安装、45/45 测试、类型检查、无 Token 演示首页及 API、390 × 844 手机宽度检查。回执记录零页面异常、无横向溢出。mini 未重走完整拼单交互，该部分沿用上面的 MacBook Chrome 证据。
+
+原文回执见 [mini 验收](reviews/20261018-maimai-xianpin-v1-MINI-ACCEPT.md)，HostDzire 与本地 SHA-256 一致：`b5af14b39bdf16396e9a4a8b5b6b9a05d8e0ad9d2c67eeb09f515112729a4fd4`。结论为 v1 本地演示验收通过，正式美术与 D1 另开单。
+
 ## 剩余验收
 
-这些是本机 source / tests / browser 证据。Mac mini 尚未独立拉代码运行；梅宝尚未完成体验验收。Cloudflare 部署、公开访问和比赛提交均未做。
+梅宝尚未完成体验验收。Cloudflare 部署、公开访问和比赛提交均未做。
 
 SQLite 表结构使用兼容 D1 的 SQL。当前运行适配器是 Node.js `node:sqlite`；尚未实现或验证 Cloudflare D1 运行适配器，不能将“可迁移”写成“已在 Workers 跑通”。

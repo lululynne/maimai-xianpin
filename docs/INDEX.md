@@ -5,5 +5,6 @@
 - `briefs/20261018-maimai-xianpin-v1-tasks.md`：Mac mini 的 T0–T11 施工卡。
 - `official-sources.md`：官方声明和交接输入的来源校验。
 - `../MCP_INTEGRATION.md`：MCP 接入与 T0 真实验证状态。
+- `reviews/20261018-maimai-xianpin-v1-MINI-ACCEPT.md`：mini 对 `a42abf6` 的独立验收原文、范围和五项裁定。
 
 执行时以最新拆分卡及梅宝的指令为准，不能把未完成的准备工作算成 T0 实测或 Mac mini 验收。

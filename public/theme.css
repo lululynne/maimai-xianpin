@@ -62,7 +62,7 @@ button{border-radius:99px;font-weight:800}
 .card{background:#fff;border:2px solid var(--yel-l);border-radius:16px;padding:12px 14px;flex-direction:row;align-items:center;gap:10px}
 .card.urgent{border-color:#F6B3AC}
 .card.mine{border-color:var(--yel)}
-.card img.food{width:56px;height:56px;object-fit:contain;mix-blend-mode:normal;align-self:center;flex-shrink:0}
+.card img.food{width:66px;height:56px;object-fit:contain;mix-blend-mode:normal;align-self:center;flex-shrink:0}
 .card .t{flex:1;min-width:0}
 .card .t b{display:block;font-size:15px}
 .card .t b em{font-style:normal;white-space:nowrap;display:inline-block;font-size:11px;font-weight:700;background:var(--yel);border-radius:99px;padding:1px 7px;margin-left:6px;vertical-align:2px}

@@ -2,7 +2,7 @@
 
 到店自取，让同一家店的陌生人现场拼一个大套餐。
 
-![不同套餐的演示广场](docs/images/varied-plaza-desktop.jpg)
+![不同套餐的演示广场](docs/images/plaza-overview.png)
 
 上图为 10-19 纳纳红黄主题的真实浏览器页面。演示广场的五位发起人随机拼不同套餐，剩余餐品和金额使用各自的快照；人物为虚构。旧单到点结束后会补上新单，「我的拼单」也会循环补充新的体验卡，后来的访客随时能试玩。
 
@@ -32,6 +32,23 @@ npm run dev
 | 我的拼单 | 等拼补偿（理想版模拟） |
 | --- | --- |
 | ![我的拼单和个人取餐卡](docs/images/my-groups-demo.jpg) | ![等拼补偿和继续等待立减](docs/images/waiting-perks-demo.jpg) |
+
+<details>
+<summary>查看更多流程：认领餐品、等满 30 分钟、拼满与取餐</summary>
+
+认领同一单剩下的餐品，确认自己的那份：
+
+![认领剩余餐品](docs/images/joining-share.png)
+
+等满 30 分钟，选择继续等待立减，或按单点价格 8.5 折模拟下单：
+
+![继续等待或单点的模拟选择](docs/images/waiting-choice.png)
+
+拼满、已出餐和已取完的单子分别展示：
+
+![拼单成功和取餐状态](docs/images/groups-success.png)
+
+</details>
 
 截图来自当前演示界面。补偿券、继续等待立减和下单付款均为模拟，不发券、不扣款；旧早餐截图不作为当前菜单展示。
 

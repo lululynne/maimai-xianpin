@@ -32,6 +32,8 @@
 
 梅宝提供的四张旧早餐截图仅用于对照。本次 README 展示当前首页、多套餐广场、个人拼单及等拼补偿；新增 `my-groups-demo.jpg`、`waiting-perks-demo.jpg`。后者在真实 Chrome 演示中选择继续等待，3 件 × ¥1.50 = ¥4.50，个人份额由 ¥22.32 显示为 ¥17.82，仍明确标理想版模拟。没有修改单子的原截止时间。
 
+梅宝随后提供的新截图中，README 首图采用多套餐广场（`plaza-overview.png`），流程折叠区收录认领餐品、30 分钟选择弹窗和拼满/取餐状态（`joining-share.png`、`waiting-choice.png`、`groups-success.png`）。等拼补偿采用本机完整卡片截图，保留金额与模拟说明，未用裁切到底部缺失的版本。
+
 ## 来源与范围
 
 代码和图片许可证官方文本、比赛声明原文字节及 fixture manifest 均按 SHA-256 校验。提交前检查实际 Token 和私密文件未入 Git。真实米末仅作五件文件有限审阅，Codex 逐条裁决，见 [审阅原文和处置](reviews/20261019-mimo-reservation-review.md)。

@@ -39,6 +39,16 @@ if (mode === 'demo') {
     for (const [index, x] of seeds.entries()) {
       groups.create(`demo-host-${store}-${index}`, store, meal, { nickname: x.nickname, tail4: x.tail4, partIds: pickHostDefault(meal, x.take), people: x.people, minutes: x.minutes }, now() - x.ago * 60_000);
     }
+    // 「拼单成功」分页的演示：两单已经拼满，一单等发起人下单，一单已经下单等取餐。
+    for (const [index, x] of [{ nickname: '小满', tail4: '4417', ago: 9, order: false }, { nickname: '阿北', tail4: '7203', ago: 21, order: true }].entries()) {
+      const host = `demo-done-${store}-${index}`;
+      let g = groups.create(host, store, meal, { nickname: x.nickname, tail4: x.tail4, partIds: pickHostDefault(meal, 2), people: 2, minutes: 45 }, now() - x.ago * 60_000);
+      const mate = `${host}-mate`;
+      g = groups.join(g.id, mate, { nickname: ['柚子', '小葵'][index], tail4: ['0826', '3591'][index], partIds: g.meal.parts.filter(p => !g.members.some(m => m.partIds.includes(p.id))).map(p => p.id) });
+      g = groups.action(g.id, host, 'confirm');
+      g = groups.action(g.id, mate, 'confirm');
+      if (x.order) groups.action(g.id, host, 'ordered');
+    }
   }
 }
 

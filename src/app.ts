@@ -40,6 +40,7 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
   app.get('/api/stores/:store/meals/:meal', async c => c.json({ meal: await catalog.meal(c.req.param('store'), c.req.param('meal')) }));
   app.get('/api/groups', c => c.json({ groups: groups.list(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() }));
   app.get('/api/mine', c => c.json({ groups: groups.mine(c.get('device')).map(g => groups.view(g, c.get('device'))) }));
+  app.get('/api/groups/done', c => c.json({ groups: groups.done(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() }));
   app.get('/api/groups/similar', c => c.json({ groups: groups.similar(c.req.query('store') ?? '', c.req.query('meal') ?? '').map(g => groups.view(g, c.get('device'))) }));
   app.post('/api/groups', async c => {
     const body = await c.req.json();

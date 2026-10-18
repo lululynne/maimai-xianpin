@@ -79,6 +79,11 @@ export class Groups {
     this.repo.sweep(this.now());
     return this.repo.all().filter(g => g.storeCode === store && ['open', 'full'].includes(g.state) && g.deadline > this.now());
   }
+  // 已拼成功：人齐了（等下单）、已下单、已取完，按发起时间新的在前（梅宝 10-19 要的第三个分页）
+  done(store: string): Group[] {
+    this.repo.sweep(this.now());
+    return this.repo.all().filter(g => g.storeCode === store && ['full', 'ordered', 'picked-up'].includes(g.state)).sort((a, b) => b.createdAt - a.createdAt).slice(0, 20);
+  }
   similar(store: string, meal: string): Group[] { return this.list(store).filter(g => g.meal.code === meal && g.state === 'open').slice(0, 3); }
   mine(device: string): Group[] { this.repo.sweep(this.now()); return this.repo.all().filter(g => g.members.some(m => m.device === device)); }
   get(id: string): Group { return this.current(id); }
@@ -177,7 +182,7 @@ export class Groups {
           const used = new Set<string>();
           for (const m of g.members) { let code; do code = String(randomInt(1000, 10000)); while (used.has(code)); used.add(code); m.pickupCode = code; }
         } else {
-          if (g.state !== 'ordered') fail('请先在官方渠道下单并标记已下单', 409);
+          if (g.state !== 'ordered') fail('发起人还没下单', 409);
           g.state = 'picked-up';
           g.pickedUpAt = this.now();
           for (const m of g.members) m.collectedAt ??= this.now();

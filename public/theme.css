@@ -332,3 +332,20 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 .card.v2.mine .allow{color:var(--red-d)}
 .card.v2.mine .c-parts i{background:#ffffff26;color:#fff}
 .card.v2.mine .who em{background:var(--yel);color:var(--ink)}
+
+/* 10-19 01:3x：头部换「拼拼」券图标；右侧中间放大图——正在拼放取餐盘，拼成了放碰杯 */
+.card.v2 img.food{width:56px;height:56px}
+.card.v2 img.side{position:absolute;right:18px;top:50%;transform:translateY(-46%);width:96px;height:96px;object-fit:contain;pointer-events:none}
+.card.v2 .c-meal,.card.v2 .c-parts{padding-right:112px}
+@media(max-width:560px){.card.v2 img.food{width:48px;height:48px}.card.v2 img.side{width:76px;height:76px;right:12px}.card.v2 .c-meal,.card.v2 .c-parts{padding-right:88px}}
+
+/* 旧样式给 .card img 加了 multiply 混色，红底卡上的图会被染成红色；v2 卡里的图一律原色 */
+.card.v2 img{mix-blend-mode:normal}
+
+/* 拼单成功卡的「看看」：麦麦棕底白字（梅宝 10-19 01:40） */
+.card.v2 .c-foot button.see{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:0 4px 0 #1f0d06}
+
+/* 三步图：01 门店、03 托盘的图自带留白，看着只有 02 的一半大，放大一倍；三步的图都占 136px 一列，02 保持原大居中，文字列对齐（梅宝 10-19 01:42） */
+.how>div p{grid-template-columns:136px 1fr}
+.how>div p .how-ico{justify-self:center}
+.how>div p:nth-child(1) .how-ico,.how>div p:nth-child(3) .how-ico{width:136px;height:136px}

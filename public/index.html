@@ -20,11 +20,11 @@
     <div id="demo-note" class="notice" hidden></div>
     <p id="window-note" class="window-note"></p>
     <section class="store-panel"><div><label class="eyebrow" for="store"><img class="ico" src="/assets/theme/pin-store-icon.png" alt="">先看看你在的这家店</label><div id="store-chips" class="chips" role="group" aria-label="选门店"></div><select id="store" aria-label="选择门店" disabled><option>正在查看门店…</option></select><p id="store-address" class="muted"></p></div><button id="new-group" class="btn-y" disabled><img class="ico" src="/assets/theme/pindan-icon.png" alt="">发起拼单</button></section>
-    <nav class="tabs" aria-label="拼单列表"><button class="active" data-tab="board">店里正在拼 <span id="board-count">0</span></button><button data-tab="mine">我的拼单 <span id="mine-count">0</span></button><button id="refresh" class="refresh">刷新</button></nav>
+    <nav class="tabs" aria-label="拼单列表"><button class="active" data-tab="board">店里正在拼 <span id="board-count">0</span></button><button data-tab="mine">我的拼单 <span id="mine-count">0</span></button><button data-tab="done">拼单成功 <span id="done-count">0</span></button><button id="refresh" class="refresh">刷新</button></nav>
     <p class="section-note" id="board-note">按截止时间排序，先帮快到点的那一单。</p>
     <div id="board" class="grid" aria-live="polite"></div>
-    <section class="how"><h2>现场拼，就三步</h2><div><p><img class="how-ico" src="/assets/theme/store-icon.png" alt=""><b>01</b><strong>找同店的人</strong><span>选好套餐，留一份给刚好也在的人。</span></p><p><img class="how-ico" src="/assets/theme/order-clipboard-icon.png" alt=""><b>02</b><strong>确认各自那份</strong><span>按单点价比例算钱；缺价格时会明确说明。</span></p><p><img class="how-ico" src="/assets/theme/pickup-tray-icon.png" alt=""><b>03</b><strong>到店对卡片取餐</strong><span>发起人在官方 App 下单，取到后在这里提醒大家。</span></p></div></section>
-    <footer>麦麦现拼 · 独立参赛作品<br>网页不收款、不代下单、不发券。请在官方渠道核对实际价格，线下交接前确认餐品和金额。</footer>
+    <section class="how"><h2>现场拼，就三步</h2><div><p><img class="how-ico" src="/assets/theme/store-icon.png" alt=""><b>01</b><strong>找同店的人</strong><span>选好套餐，留一份给刚好也在的人。</span></p><p><img class="how-ico" src="/assets/theme/order-clipboard-icon.png" alt=""><b>02</b><strong>确认各自那份</strong><span>按单点价比例算钱；缺价格时会明确说明。</span></p><p><img class="how-ico" src="/assets/theme/pickup-tray-icon.png" alt=""><b>03</b><strong>到店对卡片取餐</strong><span>拼满后发起人下单，出餐了在这里提醒大家，各自报取餐码取走自己那份。</span></p></div></section>
+    <footer>麦麦现拼 · 独立参赛作品<br>演示版的下单、付款和优惠券都是模拟的，不会扣钱，价格以门店为准。</footer>
   </main>
   <dialog id="compose" class="sheet"><div class="dialog-head"><h2>发起拼单</h2><button class="close" aria-label="关闭">×</button></div><form id="compose-form">
     <input type="hidden" id="meal-select">
@@ -35,7 +35,7 @@
     <section class="step"><h3><b>5</b>留个昵称</h3><div class="form-row"><label>昵称<input name="nickname" maxlength="20" placeholder="起个昵称" required></label><label>手机尾号后四位<input name="tail4" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="只防重复，谁都看不到" required></label></div></section>
     <div class="sheet-bar"><div id="compose-sum"><b>先选一个套餐</b><small>选好后这里算你出多少</small></div><button type="submit" class="primary">看看有没有相似拼单</button></div>
   </form></dialog>
-  <dialog id="similar"><div class="dialog-head ph2"><h2>是否确认下单？</h2><button class="close" aria-label="关闭">×</button></div><div id="similar-content"></div><p class="muted">这里只创建拼单。实际下单由发起人在官方 App / 小程序完成。</p><div class="ft"><button id="similar-back" class="btn-y">再看看</button><button id="confirm-create" class="primary">确认下单</button></div></dialog>
+  <dialog id="similar"><div class="dialog-head ph2"><h2>是否确认下单？</h2><button class="close" aria-label="关闭">×</button></div><div id="similar-content"></div><p class="muted">演示版：下单和付款都是模拟的，不会扣钱。</p><div class="ft"><button id="similar-back" class="btn-y">再看看</button><button id="confirm-create" class="primary">确认下单</button></div></dialog>
   <dialog id="wait-prompt"><div class="dialog-head ph2"><h2>是否选择继续等待拼单？</h2><button class="close" aria-label="关闭">×</button></div><div id="wait-body"></div><div class="ft"><button id="wait-solo" class="btn-y">单点下单（8.5 折）</button><button id="wait-keep" class="primary">继续等待</button></div></dialog>
   <dialog id="pay-sheet" class="pay"><div class="pay-top"><b>付款结算</b><small>理想版模拟</small><button class="close" aria-label="关闭">×</button></div><div id="pay-body"></div><div class="pay-foot"><button id="pay-go" class="pay-btn">模拟付款</button></div><div class="pay-done"><img class="pay-cheers" src="/assets/theme/pin-success-icon.png" alt=""><b id="pay-done-title">支付成功</b><span id="pay-done-amt"></span><small>模拟，不扣款</small></div></dialog>
   <dialog id="detail"><div class="dialog-head"><h2>我的小卡片</h2><button class="close" aria-label="关闭">×</button></div><div id="detail-content"></div></dialog>

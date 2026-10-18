@@ -36,7 +36,9 @@ const app = createApp({ catalog, groups, mode, now, speed, capturedAt: snapshot.
 const root = fileURLToPath(new URL('../public/', import.meta.url));
 app.get('/*', serveStatic({ root }));
 const port = Number(process.env.PORT ?? 8787);
-const server = serve({ fetch: app.fetch, port, hostname: '127.0.0.1' }, () => console.log(`麦麦现拼 · ${mode}\nLocal: http://127.0.0.1:${port}`));
+// HOST=0.0.0.0 只给演示模式用，方便同一局域网的手机打开模拟；实时模式始终只听本机。
+const hostname = mode === 'demo' && process.env.HOST ? process.env.HOST : '127.0.0.1';
+const server = serve({ fetch: app.fetch, port, hostname }, () => console.log(`麦麦现拼 · ${mode}\nLocal: http://127.0.0.1:${port}${hostname !== '127.0.0.1' ? `\nLAN: http://<本机局域网 IP>:${port}  手机模拟框: /phone.html` : ''}`));
 const sweep = setInterval(() => repo.sweep(now()), 60_000);
 const shutdown = () => { clearInterval(sweep); server.close(() => { repo.close(); if (reader instanceof McdMcpClient) void reader.close(); process.exit(0); }); };
 process.once('SIGTERM', shutdown);

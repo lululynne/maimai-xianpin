@@ -1,0 +1,116 @@
+/* 红黄主题 · 依据纳纳《麦麦现拼-UI预览方案》2026-10-18。只覆盖样式，不改业务逻辑。不使用官方 logo/金拱门/官方吉祥物。 */
+:root{--red:#DA291C;--red-d:#B51F14;--yel:#FFC72C;--yel-l:#FFE7A3;--yel-d:#D9A400;--cream:#FFF8EC;--paper:#FFF8EC;--ink:#3A1A0E;--mut:#8A6A55;--muted:#8A6A55;--line:#FFE7A3;--soft:#FFF1CF;--gold:#FFC72C}
+body{background:var(--cream);color:var(--ink);font-family:"PingFang SC","Noto Sans CJK SC",system-ui,sans-serif}
+.ico{width:22px;height:22px;object-fit:contain;vertical-align:-5px;margin-right:6px}
+
+/* 顶栏 */
+.topbar{max-width:none;background:var(--red);color:#fff;border:0;padding:16px max(18px,calc((100% - 1120px)/2 + 32px)) 14px}
+.wordmark{display:flex;align-items:center;gap:10px;letter-spacing:0}
+.wordmark img{width:44px;height:44px;object-fit:contain}
+.wordmark .wm-text{color:#fff}
+.wm-text b{display:block;font-size:20px;letter-spacing:1px;line-height:1.2}
+.wm-text small{display:block;color:var(--yel);font-size:12px;font-weight:400}
+.badge{background:#fff2;border:1.5px solid var(--yel);color:#fff;font-weight:600}
+
+/* 首屏 */
+h1 span,.eyebrow{color:var(--red)}
+.hero-art{background:radial-gradient(circle,#FFE7A3 0,#FFF1CF 62%,transparent 63%)}
+.mascot{width:86%;height:86%;object-fit:contain;filter:drop-shadow(0 6px 0 #0000000d)}
+.notice{background:#FFF1CF;border:2px solid var(--yel-l);border-radius:16px}
+
+/* 按钮：厚游戏按钮 */
+button{border-radius:99px;font-weight:800}
+.primary{background:var(--red);border:0;color:#fff;box-shadow:0 3px 0 var(--red-d)}
+.btn-y{background:var(--yel);border:0;color:var(--ink);box-shadow:0 3px 0 var(--yel-d)}
+.primary:active,.btn-y:active{transform:translateY(3px);box-shadow:none}
+.primary.sm{padding:5px 12px;font-size:12px}
+
+/* 选店胶囊 */
+.store-panel{background:#fff;border:2px solid var(--yel-l);border-radius:16px}
+.store-panel select{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 4px}
+.tag{display:inline-block;background:var(--yel);color:var(--ink);border:1.5px solid var(--yel);border-radius:99px;padding:4px 12px;font-size:13px;font-weight:700;box-shadow:none;margin:0}
+.tag.off{background:#fff;font-weight:500}
+#new-group{padding:11px 22px}
+
+/* 标签页 */
+.tabs{border-bottom:2px solid var(--yel-l)}
+.tabs .active{border-bottom:3px solid var(--red);font-weight:800}
+.tabs span{background:var(--yel);color:var(--ink);border-radius:99px}
+
+/* 拼单卡片：图标 · 文字 · 拼！ */
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{background:#fff;border:2px solid var(--yel-l);border-radius:16px;padding:12px 14px;flex-direction:row;align-items:center;gap:10px}
+.card.urgent{border-color:#F6B3AC}
+.card.mine{border-color:var(--yel)}
+.card img.food{width:56px;height:56px;object-fit:contain;mix-blend-mode:normal;align-self:center;flex-shrink:0}
+.card .t{flex:1;min-width:0}
+.card .t b{display:block;font-size:15px}
+.card .t b em{font-style:normal;white-space:nowrap;display:inline-block;font-size:11px;font-weight:700;background:var(--yel);border-radius:99px;padding:1px 7px;margin-left:6px;vertical-align:2px}
+.card .t .meal-name{color:var(--ink);font-weight:600}
+.card .t span{display:block;font-size:12px;color:var(--mut);line-height:1.5}
+.timer{font-size:12px;color:var(--red);font-weight:700;font-variant-numeric:tabular-nums}
+.card button{flex-shrink:0;padding:9px 16px;font-size:14px}
+.card button:not(.primary):not(.btn-y){background:#fff;border:1.5px solid var(--yel)}
+
+/* 空状态 */
+.empty{border:0;padding:30px 20px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:4px}
+.empty img{width:120px;filter:grayscale(.2)}
+.empty b{color:var(--ink);font-size:16px;margin-top:8px}
+.empty button{margin-top:12px}
+
+/* 薯条 loading */
+.fries-ld{grid-column:1/-1;text-align:center;padding:20px 0;color:var(--mut);font-size:12px}
+.fries-ld .box{position:relative;width:120px;aspect-ratio:639/530;margin:auto}
+.fries-ld .box img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.fries-ld .grey{filter:grayscale(1) opacity(.55)}
+.fries-ld .color{animation:fill 1.6s infinite ease-in-out}
+@keyframes fill{0%{clip-path:inset(100% 0 0 0)}80%,100%{clip-path:inset(0 0 0 0)}}
+.fries-ld .sp{position:absolute;color:#ffd63c;font-size:16px;animation:tw 1.2s infinite ease-in-out}
+.fries-ld .sp:nth-of-type(1){left:0;top:4%}.fries-ld .sp:nth-of-type(2){right:0;top:8%;animation-delay:.4s}.fries-ld .sp:nth-of-type(3){right:6%;top:58%;animation-delay:.8s}
+@keyframes tw{0%,100%{transform:scale(.4);opacity:.4}50%{transform:scale(1.1);opacity:1}}
+.fries-ld .bar{height:10px;width:140px;margin:10px auto 0;background:#f0dcc8;border-radius:7px;overflow:hidden}
+.fries-ld .bar i{display:block;height:100%;background:var(--red);border-radius:7px;animation:bar 1.6s infinite ease-in-out}
+@keyframes bar{0%{width:0}80%,100%{width:100%}}
+.fries-ld p{margin:6px 0 0}
+
+/* 弹窗 */
+dialog{background:#fff;border:0;border-radius:20px;padding:0;overflow:auto}
+dialog::backdrop{background:#3A1A0E88}
+dialog>.dialog-head{padding:14px 18px;background:var(--red);color:#fff;align-items:center;position:sticky;top:0;z-index:1}
+dialog>.dialog-head.ph2{background:var(--yel);color:var(--ink)}
+dialog>.dialog-head h2{margin:0;font-size:17px;font-weight:800}
+dialog .close{color:inherit;box-shadow:none}
+dialog>form,dialog>#similar-content,dialog>#detail-content,dialog>p{padding:0 18px}
+dialog>form{padding-top:14px;padding-bottom:18px}
+#detail-content{padding-top:12px;padding-bottom:18px}
+.similar-row{background:var(--cream);border:0;border-radius:12px;padding:8px 10px;margin:6px 0;font-size:13px}
+.similar-row button{margin-top:6px}
+.ft{display:flex;gap:8px;padding:4px 18px 18px}.ft button{flex:1}
+input,form select,.checks{border:1.5px solid var(--yel-l);border-radius:12px;background:#fff}
+.checks input{accent-color:var(--red)}
+.hint{border-left:3px solid var(--yel);background:#FFF8EC;border-radius:0 10px 10px 0}
+
+/* 小卡片：票根 */
+.ticket{background:#fff;border:2px dashed var(--red);border-radius:18px;padding:14px 16px;text-align:center;margin:12px 0}
+.ticket.own{background:#FFFDF6}
+.ticket .who{font-size:12px;color:var(--mut);font-weight:700}
+.ticket .lbl{font-weight:800;margin-top:6px}
+.ticket .num{font-size:44px;font-weight:900;color:var(--red);letter-spacing:4px;line-height:1.1;font-variant-numeric:tabular-nums}
+.ticket p{font-size:14px;margin:6px 0}
+.ticket .chips{justify-content:center}
+.ticket button{margin-top:8px;font-size:12px}
+.actions{margin-top:12px}
+.actions button:not(.primary):not(.btn-y){background:#fff;border:1.5px solid var(--yel)}
+
+.how b{color:var(--red)}
+#toast{background:var(--ink);border-radius:99px}
+
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+@media(max-width:560px){
+  .topbar{padding:14px 16px 12px}
+  .badge{font-size:10px;padding:4px 9px}
+  .hero-art{width:110px;height:110px;opacity:1;bottom:70px}
+  .card{display:flex}
+  .card .t b{font-size:14px}
+}

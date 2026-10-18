@@ -39,6 +39,15 @@ function similarPartsText(parts) {
   for (const part of parts) counts.set(part.name, (counts.get(part.name) ?? 0) + 1);
   return [...counts].map(([name, count]) => `${name}（数量：${count}）`).join('、');
 }
+const ICON = '/assets/theme/';
+function mealIcon(name = '') { return ICON + (/薯/.test(name) && !/堡/.test(name) ? 'fries-game-icon.png' : /堡|汉堡|鸡腿/.test(name) ? 'burger-icon.png' : 'pindan-icon.png'); }
+function friesLoader(text = '正在查看这家店的拼单…') { return `<div class="fries-ld" role="status"><div class="box"><img class="grey" src="${ICON}fries-game-icon.png" alt=""><img class="color" src="${ICON}fries-game-icon.png" alt=""><span class="sp">✦</span><span class="sp">✦</span><span class="sp">✦</span></div><div class="bar"><i></i></div><p>${escape(text)}</p></div>`; }
+function renderStoreChips() {
+  const current = $('#store').value;
+  $('#store-chips').innerHTML = state.stores.map(s => `<button type="button" class="tag ${s.code === current ? '' : 'off'}" data-store="${escape(s.code)}">${escape(s.name.replace(/^麦当劳/, ''))}</button>`).join('');
+  document.querySelectorAll('[data-store]').forEach(b => b.addEventListener('click', () => { if ($('#store').value === b.dataset.store) return; $('#store').value = b.dataset.store; $('#store').dispatchEvent(new Event('change')); }));
+}
+function timerText(deadline) { const seconds = Math.max(0, Math.ceil((deadline - now()) / 1000)); return seconds ? `⏱ 还剩 ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}` : '已截止'; }
 function leftText(deadline) { const seconds = Math.max(0, Math.ceil((deadline - now()) / 1000)); return seconds ? `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')} 后截止` : '已截止'; }
 function render() {
   $('#board-count').textContent = state.board.length;
@@ -50,13 +59,18 @@ function render() {
     const restCents = g.meal.priceCents - g.members.reduce((sum, m) => sum + m.cents, 0);
     const own = g.members.find(m => m.id === g.viewerId);
     const host = g.members.find(m => m.id === g.hostId);
-    return `<article class="card ${g.deadline - now() < 10 * 60000 && g.state === 'open' ? 'urgent' : ''}"><div class="card-top"><span>${escape(labels[g.state])} · ${g.state === 'open' ? `缺 ${g.people - g.members.length} 人` : `${g.members.length} 人`}</span><span class="clock" data-deadline="${g.deadline}">${escape(leftText(g.deadline))}</span></div><div class="card-body">${g.meal.image ? `<img src="${escape(g.meal.image)}" alt="${escape(g.meal.name)}" loading="lazy">` : ''}<p class="owner">@${escape(host.nickname)} 发起${g.isHost ? ' · 我发起的' : own ? ' · 我参与的' : ''}</p><h3>${escape(g.meal.name)}</h3><p class="parts-line">${escape(remaining.length ? '剩下：' + partsText(remaining) : partsText(g.meal.parts))}</p><div class="card-bottom"><div class="money">${money(own ? own.cents : restCents)}<small>${own ? '我这份的分摊金额' : '剩余餐品合计'} · 套餐 ${money(g.meal.priceCents)}</small></div><button class="${g.state === 'open' && !own ? 'primary' : ''}" data-detail="${g.id}">${own ? '查看我的卡片' : g.state === 'open' ? '我来拼这单' : '看看这单'}</button></div></div></article>`;
-  }).join('') : `<div class="empty" data-art-slot="empty-plaza">${state.tab === 'mine' ? '你还没有参与拼单。去看看店里的人正在拼什么。' : '这家店还没有人在拼。发起一单，留一份给刚好也在的人。'}</div>`;
+    const missing = g.people - g.members.length;
+    const each = g.state === 'open' && missing > 0 ? Math.round(restCents / missing) : null;
+    const action = own ? '我的卡片' : g.state === 'open' ? '拼！' : '看看';
+    return `<article class="card ${g.deadline - now() < 10 * 60000 && g.state === 'open' ? 'urgent' : ''} ${own ? 'mine' : ''}"><img class="food" src="${mealIcon(g.meal.name + remaining.map(p => p.name).join(''))}" alt=""><div class="t"><b>@${escape(host.nickname)} ${g.state === 'open' ? `缺 ${missing} 人` : escape(labels[g.state])}${g.isHost ? '<em>我发起的</em>' : own ? '<em>我参与的</em>' : ''}</b><span class="meal-name">${escape(g.meal.name)}</span><span>${escape(remaining.length ? '剩下 ' + partsText(remaining) : partsText(g.meal.parts))}${own ? ` · 我出 ${money(own.cents)}` : each !== null ? ` · 每人约 ${money(each)}` : ''}</span><div class="timer" data-deadline="${g.deadline}" data-style="timer">${escape(timerText(g.deadline))}</div></div><button class="${own ? 'btn-y' : g.state === 'open' ? 'primary' : ''}" data-detail="${g.id}">${action}</button></article>`;
+  }).join('') : `<div class="empty"><img src="${ICON}fries-game-icon.png" alt=""><b>${state.tab === 'mine' ? '你还没有参与拼单' : '这家店还没人在拼'}</b><span>${state.tab === 'mine' ? '去看看店里的人正在拼什么。' : '当前无人跟您有相似拼单，来当第一个吧'}</span>${state.tab === 'mine' ? '' : '<button class="primary" data-empty-new>发起拼单</button>'}</div>`;
   document.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', guard(() => openDetail(b.dataset.detail))));
+  $('[data-empty-new]')?.addEventListener('click', guard(compose));
   applyArt();
 }
 async function refreshBoard() {
   const store = $('#store').value;
+  if (!state.board.length) $('#board').innerHTML = friesLoader();
   const data = await api('/groups?store=' + encodeURIComponent(store));
   if (store !== $('#store').value) return;
   state.board = data.groups; syncClock(data.serverNow); render();
@@ -72,7 +86,7 @@ function checks(parts, selected = [], name = 'partIds') {
   return `<div class="checks">${parts.map(p => `<label><input type="checkbox" name="${name}" value="${escape(p.id)}" ${selected.includes(p.id) ? 'checked' : ''}><span>${escape(p.name)}${p.supportModify ? '【可特调】' : ''}<small> · 单点 ${p.unitPriceCents === null ? '价格暂缺' : money(p.unitPriceCents)}</small></span></label>`).join('')}</div>`;
 }
 async function selectMeal() {
-  $('#meal-info').textContent = '正在核对套餐和单件价格…';
+  $('#meal-info').innerHTML = friesLoader('正在核对套餐和单件价格…');
   const button = $('#compose-form button[type="submit"]'); button.disabled = true;
   state.selectedMeal = null;
   try {
@@ -86,7 +100,7 @@ async function selectMeal() {
   } finally { button.disabled = !state.selectedMeal; }
 }
 async function compose() {
-  $('#compose').showModal(); $('#meal-info').textContent = '正在查看这家店的套餐…';
+  $('#compose').showModal(); $('#meal-info').innerHTML = friesLoader('正在查看这家店的套餐…');
   const data = await api(`/stores/${$('#store').value}/meals`); state.meals = data.meals;
   $('#meal-select').innerHTML = data.meals.map(m => `<option value="${escape(m.code)}">${escape(m.name)}${m.menuPriceCents === null ? '' : ' · ' + money(m.menuPriceCents)}</option>`).join('');
   if (!data.meals.length) { $('#meal-info').textContent = '这个时段还没有适合拆分的套餐，稍后再看看。'; return; }
@@ -101,7 +115,7 @@ async function reviewDraft(event) {
   if (!partIds.length || partIds.length > state.selectedMeal.parts.length - people + 1) throw new Error('选好自己那份，并为其他每个人至少留一件餐品。');
   state.draft = { storeCode: $('#store').value, mealCode: state.selectedMeal.code, nickname: form.get('nickname'), tail4: form.get('tail4'), people, minutes: Number(form.get('minutes')), partIds, confirmedSimilar: true };
   const { groups } = await api(`/groups/similar?store=${state.draft.storeCode}&meal=${state.draft.mealCode}`);
-  $('#similar-content').innerHTML = groups.length ? '<p>还有跟你相似的拼单噢</p>' + groups.map(g => `<div class="similar-row">@${escape(g.members.find(m => m.id === g.hostId).nickname)} 正在拼单，缺${g.people - g.members.length === 1 ? "一" : g.people - g.members.length}人拼${escape(similarPartsText(g.meal.parts.filter(p => g.remainingPartIds.includes(p.id))))}<br><span class="clock" data-deadline="${g.deadline}">${escape(leftText(g.deadline))}</span><button data-similar="${g.id}">点击直接完成拼单</button></div>`).join('') : '<p>当前无人跟您有相似拼单</p>';
+  $('#similar-content').innerHTML = groups.length ? '<p>还有跟你相似的拼单噢</p>' + groups.map(g => `<div class="similar-row">@${escape(g.members.find(m => m.id === g.hostId).nickname)} 正在拼单，缺${g.people - g.members.length === 1 ? "一" : g.people - g.members.length}人拼${escape(similarPartsText(g.meal.parts.filter(p => g.remainingPartIds.includes(p.id))))}<br><span class="timer" data-deadline="${g.deadline}" data-style="timer">${escape(timerText(g.deadline))}</span><button class="primary sm" data-similar="${g.id}">点击直接完成拼单</button></div>`).join('') : '<p>当前无人跟您有相似拼单</p>';
   document.querySelectorAll('[data-similar]').forEach(b => b.addEventListener('click', guard(async () => { $('#similar').close(); await openDetail(b.dataset.similar); })));
   $('#compose').close(); $('#similar').showModal();
 }
@@ -116,7 +130,7 @@ function renderDetail(g) {
   const remaining = g.meal.parts.filter(p => g.remainingPartIds.includes(p.id));
   const own = g.members.find(m => m.id === g.viewerId);
   const fallback = g.method === 'equal-items';
-  $('#detail-content').innerHTML = `<h3>${escape(g.meal.name)}</h3><p>${escape(labels[g.state])} · <span class="clock" data-deadline="${g.deadline}">${escape(leftText(g.deadline))}</span></p><p class="muted">规定时间不延长 · 套餐核价 ${money(g.meal.priceCents)} · 到店自取<br>核价时间 ${chinaDate(g.meal.verifiedAt)}，实际以官方下单为准。</p>${fallback ? '<p class="hint">单件价格有缺失：整单按餐品件数均分，零头归发起人。</p>' : '<p class="hint">按每人单点价占比分摊套餐价，零头归发起人。</p>'}${g.members.map(m => `<div class="ticket" data-art-slot="ticket"><h3>${m.id === g.viewerId ? '我这份 · ' : ''}${escape(m.nickname)}${m.id === g.hostId ? '（发起人）' : ''}</h3><p>${escape(partsText(g.meal.parts.filter(p => m.partIds.includes(p.id))))}</p><p>尾号 ${escape(m.tail4 ?? '入拼后可核对')} · ${m.confirmed ? '已确认' : '待本人确认'}</p><div class="amount">${money(m.cents)}</div>${g.isHost && !m.confirmed && ['open','full'].includes(g.state) ? `<button data-kick="${m.id}">移出未确认成员</button>` : ''}</div>`).join('')}<p class="muted">已等待 ${Math.floor(g.waitedMs / 60000)} 分钟。按理想版${g.idealCouponYuan ? '可对应 ' + g.idealCouponYuan + ' 元券档位' : '尚未达到补偿券档位'}。此处仅展示，不发券。</p>${g.state === 'expired' ? `<div class="hint">到点了，这单已经下架。可以改成自己单点：<br>${g.meal.parts.filter(p => !own || own.partIds.includes(p.id)).map(p => `${escape(p.name)}：${p.unitPriceCents === null ? '价格暂缺' : money(p.unitPriceCents)}`).join('<br>')}<br>自己的可用券，请到官方 App 查看。</div>` : ''}<div class="actions">${g.isHost && g.state === 'open' && state.config.mode === 'demo' ? '<button data-demo-fill>演示：模拟拼友加入并确认</button>' : ''}${own ? '<button id="copy-card">复制我的小卡片</button>' : ''}${own && !own.confirmed && ['open','full'].includes(g.state) ? '<button class="primary" data-action="confirm">确认我这份和金额</button>' : ''}${g.isHost && g.state === 'full' ? `<button class="primary" data-action="ordered">${state.config.mode === 'demo' ? '演示：模拟官方渠道已下单' : '我已在官方渠道下单'}</button>` : ''}${g.isHost && g.state === 'ordered' ? '<button class="primary" data-action="picked-up">已取到，提醒大家</button>' : ''}</div>${g.state === 'picked-up' ? '<p class="hint">餐已经取到了。带着卡片，和发起人核对你那份。</p>' : ''}${!own && g.state === 'open' ? `<hr><form id="join-form"><h3>我来拼剩下这份</h3>${checks(remaining, g.people - g.members.length === 1 ? remaining.map(p => p.id) : [])}<div class="form-row"><label>昵称<input name="nickname" maxlength="20" required></label><label>手机尾号后四位<input name="tail4" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></label></div><button class="primary wide" type="submit">加入这单，再核对金额</button></form>` : ''}`;
+  $('#detail-content').innerHTML = `<h3>${escape(g.meal.name)}</h3><p>${escape(labels[g.state])} · <span class="clock" data-deadline="${g.deadline}">${escape(leftText(g.deadline))}</span></p><p class="muted">规定时间不延长 · 套餐核价 ${money(g.meal.priceCents)} · 到店自取<br>核价时间 ${chinaDate(g.meal.verifiedAt)}，实际以官方下单为准。</p>${fallback ? '<p class="hint">单件价格有缺失：整单按餐品件数均分，零头归发起人。</p>' : '<p class="hint">按每人单点价占比分摊套餐价，零头归发起人。</p>'}${g.members.map(m => `<div class="ticket ${m.id === g.viewerId ? 'own' : ''}"><div class="who">${m.id === g.viewerId ? '我这份 · ' : ''}@${escape(m.nickname)}${m.id === g.hostId ? '（发起人）' : ''}</div><div class="lbl">尾号</div><div class="num">${escape(m.tail4 ?? '····')}</div><p>${escape(partsText(g.meal.parts.filter(p => m.partIds.includes(p.id))))}</p><div class="chips"><span class="tag">${m.id === g.viewerId ? '我出' : 'TA 出'} ${money(m.cents)}</span><span class="tag off">${m.confirmed ? '已确认' : '待本人确认'}</span></div>${g.isHost && !m.confirmed && ['open','full'].includes(g.state) ? `<button data-kick="${m.id}">移出未确认成员</button>` : ''}</div>`).join('')}<p class="muted">已等待 ${Math.floor(g.waitedMs / 60000)} 分钟。按理想版${g.idealCouponYuan ? '可对应 ' + g.idealCouponYuan + ' 元券档位' : '尚未达到补偿券档位'}。此处仅展示，不发券。</p>${g.state === 'expired' ? `<div class="hint">到点了，这单已经下架。可以改成自己单点：<br>${g.meal.parts.filter(p => !own || own.partIds.includes(p.id)).map(p => `${escape(p.name)}：${p.unitPriceCents === null ? '价格暂缺' : money(p.unitPriceCents)}`).join('<br>')}<br>自己的可用券，请到官方 App 查看。</div>` : ''}<div class="actions">${g.isHost && g.state === 'open' && state.config.mode === 'demo' ? '<button data-demo-fill>演示：模拟拼友加入并确认</button>' : ''}${own ? '<button id="copy-card">复制我的小卡片</button>' : ''}${own && !own.confirmed && ['open','full'].includes(g.state) ? '<button class="primary" data-action="confirm">确认我这份和金额</button>' : ''}${g.isHost && g.state === 'full' ? `<button class="primary" data-action="ordered">${state.config.mode === 'demo' ? '演示：模拟官方渠道已下单' : '我已在官方渠道下单'}</button>` : ''}${g.isHost && g.state === 'ordered' ? '<button class="primary" data-action="picked-up">已取到，提醒大家</button>' : ''}</div>${g.state === 'picked-up' ? '<p class="hint">餐已经取到了。带着卡片，和发起人核对你那份。</p>' : ''}${!own && g.state === 'open' ? `<hr><form id="join-form"><h3>我来拼剩下这份</h3>${checks(remaining, g.people - g.members.length === 1 ? remaining.map(p => p.id) : [])}<div class="form-row"><label>昵称<input name="nickname" maxlength="20" required></label><label>手机尾号后四位<input name="tail4" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></label></div><button class="primary wide" type="submit">加入这单，再核对金额</button></form>` : ''}`;
   $('#join-form')?.addEventListener('submit', guard(async event => {
     event.preventDefault(); const data = new FormData(event.currentTarget);
     await api(`/groups/${g.id}/join`, { nickname: data.get('nickname'), tail4: data.get('tail4'), partIds: data.getAll('partIds') });
@@ -133,15 +147,16 @@ function renderDetail(g) {
 }
 document.querySelectorAll('dialog .close').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
 document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', guard(async () => { state.tab = b.dataset.tab; document.querySelectorAll('[data-tab]').forEach(t => t.classList.toggle('active', t === b)); if (state.tab === 'mine') await refreshMine(); else await refreshBoard(); })));
-$('#store').addEventListener('change', guard(async () => { const s = state.stores.find(s => s.code === $('#store').value); $('#store-address').textContent = s.address + (s.open ? '' : ' · 当前暂停营业'); await refreshBoard(); }));
+$('#store').addEventListener('change', guard(async () => { state.board = []; renderStoreChips(); const s = state.stores.find(s => s.code === $('#store').value); $('#store-address').textContent = s.address + (s.open ? '' : ' · 当前暂停营业'); await refreshBoard(); }));
 $('#refresh').addEventListener('click', guard(() => Promise.all([refreshBoard(), refreshMine()])));
 $('#new-group').addEventListener('click', guard(compose));
 $('#meal-select').addEventListener('change', guard(selectMeal));
 $('#compose-form').addEventListener('submit', guard(reviewDraft));
 $('#confirm-create').addEventListener('click', guard(createGroup));
+$('#similar-back').addEventListener('click', () => { $('#similar').close(); $('#compose').showModal(); });
 setInterval(() => {
   if (state.board.some(g => g.deadline <= now())) { state.board = state.board.filter(g => g.deadline > now()); render(); }
-  document.querySelectorAll('[data-deadline]').forEach(el => el.textContent = leftText(Number(el.dataset.deadline)));
+  document.querySelectorAll('[data-deadline]').forEach(el => el.textContent = (el.dataset.style === 'timer' ? timerText : leftText)(Number(el.dataset.deadline)));
   const g = state.detail;
   if ($('#detail').open && g && ['open', 'full'].includes(g.state) && g.deadline <= now() && !g.expiryRefreshSent) {
     g.expiryRefreshSent = true;
@@ -158,7 +173,7 @@ setInterval(() => { if (!document.hidden && state.config) refreshBoard().catch(e
     if (state.config.mode === 'demo') { $('#demo-note').hidden = false; $('#demo-note').textContent = `演示模式：菜单采集于 ${chinaDate(state.config.capturedAt)}，拼单、昵称和尾号为虚构。仅展示已采集套餐，不会真实下单${state.config.clockSpeed > 1 ? '；计时加速 ' + state.config.clockSpeed + ' 倍' : ''}。`; }
     state.stores = (await api('/stores')).stores;
     $('#store').innerHTML = state.stores.map(s => `<option value="${s.code}">${escape(s.name)}</option>`).join('');
-    $('#store').disabled = false; $('#new-group').disabled = false;
+    $('#store').disabled = false; $('#new-group').disabled = false; renderStoreChips();
     $('#store-address').textContent = state.stores[0]?.address ?? '暂时没有可用门店';
     await Promise.all([refreshBoard(), refreshMine()]);
   } catch (e) { $('#board').textContent = '暂时没有连上。请刷新页面重试。'; toast(e.message); }

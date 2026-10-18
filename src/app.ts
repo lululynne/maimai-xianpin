@@ -11,7 +11,7 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
   app.use('*', async (c, next) => {
     c.header('X-Content-Type-Options', 'nosniff');
     c.header('Referrer-Policy', 'no-referrer');
-    c.header('Content-Security-Policy', "default-src 'self'; img-src 'self' https://menu-img.mcd.cn https://img.mcd.cn data:; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+    c.header('Content-Security-Policy', "default-src 'self'; img-src 'self' https://menu-img.mcd.cn https://img.mcd.cn data:; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'self'; base-uri 'none'; form-action 'self'");
     await next();
   });
   app.use('/api/*', bodyLimit({ maxSize: 16 * 1024 }));

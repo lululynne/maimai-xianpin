@@ -80,6 +80,20 @@ button{border-radius:99px;font-weight:800}
 .card button{flex-shrink:0;padding:9px 16px;font-size:14px}
 .card button:not(.primary):not(.btn-y){background:#fff;border:1.5px solid var(--yel)}
 
+/* 别人的单＝麦麦黄底；我的单＝麦麦红底 */
+.card{background:var(--yel);border-color:var(--yel-d);box-shadow:0 4px 0 var(--yel-d)}
+.card.urgent{border-color:var(--red)}
+.card .t span{color:#5a3a1e}
+.card .t .allow{background:#fff;color:var(--ink)}
+.card button:not(.primary):not(.btn-y){background:#fff;border-color:#fff}
+.card.mine{background:var(--red);border-color:var(--red-d);box-shadow:0 4px 0 var(--red-d);color:#fff}
+.card.mine .t b,.card.mine .t .meal-name{color:#fff}
+.card.mine .t span{color:#FFE7A3}
+.card.mine .t b em{background:var(--yel);color:var(--ink)}
+.card.mine .t .allow{background:#fff;color:var(--red-d)}
+.card .corner{background:#fff}
+.card.mine .corner{border-color:#fff}
+
 /* 空状态 */
 .empty{border:0;padding:30px 20px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:4px}
 .empty img{width:120px;filter:grayscale(.2)}

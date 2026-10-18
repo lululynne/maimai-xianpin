@@ -70,9 +70,11 @@ test('demo merges periods and filters each store independently, falling back onl
   const catalog = new Catalog(new DemoMcpClient({ calls }, () => at), () => at);
   assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['101']);
   at = Date.parse('2026-10-19T04:00:00Z');
-  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['102', '103']);
+  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['102']);
   assert.deepEqual((await catalog.shareableMenu(STORE_CODES[1]!)).map(m => m.code), ['201']);
   assert.equal((await catalog.meal(STORE_CODES[0]!, '102')).parts.length, 2);
+  at = Date.parse('2026-10-19T11:00:00Z');
+  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['103']);
 });
 
 test('same code keeps its period price and invalidates cached detail at the breakfast boundary', async () => {
@@ -100,7 +102,50 @@ test('a later partial re-capture cannot hide a previously complete meal or turn 
   partial[1]!.result.structuredContent.data.rounds[0].quantity = 3;
   partial[1]!.result.structuredContent.data.rounds[0].choices[0].quantity = 3;
   partial[2]!.result.structuredContent.data = { productList: [], price: 0 };
-  const at = () => Date.parse('2026-10-19T11:30:00Z');
+  const at = () => Date.parse('2026-10-19T04:30:00Z');
   const catalog = new Catalog(new DemoMcpClient({ calls: [...calls, ...partial] }, at), at);
   assert.equal((await catalog.meal(STORE_CODES[0]!, '101')).priceCents, 3990);
+});
+
+test('reserved lunch and dinner captured at night retain actual capture time and separate quotes', async () => {
+  const lunch = captureMeal('301', '午晚双人餐', '2026-10-18T19:30:00Z', 4900);
+  const dinner = captureMeal('301', '午晚双人餐', '2026-10-18T19:31:00Z', 5900);
+  for (const c of lunch) c.arguments.reservationDate = '2026-10-19 12:00';
+  for (const c of dinner) c.arguments.reservationDate = '2026-10-19 19:00';
+  const now = () => Date.parse('2026-10-18T19:35:00Z');
+  let selected = Date.parse('2026-10-19T04:00:00Z');
+  const menuTime = () => selected;
+  const catalog = new Catalog(new DemoMcpClient({ calls: [...lunch, ...dinner] }, menuTime), now, 3000, undefined, menuTime);
+  const first = await catalog.meal(STORE_CODES[0]!, '301');
+  assert.equal(first.priceCents, 4900);
+  assert.equal(first.verifiedAt, Date.parse('2026-10-18T19:30:00Z'));
+  assert.equal(first.reservationDate, '2026-10-19 12:00');
+  selected = Date.parse('2026-10-19T11:00:00Z');
+  assert.equal((await catalog.meal(STORE_CODES[0]!, '301')).priceCents, 5900);
+});
+
+test('missing lunch single-item prices cannot borrow breakfast prices', async () => {
+  const breakfast = captureMeal('301', '双人餐', '2026-10-18T00:12:00Z', 3900);
+  const lunch = captureMeal('301', '双人餐', '2026-10-18T19:30:00Z', 4900).slice(0, 3);
+  for (const c of lunch) c.arguments.reservationDate = '2026-10-19 12:00';
+  const at = () => Date.parse('2026-10-19T04:00:00Z');
+  const catalog = new Catalog(new DemoMcpClient({ calls: [...breakfast, ...lunch] }, at), at);
+  assert.ok((await catalog.meal(STORE_CODES[0]!, '301')).parts.every(p => p.unitPriceCents === null));
+});
+
+test('unsupported reserved period falls back to recorded breakfast instead of replaying a failed menu', async () => {
+  const calls = captureMeal('401', '早餐组合', '2026-10-18T00:12:00Z');
+  calls.push({ name: 'query-meals', arguments: { storeCode: STORE_CODES[0]!, beType: 1, orderType: 1, reservationDate: '2026-10-19 12:00' }, capturedAt: '2026-10-18T19:30:00Z', result: { structuredContent: { success: false, code: 600054, data: null } } });
+  const at = () => Date.parse('2026-10-19T04:00:00Z');
+  const catalog = new Catalog(new DemoMcpClient({ calls }, at), at);
+  assert.deepEqual((await catalog.shareableMenu(STORE_CODES[0]!)).map(m => m.code), ['401']);
+  assert.equal((await catalog.meal(STORE_CODES[0]!, '401')).priceCents, 3990);
+});
+
+test('success with null data cannot replace a valid snapshot', async () => {
+  const calls = captureMeal('501', '双人餐', '2026-10-19T04:00:00Z');
+  calls.push({ ...calls[0]!, capturedAt: '2026-10-19T04:01:00Z', result: { structuredContent: { success: true, data: null } } });
+  const at = () => Date.parse('2026-10-19T04:02:00Z');
+  const catalog = new Catalog(new DemoMcpClient({ calls }, at), at);
+  assert.equal((await catalog.shareableMenu(STORE_CODES[0]!)).length, 1);
 });

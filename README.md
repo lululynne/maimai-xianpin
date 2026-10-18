@@ -4,7 +4,7 @@
 
 ![真实页面步骤演示](docs/images/demo-walkthrough.gif)
 
-上图为 10-18 功能版留档；纳纳红黄主题已经接入，当前补采午晚市菜单，新主题媒体待采集后更新。
+上图为 10-19 纳纳红黄主题的真实浏览器步骤截图序列；菜单已经接入午、晚市预约查询快照。
 
 大套餐一个人吃不完，就和同店的人各选几样，算清每人的那份，到店对卡片取餐。网页不碰支付，不代下单，不领券、不绑券。
 
@@ -21,7 +21,7 @@ npm run dev
 
 演示完整流程：发起（最多再允许 1 或 2 人）→ 相似拼单确认 → 模拟拼友加入 → 模拟已下单（每人得到自己的取餐码）→ 我已凭码取走我这份 → 模拟拼友取走 TA 那份。所有模拟入口只在 demo 模式注册。
 
-[桌面截图](docs/images/demo-desktop.jpg) · [手机截图](docs/images/demo-mobile.jpg) · [21 秒界面步骤视频](docs/images/demo-walkthrough.mp4)。动图和视频由真实界面状态截图序列组成，非连续屏幕录像。
+[桌面截图](docs/images/demo-desktop.jpg) · [手机截图](docs/images/demo-mobile.jpg) · [界面步骤视频](docs/images/demo-walkthrough.mp4)。动图和视频由真实界面状态截图序列组成，非连续屏幕录像。
 
 ## 真实菜单模式
 
@@ -43,6 +43,7 @@ chmod 600 .env
 | `PORT` | `8787` | 监听 `127.0.0.1` 的本地端口 |
 | `DATABASE_PATH` | 按模式分库 | 留空使用默认路径 |
 | `MIN_SHARE_PRICE_CENTS` | `3000` | 推荐套餐的价格阈值；识别到多件套餐时也会推荐 |
+| `DEMO_MENU_PERIOD` | `auto` | 演示菜单时段；可设 `breakfast` / `lunch` / `dinner` 提前体验，计时仍用真实时间 |
 | `DEMO_SPEED` | `1` | 演示计时倍速 1–60，live 固定 1 |
 
 ## 规则
@@ -63,7 +64,18 @@ chmod 600 .env
 
 菜单、明细、算价按门店和参数缓存十分钟。访客只接收白名单中的门店 / 餐品字段。门店搜索强制按位置搜索，不读取账号收藏；常点、随单购卡等字段不进入公开夹具。
 
-演示合并保留多个时段的真实记录：北京时间 10:30 前显示早餐，之后显示午晚市套餐；该店没有对应时段的完整记录时才退回全部。只有明细和整套匹配价格齐全的套餐进入演示菜单。当前午晚市采集进度见 [采集安排](docs/menu-capture-20261019.md)。
+演示按北京时间自动选早餐（10:30 前）、午市（10:30–17:00）、晚市（17:00 起），缓存和报价按这三个时段隔离。预约用餐时间决定快照所属时段，页面另标实际采集时间。缺少该时段记录时会明确提示历史快照回退，不能视为该时段可售。
+
+10-19 凌晨通过官方 `reservationDate` 提前查得当日 12:00、19:00 菜单。三乡、谷都大道、新天地各有 **29 / 24 / 30** 个真实可发起套餐，午晚市分别验证；三店示例自动退出。神湾大道两次均返回 `600054`（预约时间不在可预约时间范围），该接口当前只给早餐预约选项：其午晚市真实数为 **0**，页面保留明确提示的 4 个早餐历史快照及 7 个「示例」，不计入真实数。每个单件都尝试询价；空商品列表的零总额仍是未知价，触发按件均分。
+
+现在直接体验午市或晚市：
+
+```sh
+DEMO_MENU_PERIOD=lunch npm run dev
+# 或 DEMO_MENU_PERIOD=dinner npm run dev
+```
+
+完整数量、名单、实际采集时间和后台复查安排见 [菜单记录](docs/menu-capture-20261019.md) 与 [逐套核验表](docs/reviews/20261019-menu-counts.md)。
 
 `query-store-coupons` 和 `available-coupons` 的实际 schema / 工具描述均涉及账号可用或可领取的券，暂不接入。到点后请在官方 App 查看自己账号的券；静态理想版券档正常展示。
 
@@ -82,9 +94,9 @@ npm run typecheck
 ## 施工与验收
 
 - [当前状态](docs/STATUS.md)、[验证记录](docs/validation.md)、[原方案和施工卡](docs/INDEX.md)。
-- [美术预留位](docs/art-slots.md)：正式小水母、美术小件仍由 Mac mini 另开单。
+- [美术与图标覆盖](docs/art-slots.md)：纳纳主题和 27 件图片已接入；玉米、苹果等无专图时使用拼单袋。
 - Hono + TypeScript + Node.js SQLite，本地单命令启动。迁移 SQL 保持 D1 兼容；Cloudflare D1 运行适配器及部署尚未完成。
-- 本机验证与 Mac mini 独立验收是两步；没有把本地通过写成隔壁已验收。
+- 10-18 v1 有 Mac mini 独立验收；10-19 最新任务改由 Codex 负责完整核验，不再等待 mini 复核。
 
 ## 官方来源
 
@@ -93,3 +105,9 @@ npm run typecheck
 - `CONTEST_DECLARATION.md` 为官方模板原字节副本，来源与哈希见 [校验记录](docs/official-sources.md)。
 
 仓库当前保持私有。转公开、报名 issue 和最终提交由梅宝处理。
+
+## 版权声明
+
+本项目用于麦当劳 MCP 大赛参赛展示。原创代码采用 [PolyForm Noncommercial 1.0.0](LICENSE)，可在许可证允许的非商业用途下使用、学习和修改，商用须另获授权；完整条款以原文为准。`package.json` 保持 `private: true`，防止误发布 npm 包。
+
+纳纳绘制的 `public/assets/theme/` 图片采用 **CC BY-NC-ND 4.0（署名—非商业性使用—禁止演绎）**，见 [图片许可与署名](public/assets/theme/LICENSE.md)。转载需署名、限非商业用途，不得分发改作。代码许可证不授予麦当劳商标、菜单数据或第三方素材权利，详见 [NOTICE.md](NOTICE.md)。[官方许可证来源及原文字节校验](docs/official-sources.md) 已留档。

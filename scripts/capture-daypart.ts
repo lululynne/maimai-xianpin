@@ -22,13 +22,18 @@ export function candidatePriority(name: string): number {
   return 4;
 }
 
-export async function captureDaypart(date: string, period: string) {
-  if (!captureWindow(Date.now(), date, period).open) throw new Error('MCD_OUTSIDE_CAPTURE_WINDOW');
+export async function captureDaypart(date: string, period: string, reserved = false, stores = STORE_CODES) {
+  if (reserved) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !['breakfast', 'lunch', 'dinner'].includes(period)) throw new Error('INVALID_CAPTURE_WINDOW');
+  } else captureWindow(Date.now(), date, period);
+  if (!stores.length || stores.some(s => !STORE_CODES.includes(s))) throw new Error('INVALID_STORE');
+  const reservationDate = reserved ? `${date} ${period === 'breakfast' ? '08:00' : period === 'lunch' ? '12:00' : '19:00'}` : undefined;
+  if (!reserved && !captureWindow(Date.now(), date, period).open) throw new Error('MCD_OUTSIDE_CAPTURE_WINDOW');
   const token = process.env.MCD_MCP_TOKEN?.trim();
   if (!token) throw new Error('MCD_MCP_TOKEN_MISSING');
   await mkdir('.local/probes', { recursive: true, mode: 0o700 });
   await mkdir('.local/menu-captures', { recursive: true, mode: 0o700 });
-  const prefix = `${date}-${period}`, reportPath = `.local/menu-captures/${prefix}.json`;
+  const prefix = `${date}-${period}${reserved ? '-reserved' : ''}`, reportPath = `.local/menu-captures/${prefix}.json`;
   try {
     const previous = JSON.parse(await readFile(reportPath, 'utf8'));
     if (previous.finishedAt && previous.status === 'captured') { console.log('MCD_CAPTURE_ALREADY_FINISHED'); return previous; }
@@ -39,17 +44,17 @@ export async function captureDaypart(date: string, period: string) {
   const startedAt = new Date().toISOString();
   const runId = startedAt.replace(/\D/g, '');
   let sequence = 0;
-  const report: any = { date, period, startedAt, status: 'running', stores: [], errors: [], callCount: 0 };
+  const report: any = { date, period, mode: reserved ? 'reserved-query' : 'live-recheck', reservationDate, startedAt, status: 'running', stores: [], errors: [], callCount: 0 };
   const saveReport = async () => writeFile(reportPath, JSON.stringify(report, null, 2) + '\n', { mode: 0o600 });
   const seenPrices = new Map<string, Capture>();
   async function call(name: PublicReadTool, args: Record<string, unknown>): Promise<Capture> {
-    if (!captureWindow(Date.now(), date, period).open) throw new Error('MCD_OUTSIDE_CAPTURE_WINDOW');
+    if (!reserved && !captureWindow(Date.now(), date, period).open) throw new Error('MCD_OUTSIDE_CAPTURE_WINDOW');
     const key = name + JSON.stringify(args);
     if (name === 'calculate-price' && seenPrices.has(key)) return seenPrices.get(key)!;
     let result: any;
     try { result = await client.call(name, args); }
     catch { result = { structuredContent: { success: false, code: 'MCD_READ_FAILED', message: 'Read failed', data: null }, isError: true }; }
-    if (!captureWindow(Date.now(), date, period).open) throw new Error('MCD_OUTSIDE_CAPTURE_WINDOW');
+    if (!reserved && !captureWindow(Date.now(), date, period).open) throw new Error('MCD_OUTSIDE_CAPTURE_WINDOW');
     const entry: Capture = { name, arguments: args, capturedAt: new Date().toISOString(), result };
     // Raw public-tool responses stay private; credentials never enter logs or fixtures.
     const safe = JSON.stringify(entry, null, 2).replaceAll(token!, '[REDACTED]') + '\n';
@@ -62,10 +67,10 @@ export async function captureDaypart(date: string, period: string) {
     await saveReport();
     const tools = await client.listTools();
     await writeFile('.local/probes/tools-list.json', JSON.stringify({ capturedAt: new Date().toISOString(), tools }, null, 2).replaceAll(token, '[REDACTED]') + '\n', { mode: 0o600 });
-    for (const store of STORE_CODES) {
+    for (const store of stores) {
       const summary: any = { storeCode: store, candidates: 0, captured: [], rejected: [] };
       report.stores.push(summary);
-      const args = { storeCode: store, beType: 1, orderType: 1 };
+      const args = { storeCode: store, beType: 1, orderType: 1, ...(reservationDate ? { reservationDate } : {}) };
       let data: any;
       try { data = unwrap((await call('query-meals', args)).result); }
       catch { summary.error = 'MCD_MENU_READ_FAILED'; await saveReport(); continue; }
@@ -111,8 +116,9 @@ export async function captureDaypart(date: string, period: string) {
     await client.close().catch(() => {});
     try {
       const calls = await captureFixtures();
-      const now = () => Date.parse(startedAt);
-      const catalog = new Catalog(new DemoMcpClient({ calls }, now), now);
+      const now = Date.now;
+      const menuTime = () => reservationDate ? Date.parse(reservationDate.replace(' ', 'T') + ':00+08:00') : Date.parse(startedAt);
+      const catalog = new Catalog(new DemoMcpClient({ calls }, menuTime), now, 3000, undefined, menuTime);
       for (const store of report.stores) {
         const menu = await catalog.shareableMenu(store.storeCode);
         // Count this round's successful meals, never breakfast fallback.
@@ -120,6 +126,20 @@ export async function captureDaypart(date: string, period: string) {
         if (store.offered.length < 10) report.status = 'partial';
       }
     } catch { report.errors.push('MCD_FIXTURE_MERGE_FAILED'); report.status = 'partial'; }
+    if (!reserved) {
+      try {
+        const earlier = JSON.parse(await readFile(`.local/menu-captures/${date}-${period}-reserved.json`, 'utf8'));
+        report.unitPriceChanges = report.stores.flatMap((store: any) => store.captured.flatMap((meal: any) => {
+          const previous = earlier.stores.find((s: any) => s.storeCode === store.storeCode)?.captured.find((m: any) => m.code === meal.code);
+          if (!previous) return [];
+          return meal.parts.flatMap((part: any) => { const old = previous.parts.find((p: any) => p.code === part.code); return old && old.unitPriceCents !== part.unitPriceCents ? [{ storeCode: store.storeCode, mealCode: meal.code, code: part.code, name: part.name, reservedCents: old.unitPriceCents, currentCents: part.unitPriceCents }] : []; });
+        }));
+        report.priceChanges = report.stores.flatMap((store: any) => store.captured.flatMap((meal: any) => {
+          const previous = earlier.stores.find((s: any) => s.storeCode === store.storeCode)?.captured.find((m: any) => m.code === meal.code);
+          return previous && previous.priceCents !== meal.priceCents ? [{ storeCode: store.storeCode, code: meal.code, name: meal.name, reservedCents: previous.priceCents, currentCents: meal.priceCents }] : [];
+        }));
+      } catch { report.priceChanges = null; }
+    }
     await saveReport();
     await lock.close();
     await unlink(lockPath);
@@ -129,6 +149,6 @@ export async function captureDaypart(date: string, period: string) {
 }
 
 if (process.argv[1]?.endsWith('/capture-daypart.ts')) {
-  try { await captureDaypart(process.argv[2] ?? '', process.argv[3] ?? ''); }
+  try { await captureDaypart(process.argv[2] ?? '', process.argv[3] ?? '', process.argv.includes('--reserve'), process.argv.find(a => a.startsWith('--store='))?.slice(8).split(',') ?? STORE_CODES); }
   catch (error: any) { console.error(/^[A-Z_]+$/.test(error.message ?? '') ? error.message : 'MCD_CAPTURE_FAILED'); process.exitCode = 1; }
 }

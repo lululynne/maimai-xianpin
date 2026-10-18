@@ -5,12 +5,13 @@ import { randomUUID } from 'node:crypto';
 import type { Catalog } from './catalog.js';
 import { windowAt, pickHostDefault, DomainError, type Groups } from './domain/groups.js';
 
-export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string }) {
+export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string; menuPreview?: string }) {
   const { catalog, groups, mode, now } = options;
   const app = new Hono<{ Variables: { device: string } }>();
   app.use('*', async (c, next) => {
     c.header('X-Content-Type-Options', 'nosniff');
     c.header('Referrer-Policy', 'no-referrer');
+    c.header('Cache-Control', 'no-cache');
     c.header('Content-Security-Policy', "default-src 'self'; img-src 'self' https://menu-img.mcd.cn https://img.mcd.cn data:; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'self'; base-uri 'none'; form-action 'self'");
     await next();
   });
@@ -32,11 +33,16 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     const known = /^(INVALID_STORE|INVALID_MEAL|MEAL_NOT_AVAILABLE|MEAL_NOT_SHAREABLE|MEAL_TOO_LARGE|MEAL_PRICE_UNAVAILABLE|MCD_[A-Z_]+|DEMO_CAPTURE_NOT_AVAILABLE)$/;
     return c.json({ error: known.test(error.message) ? error.message : '服务暂时不可用，请稍后重试' }, 502);
   });
-  app.get('/api/config', c => c.json({ mode, serverNow: now(), clockSpeed: options.speed, capturedAt: options.capturedAt, couponsEnabled: false, window: windowAt(now()), windowSimulated: mode === 'demo' }));
+  app.get('/api/config', c => c.json({ mode, serverNow: now(), clockSpeed: options.speed, capturedAt: options.capturedAt, menuPreview: options.menuPreview ?? 'auto', couponsEnabled: false, window: windowAt(now()), windowSimulated: mode === 'demo' }));
   // 午市 11:30–14:30、晚市 18:30–21:30 才开放发起和加入；演示模式按开放时段模拟。
   const requireWindow = () => { if (mode !== 'demo' && !windowAt(now()).open) throw new DomainError(`拼单只在午市 11:30–14:30、晚市 18:30–21:30 开放，下一场 ${windowAt(now()).next}`, 409); };
   app.get('/api/stores', async c => c.json({ stores: await catalog.stores() }));
-  app.get('/api/stores/:store/meals', async c => c.json({ meals: await catalog.shareableMenu(c.req.param('store')) }));
+  app.get('/api/stores/:store/meals', async c => {
+    const meals = await catalog.shareableMenu(c.req.param('store'));
+    const period = catalog.activePeriod();
+    const fallback = mode === 'demo' && !meals.some(m => !m.sample && m.availablePeriods?.includes(period));
+    return c.json({ meals, period, fallback });
+  });
   app.get('/api/stores/:store/meals/:meal', async c => c.json({ meal: await catalog.meal(c.req.param('store'), c.req.param('meal')) }));
   app.get('/api/groups', c => c.json({ groups: groups.list(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() }));
   app.get('/api/mine', c => c.json({ groups: groups.mine(c.get('device')).map(g => groups.view(g, c.get('device'))) }));
@@ -84,7 +90,8 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     if (groups.mine(device).some(g => g.hostId === g.members.find(m => m.device === device)?.id)) return c.json({ seeded: false });
     const body = await c.req.json().catch(() => ({}));
     const store = typeof body?.storeCode === 'string' ? body.storeCode : '1420082';
-    const meal = await catalog.meal(store, '9900016136');
+    const menu = await catalog.shareableMenu(store);
+    const meal = await catalog.meal(store, menu.find(m => /双人|分享|桶/.test(m.name))?.code ?? menu[0]?.code ?? '9900016136');
     groups.create(device, store, meal, { nickname: demoHostName(store), tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal), people: 2, minutes: 60 }, now() - 18 * 60_000);
     return c.json({ seeded: true });
   });

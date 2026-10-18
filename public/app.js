@@ -42,7 +42,7 @@ function similarPartsText(parts) {
 const ICON = '/assets/theme/';
 function mealIcon(name = '') {
   // 按剩下的主要餐品配纳纳的食物图标；没有对应的就用拼单图标。
-  const rules = [[/桶|分享|家庭|双人|三人|组合|套/, 'pindan-icon'], [/油条/, 'youtiao-icon'], [/薯饼/, 'hashbrown-icon'], [/厚松饼/, 'choco-pancake-pork-icon'], [/冰咖|鲜萃|冰美式|冰拿铁|咖啡|美式|拿铁|卡布|浓缩|咖/, 'iced-coffee-icon'], [/玩具|开心乐园/, 'toy-gift-icon'], [/营养卷|卷/, 'wrap-icon'], [/豆浆/, 'soymilk-icon'], [/牛奶|燕麦奶|奶铁/, 'milk-icon'], [/红茶|奶茶|柠檬红茶|茶/, 'black-tea-icon'], [/橙|美汁源|苹果汁|果汁/, 'orange-juice-icon'], [/柠|雪碧|怡泉|气泡/, 'lemon-soda-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡|麦满分/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
+  const rules = [[/桶|分享|家庭|双人|三人|组合|套/, 'pindan-icon'], [/油条/, 'youtiao-icon'], [/薯饼/, 'hashbrown-icon'], [/厚松饼/, 'choco-pancake-pork-icon'], [/冰咖|鲜萃|冰美式|冰拿铁|咖啡|美式|拿铁|卡布|浓缩|咖/, 'iced-coffee-icon'], [/玩具|开心乐园/, 'toy-gift-icon'], [/营养卷|卷/, 'wrap-icon'], [/豆浆/, 'soymilk-icon'], [/牛奶|燕麦奶|奶铁/, 'milk-icon'], [/红茶|奶茶|柠檬红茶|茶/, 'black-tea-icon'], [/橙|美汁源|苹果汁|果汁/, 'orange-juice-icon'], [/柠|雪碧|怡泉|气泡/, 'lemon-soda-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡|麦满分|麦香鱼|麦香鸡|巨无霸/, 'burger-icon'], [/翅|鸡块|麦乐鸡|脆汁鸡|鸡排/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
   return ICON + (rules.find(([re]) => re.test(name))?.[1] ?? 'pindan-icon') + '.png';
 }
 // 套餐格子按套餐里的主角配纳纳的图：先去掉「双人/分享/组合/套餐」这些词再匹配，匹配不到才用拼单纸袋（10-19 02:3x）。
@@ -188,7 +188,7 @@ async function refreshMine() {
 }
 // 与服务端 src/domain/groups.ts 同一套分类：4 件以上的套餐，发起人至少 1 饮料 + 1 主食。
 const DRINK = /可乐|雪碧|芬达|咖|美式|拿铁|奶铁|卡布|浓缩|茶|饮|豆浆|牛奶|奶昔|果汁|橙|柠|水|怡泉/;
-const MAIN = /堡|麦满分|营养卷|卷|鸡腿|鸡翅|鸡块|麦乐鸡|鸡排|粥|饭|面|扒|肠/;
+const MAIN = /堡|麦满分|麦香鱼|麦香鸡|巨无霸|营养卷|卷|鸡腿|鸡翅|鸡块|麦乐鸡|鸡排|脆汁鸡|V翅|粥|饭|面|扒|肠/;
 const kindOf = name => DRINK.test(name) ? 'drink' : MAIN.test(name) ? 'main' : 'other';
 const KIND_LABEL = { drink: '饮料', main: '主食', other: '小食' };
 // 4 件以上至少 1 饮料 + 1 主食；6 件以上至少 2 + 2；主食两份以上时给拼友留一份。
@@ -201,7 +201,7 @@ function hostNeeds(meal) {
 const hostRule = meal => hostNeeds(meal).main > 0;
 function hostDefault(meal) {
   const n = hostNeeds(meal);
-  if (!n.main) return meal.parts.slice(0, 2).map(p => p.id);
+  if (!n.main) return meal.parts.slice(0, Math.min(2, meal.parts.length - 1)).map(p => p.id);
   return [...meal.parts.filter(p => kindOf(p.name) === 'main').slice(0, n.main), ...meal.parts.filter(p => kindOf(p.name) === 'drink').slice(0, n.drink)].map(p => p.id);
 }
 function checks(parts, selected = [], name = 'partIds') {
@@ -235,7 +235,7 @@ async function selectMeal() {
     if (code !== $('#meal-select').value) return;
     state.selectedMeal = data.meal;
     const meal = data.meal;
-    $('#meal-info').innerHTML = `${hostRule(meal) ? `<p class="rule">这是 ${meal.parts.length} 件的套餐：发起人至少拿 <b>${hostNeeds(meal).drink} 份饮料 + ${hostNeeds(meal).main} 份主食</b>。等待补偿归你，饮料的溢价也由你担；主食不能全拿走，给拼友留一份。</p>` : ''}${checks(meal.parts, hostDefault(meal))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
+    $('#meal-info').innerHTML = `${hostRule(meal) ? `<p class="rule">这是 ${meal.parts.length} 件的套餐：发起人至少拿 <b>${hostNeeds(meal).drink} 份饮料 + ${hostNeeds(meal).main} 份主食</b>。等待补偿归你，饮料的溢价也由你担；主食不能全拿走，给拼友留一份。</p>` : ''}${checks(meal.parts, hostDefault(meal))}<p class="muted">${meal.sample ? '示例参考价' : '套餐核价'} <strong>${money(meal.priceCents)}</strong>${meal.sample ? ' · 示例内容，非 MCP 核价' : (meal.reservationDate ? ' · 预约用餐 ' + escape(meal.reservationDate) : '') + ' · 采集 ' + chinaDate(meal.verifiedAt)} · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
     const max = Math.min(3, meal.parts.length);
     document.querySelectorAll('#people-grid input').forEach(r => { r.disabled = Number(r.value) > max; if (r.disabled && r.checked) document.querySelector('#people-grid input[value="2"]').checked = true; });
   } catch (e) { $('#meal-info').innerHTML = `<p class="hint">${escape(e.message)}</p>`; }
@@ -244,6 +244,8 @@ async function selectMeal() {
 async function compose() {
   $('#compose').showModal(); $('#meal-grid').innerHTML = friesLoader('正在查看这家店的套餐…'); $('#meal-info').innerHTML = '';
   const data = await api(`/stores/${$('#store').value}/meals`); state.meals = data.meals;
+  $('#menu-availability').hidden = !data.fallback;
+  $('#menu-availability').textContent = data.fallback ? '这家店当前未提供可查询的这个时段菜单，先展示已有快照和标为「示例」的体验套餐。' : '';
   if (!data.meals.length) { $('#meal-grid').innerHTML = '<p class="muted">这个时段还没有适合拆分的套餐，稍后再看看。</p>'; return; }
   $('#meal-grid').innerHTML = data.meals.map(m => `<button type="button" class="meal-tile" data-code="${escape(m.code)}"><span class="pic"><img src="${mealTileIcon(m.name)}" alt=""></span>${m.sample ? '<i class="sample-tag">示例</i>' : ''}<b>${escape(m.name)}</b><small>${m.menuPriceCents === null ? '价格待核' : money(m.menuPriceCents) + (m.sample ? ' 参考价' : '')}${!m.sample && m.tags?.[0] ? ' · ' + escape(m.tags[0]) : ''}</small></button>`).join('');
   document.querySelectorAll('.meal-tile').forEach(t => t.addEventListener('click', guard(async () => { $('#meal-select').value = t.dataset.code; await selectMeal(); })));
@@ -320,7 +322,7 @@ setInterval(() => { if (!document.hidden && state.config) refreshBoard().catch(e
     artManifest = await fetch('/assets/manifest.json').then(r => r.json()).catch(() => ({})); applyArt();
     state.config = await api('/config'); syncClock(state.config.serverNow);
     $('#mode-badge').textContent = state.config.mode === 'demo' ? '演示模式 · 真实菜单快照' : '实时菜单';
-    if (state.config.mode === 'demo') { $('#demo-note').hidden = false; $('#demo-note').textContent = `演示模式：菜单采集于 ${chinaDate(state.config.capturedAt)}，拼单、昵称和尾号为虚构。仅展示已采集套餐，不会真实下单${state.config.clockSpeed > 1 ? '；计时加速 ' + state.config.clockSpeed + ' 倍' : ''}。`; }
+    if (state.config.mode === 'demo') { $('#demo-note').hidden = false; $('#demo-note').textContent = `演示模式${state.config.menuPreview !== 'auto' ? ' · ' + ({breakfast:'早餐',lunch:'午市',dinner:'晚市'}[state.config.menuPreview] ?? '') + '预览' : ''}：使用真实接口快照（最近采集 ${chinaDate(state.config.capturedAt)}），拼单、昵称和尾号为虚构。仅展示已采集套餐，不会真实下单${state.config.clockSpeed > 1 ? '；计时加速 ' + state.config.clockSpeed + ' 倍' : ''}。`; }
     state.stores = (await api('/stores')).stores;
     $('#store').innerHTML = state.stores.map(s => `<option value="${s.code}">${escape(s.name)}</option>`).join('');
     $('#store').disabled = false; $('#new-group').disabled = false; renderStoreChips();

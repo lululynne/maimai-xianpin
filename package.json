@@ -12,7 +12,8 @@
     "probe:mcp": "node --env-file-if-exists=.env --import tsx scripts/probe-mcp.ts",
     "dev": "node --env-file-if-exists=.env --import tsx src/server.ts",
     "capture:fixtures": "node --env-file-if-exists=.env --import tsx scripts/capture-fixtures.ts",
-    "capture:daypart": "node --env-file-if-exists=.env --import tsx scripts/capture-daypart.ts"
+    "capture:daypart": "node --env-file-if-exists=.env --import tsx scripts/capture-daypart.ts",
+    "validate:catalog": "node --import tsx scripts/validate-catalog.ts"
   },
   "dependencies": {
     "@hono/node-server": "2.1.5",
@@ -23,5 +24,6 @@
     "@types/node": "26.6.5",
     "tsx": "4.23.15",
     "typescript": "7.0.2"
-  }
+  },
+  "license": "PolyForm-Noncommercial-1.0.0"
 }

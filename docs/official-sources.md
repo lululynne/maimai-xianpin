@@ -23,3 +23,14 @@
 - `.gitattributes` 对该文件禁用文本换行转换，保持官方字节。
 
 正式提交比赛前再次核对官方版本；本文只记录来源，不修改声明正文。
+
+## 10-19 许可证原文
+
+| 文件 | 官方下载来源 | SHA-256 | 字节 |
+| --- | --- | --- | ---: |
+| `LICENSE` | https://polyformproject.org/licenses/noncommercial/1.0.0.txt | `ffcca38841adb694b6f380647e15f17c446a4d1656fed51a1e2041d064c94cc8` | 4563 |
+| `public/assets/theme/LICENSE-CC-BY-NC-ND-4.0.txt` | https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.txt | `38762e3777f4ec00a6f769062a7c3f704fb78ce08303ecff88558da4c49cf9ea` | 19127 |
+
+两件全文均从官方站点按原字节下载，`.gitattributes` 禁用换行转换；CC 原文自带末尾空行，保留并对该文件关闭 blank-at-eof 检查。代码 / 图片适用范围、署名、第三方商标与数据边界另写 `NOTICE.md` 和图片目录 `LICENSE.md`，不插入许可证原文。此处记录用户选定许可证，不把它称作 OSI 开源许可或额外保证比赛资格。
+
+最新补菜单卡按末尾「改定 03:2x」执行，其 SHA 见 `menu-capture-20261019.md`。声明文件本批次未修改，仍为上列 1522 字节官方副本。

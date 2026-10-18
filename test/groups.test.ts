@@ -254,3 +254,18 @@ test('pickHostDefault never takes every main when filling up', () => {
     assert.ok(!(ids.includes('d0') && ids.includes('d1')), `count ${count}`);
   }
 });
+
+test('real menu names without the character bao still enforce host drink and leave-a-main rules', () => {
+  const repo = new Repository(':memory:', 'demo');
+  try {
+    const groups = new Groups(repo);
+    const meal = { code: '701', name: '麦香鱼双人餐', image: '', menuPriceCents: 5000, tags: [], priceCents: 5000, verifiedAt: Date.now(), parts: [
+      { id: 'fish1', code: 'fish', name: '麦香鱼', unitPriceCents: 2000, supportModify: false },
+      { id: 'fish2', code: 'fish', name: '麦香鱼', unitPriceCents: 2000, supportModify: false },
+      { id: 'drink1', code: 'cola', name: '可乐中杯', unitPriceCents: 1000, supportModify: false },
+      { id: 'drink2', code: 'cola', name: '可乐中杯', unitPriceCents: 1000, supportModify: false },
+    ] };
+    assert.throws(() => groups.create('host', '1420082', meal, { nickname: '鱼堡', tail4: '1234', partIds: ['fish1', 'fish2'], people: 2 }), /饮料/);
+    assert.equal(groups.create('host', '1420082', meal, { nickname: '鱼堡', tail4: '1234', partIds: ['fish1', 'drink1'], people: 2 }).state, 'open');
+  } finally { repo.close(); }
+});

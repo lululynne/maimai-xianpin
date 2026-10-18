@@ -9,6 +9,7 @@ import { Groups, pickHostDefault } from './domain/groups.js';
 import { McdMcpClient } from './mcp/client.js';
 import { DemoMcpClient } from './mcp/demo.js';
 import { sampleMeals } from './sample-meals.js';
+import { menuPeriod, serviceTime } from './dayparts.js';
 
 const mode = process.env.MCD_MODE ?? 'demo';
 if (mode !== 'demo' && mode !== 'live') throw new Error('INVALID_MCD_MODE');
@@ -17,8 +18,15 @@ const speed = mode === 'demo' ? Number(process.env.DEMO_SPEED ?? 1) : 1;
 if (!Number.isFinite(speed) || speed < 1 || speed > 60) throw new Error('INVALID_DEMO_SPEED');
 const base = Date.now();
 const now = () => base + (Date.now() - base) * speed;
-const reader = mode === 'demo' ? new DemoMcpClient(snapshot, now) : new McdMcpClient(process.env.MCD_MCP_TOKEN ?? '');
-const catalog = new Catalog(reader, now, Number(process.env.MIN_SHARE_PRICE_CENTS ?? 3000), mode === 'demo' ? sampleMeals : undefined);
+const menuPreview = mode === 'demo' ? process.env.DEMO_MENU_PERIOD ?? 'auto' : 'auto';
+if (!['auto', 'breakfast', 'lunch', 'dinner'].includes(menuPreview)) throw new Error('INVALID_MENU_PREVIEW');
+const menuTime = () => {
+  if (menuPreview === 'auto') return now();
+  const date = new Date(now() + 8 * 3600_000).toISOString().slice(0, 10);
+  return Date.parse(`${date}T${menuPreview === 'breakfast' ? '08:00' : menuPreview === 'lunch' ? '12:00' : '19:00'}:00+08:00`);
+};
+const reader = mode === 'demo' ? new DemoMcpClient(snapshot, menuTime) : new McdMcpClient(process.env.MCD_MCP_TOKEN ?? '');
+const catalog = new Catalog(reader, now, Number(process.env.MIN_SHARE_PRICE_CENTS ?? 3000), mode === 'demo' ? sampleMeals : undefined, menuTime);
 const repo = new Repository(process.env.DATABASE_PATH || `data/${mode}.sqlite`, mode);
 const groups = new Groups(repo, now);
 repo.sweep(now());
@@ -29,7 +37,7 @@ if (mode === 'demo') {
     // 演示五单：有人赶时间只允许 1 人加入，有人等得起允许 2 人加入；快照里有全家桶/分享盒时优先用它。
     const menu = await catalog.shareableMenu(store);
     const big = menu.find(m => /桶|分享|家庭/.test(m.name));
-    const meal = await catalog.meal(store, big?.code ?? '9900016136');
+    const meal = await catalog.meal(store, big?.code ?? menu.find(m => /双人/.test(m.name))?.code ?? menu[0]?.code ?? '9900016136');
     const seeds = [
       { nickname: '小林', tail4: '2716', take: 2, people: 2, minutes: 10, ago: 4 },
       { nickname: '小圆', tail4: '5832', take: 1, people: 3, minutes: 30, ago: 7 },
@@ -53,7 +61,9 @@ if (mode === 'demo') {
   }
 }
 
-const app = createApp({ catalog, groups, mode, now, speed, capturedAt: snapshot.calls[0]?.capturedAt ?? '' });
+const periodCaptures = snapshot.calls.filter((c: any) => c.name === 'query-meals' && c.result?.structuredContent?.success && menuPeriod(serviceTime(c.arguments.reservationDate, c.capturedAt)) === menuPeriod(menuTime()));
+const capturedAt = periodCaptures.at(-1)?.capturedAt ?? snapshot.calls.at(-1)?.capturedAt ?? '';
+const app = createApp({ catalog, groups, mode, now, speed, capturedAt, menuPreview });
 const root = fileURLToPath(new URL('../public/', import.meta.url));
 app.get('/*', serveStatic({ root }));
 const port = Number(process.env.PORT ?? 8787);

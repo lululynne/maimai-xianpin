@@ -1,0 +1,5328 @@
+{
+  "checkedAt": "2026-10-18T19:48:30.171Z",
+  "sourceCallCount": 645,
+  "periods": {
+    "breakfast": [
+      {
+        "store": "1420082",
+        "forRequestedPeriod": 3,
+        "fallback": 0,
+        "samples": 7,
+        "singlePricesComplete": 0,
+        "meals": [
+          {
+            "code": "9900016136",
+            "name": "满分厚松饼堡双人餐",
+            "priceCents": 3990,
+            "verifiedAt": "2026-10-18T00:12:04.887Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巧克力味厚松饼猪柳堡",
+                "kind": "main",
+                "unitPriceCents": 1800
+              },
+              {
+                "name": "原味板烧鸡腿麦满分",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "脆薯饼",
+                "kind": "other",
+                "unitPriceCents": 850
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900003728",
+            "name": "脆香油条豆浆组合",
+            "priceCents": 1850,
+            "verifiedAt": "2026-10-18T00:12:06.949Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "优品豆浆大杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900013221",
+            "name": "一早现磨 超值二件套",
+            "priceCents": 1490,
+            "verifiedAt": "2026-10-18T00:12:07.113Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士蛋麦满分",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦咖啡™冰美式中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1420800",
+        "forRequestedPeriod": 1,
+        "fallback": 0,
+        "samples": 7,
+        "singlePricesComplete": 0,
+        "meals": [
+          {
+            "code": "9900016136",
+            "name": "满分厚松饼堡双人餐",
+            "priceCents": 3990,
+            "verifiedAt": "2026-10-18T00:12:07.331Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巧克力味厚松饼猪柳堡",
+                "kind": "main",
+                "unitPriceCents": 1800
+              },
+              {
+                "name": "原味板烧鸡腿麦满分",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "脆薯饼",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1420277",
+        "forRequestedPeriod": 3,
+        "fallback": 0,
+        "samples": 7,
+        "singlePricesComplete": 0,
+        "meals": [
+          {
+            "code": "9900016136",
+            "name": "满分厚松饼堡双人餐",
+            "priceCents": 3990,
+            "verifiedAt": "2026-10-18T00:12:08.380Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "枫糖风味厚松饼猪柳堡",
+                "kind": "main",
+                "unitPriceCents": 1800
+              },
+              {
+                "name": "原味板烧鸡腿麦满分",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "脆薯饼",
+                "kind": "other",
+                "unitPriceCents": 850
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900003728",
+            "name": "脆香油条豆浆组合",
+            "priceCents": 1850,
+            "verifiedAt": "2026-10-18T00:12:09.188Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "优品豆浆大杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900013221",
+            "name": "一早现磨 超值二件套",
+            "priceCents": 1490,
+            "verifiedAt": "2026-10-18T00:12:09.429Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士蛋麦满分",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦咖啡™冰美式中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1421248",
+        "forRequestedPeriod": 4,
+        "fallback": 0,
+        "samples": 7,
+        "singlePricesComplete": 1,
+        "meals": [
+          {
+            "code": "9900016136",
+            "name": "满分厚松饼堡双人餐",
+            "priceCents": 3990,
+            "verifiedAt": "2026-10-18T00:12:09.572Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巧克力味厚松饼猪柳堡",
+                "kind": "main",
+                "unitPriceCents": 1800
+              },
+              {
+                "name": "原味板烧鸡腿麦满分",
+                "kind": "main",
+                "unitPriceCents": 1550
+              },
+              {
+                "name": "脆薯饼",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900013221",
+            "name": "一早现磨 超值二件套",
+            "priceCents": 1490,
+            "verifiedAt": "2026-10-18T00:12:10.614Z",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士蛋麦满分",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦咖啡™冰美式中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900003728",
+            "name": "脆香油条豆浆组合",
+            "priceCents": 1800,
+            "verifiedAt": "2026-10-18T19:30:21.532Z",
+            "reservationDate": "2026-10-19 08:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": true,
+            "parts": [
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "优品豆浆大杯",
+                "kind": "drink",
+                "unitPriceCents": 1200
+              }
+            ]
+          },
+          {
+            "code": "9900011872",
+            "name": "芝芝火腿扒堡组合",
+            "priceCents": 990,
+            "verifiedAt": "2026-10-18T19:30:20.586Z",
+            "reservationDate": "2026-10-19 08:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝芝火腿扒堡",
+                "kind": "main",
+                "unitPriceCents": 1300
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "lunch": [
+      {
+        "store": "1420082",
+        "forRequestedPeriod": 29,
+        "fallback": 0,
+        "samples": 0,
+        "singlePricesComplete": 1,
+        "meals": [
+          {
+            "code": "9900005456",
+            "name": "麦辣鸡腿汉堡三件套",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:25:43.837Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016075",
+            "name": "龙焰芝士棒鸡腿堡三件套",
+            "priceCents": 2990,
+            "verifiedAt": "2026-10-18T19:25:46.831Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰芝士棒鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2750
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016073",
+            "name": "龙焰鸡腿堡三件套",
+            "priceCents": 2690,
+            "verifiedAt": "2026-10-18T19:25:47.394Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005460",
+            "name": "麦香鱼套餐",
+            "priceCents": 3350,
+            "verifiedAt": "2026-10-18T19:25:47.962Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005462",
+            "name": "板烧鸡腿堡三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:25:48.560Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005464",
+            "name": "双层吉士汉堡套餐",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:25:48.955Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "双层吉士汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005466",
+            "name": "巨无霸三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:25:49.486Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005449",
+            "name": "吉士汉堡包套餐",
+            "priceCents": 2600,
+            "verifiedAt": "2026-10-18T19:25:50.044Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005451",
+            "name": "麦辣鸡翅4块套餐",
+            "priceCents": 3700,
+            "verifiedAt": "2026-10-18T19:25:42.499Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅4块",
+                "kind": "main",
+                "unitPriceCents": 2600
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005453",
+            "name": "麦香鸡套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:25:50.644Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鸡",
+                "kind": "main",
+                "unitPriceCents": 1700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900006332",
+            "name": "薄皮V翅双拼十翅",
+            "priceCents": 4990,
+            "verifiedAt": "2026-10-18T19:25:51.124Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005468",
+            "name": "培根蔬萃双层牛堡三件套",
+            "priceCents": 3550,
+            "verifiedAt": "2026-10-18T19:25:51.705Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016081",
+            "name": "“我就喜欢”鸡薯双全盒",
+            "priceCents": 1590,
+            "verifiedAt": "2026-10-18T19:25:52.186Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "5块心形薯饼",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "5块麦乐鸡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "甜酸酱",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005413",
+            "name": "双层深海鳕鱼堡三件套",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:25:53.247Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "原味双层深海鳕鱼堡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015730",
+            "name": "BFF四宫格小食盘",
+            "priceCents": 3980,
+            "verifiedAt": "2026-10-18T19:25:53.758Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004835",
+            "name": "麦乐鸡套餐",
+            "priceCents": 2550,
+            "verifiedAt": "2026-10-18T19:25:43.340Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦乐鸡5块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011126",
+            "name": "酥脆无双套餐",
+            "priceCents": 2000,
+            "verifiedAt": "2026-10-18T19:25:54.402Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "迷你薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015602",
+            "name": "大堡口福三件套",
+            "priceCents": 2290,
+            "verifiedAt": "2026-10-18T19:25:55.606Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "Hold不住鸡排堡（椒盐风味）",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011128",
+            "name": "“堡”你欢乐套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:25:56.132Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011121",
+            "name": "“苹”水相“鱼”套餐",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:25:56.802Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": true,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "锡兰红茶",
+                "kind": "drink",
+                "unitPriceCents": 1100
+              }
+            ]
+          },
+          {
+            "code": "9900011123",
+            "name": "“辣”么快乐套餐",
+            "priceCents": 2400,
+            "verifiedAt": "2026-10-18T19:25:57.321Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005411",
+            "name": "不素之霸双层牛堡三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:25:57.864Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "不素之霸双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004066",
+            "name": "堡堡随心拼（7件任选）",
+            "priceCents": 7300,
+            "verifiedAt": "2026-10-18T19:25:58.405Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004064",
+            "name": "精选单人餐三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:25:58.752Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016055",
+            "name": "开心亲子双人餐",
+            "priceCents": 5950,
+            "verifiedAt": "2026-10-18T19:25:44.353Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "麦乐鸡-4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "纯牛奶",
+                "kind": "drink",
+                "unitPriceCents": 1050
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "海绵宝宝×航海王系列玩具",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009242",
+            "name": "“苹板”支撑Pro套餐",
+            "priceCents": 3950,
+            "verifiedAt": "2026-10-18T19:25:58.981Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009245",
+            "name": "牛气满满套餐",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:25:59.277Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005428",
+            "name": "培根安格斯厚牛堡三件套",
+            "priceCents": 4550,
+            "verifiedAt": "2026-10-18T19:25:59.554Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005430",
+            "name": "芝士安格斯厚牛堡三件套",
+            "priceCents": 4250,
+            "verifiedAt": "2026-10-18T19:26:00.493Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝士安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3200
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1420800",
+        "forRequestedPeriod": 24,
+        "fallback": 0,
+        "samples": 0,
+        "singlePricesComplete": 0,
+        "meals": [
+          {
+            "code": "9900005456",
+            "name": "麦辣鸡腿汉堡三件套",
+            "priceCents": 3350,
+            "verifiedAt": "2026-10-18T19:26:04.761Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005413",
+            "name": "双层深海鳕鱼堡三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:26:05.869Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "原味双层深海鳕鱼堡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015730",
+            "name": "BFF四宫格小食盘",
+            "priceCents": 4030,
+            "verifiedAt": "2026-10-18T19:26:06.361Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016075",
+            "name": "龙焰芝士棒鸡腿堡三件套",
+            "priceCents": 2990,
+            "verifiedAt": "2026-10-18T19:26:07.423Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰芝士棒鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016073",
+            "name": "龙焰鸡腿堡三件套",
+            "priceCents": 2690,
+            "verifiedAt": "2026-10-18T19:26:07.949Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005460",
+            "name": "麦香鱼套餐",
+            "priceCents": 3300,
+            "verifiedAt": "2026-10-18T19:26:08.449Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2200
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004835",
+            "name": "麦乐鸡套餐",
+            "priceCents": 2550,
+            "verifiedAt": "2026-10-18T19:26:02.755Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦乐鸡5块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005464",
+            "name": "双层吉士汉堡套餐",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:26:09.017Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "双层吉士汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005466",
+            "name": "巨无霸三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:26:09.491Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005449",
+            "name": "吉士汉堡包套餐",
+            "priceCents": 2650,
+            "verifiedAt": "2026-10-18T19:26:10.054Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011126",
+            "name": "酥脆无双套餐",
+            "priceCents": 2050,
+            "verifiedAt": "2026-10-18T19:26:10.547Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "迷你薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015602",
+            "name": "大堡口福三件套",
+            "priceCents": 2290,
+            "verifiedAt": "2026-10-18T19:26:11.520Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "Hold不住鸡排堡（椒盐风味）",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011123",
+            "name": "“辣”么快乐套餐",
+            "priceCents": 2400,
+            "verifiedAt": "2026-10-18T19:26:12.017Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005451",
+            "name": "麦辣鸡翅4块套餐",
+            "priceCents": 3650,
+            "verifiedAt": "2026-10-18T19:26:03.666Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅4块",
+                "kind": "main",
+                "unitPriceCents": 2550
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005453",
+            "name": "麦香鸡套餐",
+            "priceCents": 2750,
+            "verifiedAt": "2026-10-18T19:26:12.626Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鸡",
+                "kind": "main",
+                "unitPriceCents": 1650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005411",
+            "name": "不素之霸双层牛堡三件套",
+            "priceCents": 3650,
+            "verifiedAt": "2026-10-18T19:26:13.162Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "不素之霸双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2550
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004066",
+            "name": "堡堡随心拼（7件任选）",
+            "priceCents": 7300,
+            "verifiedAt": "2026-10-18T19:26:13.712Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004064",
+            "name": "精选单人餐三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:26:14.104Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009245",
+            "name": "牛气满满套餐",
+            "priceCents": 3450,
+            "verifiedAt": "2026-10-18T19:26:14.481Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1300
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900006332",
+            "name": "薄皮V翅双拼十翅",
+            "priceCents": 4990,
+            "verifiedAt": "2026-10-18T19:26:15.144Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005468",
+            "name": "培根蔬萃双层牛堡三件套",
+            "priceCents": 3550,
+            "verifiedAt": "2026-10-18T19:26:15.666Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005428",
+            "name": "培根安格斯厚牛堡三件套",
+            "priceCents": 4550,
+            "verifiedAt": "2026-10-18T19:26:16.053Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016081",
+            "name": "“我就喜欢”鸡薯双全盒",
+            "priceCents": 1590,
+            "verifiedAt": "2026-10-18T19:26:17.870Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "5块心形薯饼",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "5块麦乐鸡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "甜酸酱",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005430",
+            "name": "芝士安格斯厚牛堡三件套",
+            "priceCents": 4250,
+            "verifiedAt": "2026-10-18T19:26:18.675Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝士安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3150
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1420277",
+        "forRequestedPeriod": 30,
+        "fallback": 0,
+        "samples": 0,
+        "singlePricesComplete": 1,
+        "meals": [
+          {
+            "code": "9900005456",
+            "name": "麦辣鸡腿汉堡三件套",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:26:21.045Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016075",
+            "name": "龙焰芝士棒鸡腿堡三件套",
+            "priceCents": 2990,
+            "verifiedAt": "2026-10-18T19:26:24.179Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰芝士棒鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2750
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016073",
+            "name": "龙焰鸡腿堡三件套",
+            "priceCents": 2690,
+            "verifiedAt": "2026-10-18T19:26:24.750Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005460",
+            "name": "麦香鱼套餐",
+            "priceCents": 3350,
+            "verifiedAt": "2026-10-18T19:26:25.236Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005462",
+            "name": "板烧鸡腿堡三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:26:25.754Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005464",
+            "name": "双层吉士汉堡套餐",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:26:26.015Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "双层吉士汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005466",
+            "name": "巨无霸三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:26:26.541Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005449",
+            "name": "吉士汉堡包套餐",
+            "priceCents": 2600,
+            "verifiedAt": "2026-10-18T19:26:27.067Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005451",
+            "name": "麦辣鸡翅4块套餐",
+            "priceCents": 3700,
+            "verifiedAt": "2026-10-18T19:26:19.724Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅4块",
+                "kind": "main",
+                "unitPriceCents": 2600
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005453",
+            "name": "麦香鸡套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:26:27.589Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鸡",
+                "kind": "main",
+                "unitPriceCents": 1700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900006332",
+            "name": "薄皮V翅双拼十翅",
+            "priceCents": 4990,
+            "verifiedAt": "2026-10-18T19:26:27.949Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005468",
+            "name": "培根蔬萃双层牛堡三件套",
+            "priceCents": 3550,
+            "verifiedAt": "2026-10-18T19:26:28.638Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016081",
+            "name": "“我就喜欢”鸡薯双全盒",
+            "priceCents": 1590,
+            "verifiedAt": "2026-10-18T19:26:28.994Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "5块心形薯饼",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "5块麦乐鸡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "甜酸酱",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005413",
+            "name": "双层深海鳕鱼堡三件套",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:26:29.855Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "原味双层深海鳕鱼堡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015730",
+            "name": "BFF四宫格小食盘",
+            "priceCents": 3980,
+            "verifiedAt": "2026-10-18T19:26:30.356Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004835",
+            "name": "麦乐鸡套餐",
+            "priceCents": 2550,
+            "verifiedAt": "2026-10-18T19:26:20.519Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦乐鸡5块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015729",
+            "name": "蘸酱BFF四宫格小食盘",
+            "priceCents": 4280,
+            "verifiedAt": "2026-10-18T19:26:32.586Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "韩式烟熏芝士风味酱",
+                "kind": "other",
+                "unitPriceCents": 300
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011126",
+            "name": "酥脆无双套餐",
+            "priceCents": 2000,
+            "verifiedAt": "2026-10-18T19:26:33.077Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "迷你薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015602",
+            "name": "大堡口福三件套",
+            "priceCents": 2290,
+            "verifiedAt": "2026-10-18T19:26:34.070Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "Hold不住鸡排堡（椒盐风味）",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011128",
+            "name": "“堡”你欢乐套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:26:34.553Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011121",
+            "name": "“苹”水相“鱼”套餐",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:26:36.167Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": true,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "锡兰红茶",
+                "kind": "drink",
+                "unitPriceCents": 1100
+              }
+            ]
+          },
+          {
+            "code": "9900011123",
+            "name": "“辣”么快乐套餐",
+            "priceCents": 2400,
+            "verifiedAt": "2026-10-18T19:26:36.684Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005411",
+            "name": "不素之霸双层牛堡三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:26:37.206Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "不素之霸双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004066",
+            "name": "堡堡随心拼（7件任选）",
+            "priceCents": 7300,
+            "verifiedAt": "2026-10-18T19:26:37.701Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004064",
+            "name": "精选单人餐三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:26:38.075Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016055",
+            "name": "开心亲子双人餐",
+            "priceCents": 5950,
+            "verifiedAt": "2026-10-18T19:26:22.015Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "麦乐鸡-4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "纯牛奶",
+                "kind": "drink",
+                "unitPriceCents": 1050
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "海绵宝宝×航海王系列玩具",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009242",
+            "name": "“苹板”支撑Pro套餐",
+            "priceCents": 3950,
+            "verifiedAt": "2026-10-18T19:26:38.298Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009245",
+            "name": "牛气满满套餐",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:26:38.599Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005428",
+            "name": "培根安格斯厚牛堡三件套",
+            "priceCents": 4550,
+            "verifiedAt": "2026-10-18T19:26:38.862Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005430",
+            "name": "芝士安格斯厚牛堡三件套",
+            "priceCents": 4250,
+            "verifiedAt": "2026-10-18T19:26:39.383Z",
+            "reservationDate": "2026-10-19 12:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝士安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3200
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1421248",
+        "forRequestedPeriod": 0,
+        "fallback": 4,
+        "samples": 7,
+        "singlePricesComplete": 1,
+        "meals": [
+          {
+            "code": "9900016136",
+            "name": "满分厚松饼堡双人餐",
+            "priceCents": 3990,
+            "verifiedAt": "2026-10-18T00:12:09.572Z",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巧克力味厚松饼猪柳堡",
+                "kind": "main",
+                "unitPriceCents": 1800
+              },
+              {
+                "name": "原味板烧鸡腿麦满分",
+                "kind": "main",
+                "unitPriceCents": 1550
+              },
+              {
+                "name": "脆薯饼",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900013221",
+            "name": "一早现磨 超值二件套",
+            "priceCents": 1490,
+            "verifiedAt": "2026-10-18T00:12:10.614Z",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士蛋麦满分",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦咖啡™冰美式中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900003728",
+            "name": "脆香油条豆浆组合",
+            "priceCents": 1800,
+            "verifiedAt": "2026-10-18T19:30:21.532Z",
+            "reservationDate": "2026-10-19 08:00",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": true,
+            "parts": [
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "优品豆浆大杯",
+                "kind": "drink",
+                "unitPriceCents": 1200
+              }
+            ]
+          },
+          {
+            "code": "9900011872",
+            "name": "芝芝火腿扒堡组合",
+            "priceCents": 990,
+            "verifiedAt": "2026-10-18T19:30:20.586Z",
+            "reservationDate": "2026-10-19 08:00",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝芝火腿扒堡",
+                "kind": "main",
+                "unitPriceCents": 1300
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "dinner": [
+      {
+        "store": "1420082",
+        "forRequestedPeriod": 29,
+        "fallback": 0,
+        "samples": 0,
+        "singlePricesComplete": 1,
+        "meals": [
+          {
+            "code": "9900005456",
+            "name": "麦辣鸡腿汉堡三件套",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:26:43.475Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016075",
+            "name": "龙焰芝士棒鸡腿堡三件套",
+            "priceCents": 2990,
+            "verifiedAt": "2026-10-18T19:26:45.938Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰芝士棒鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2750
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016073",
+            "name": "龙焰鸡腿堡三件套",
+            "priceCents": 2690,
+            "verifiedAt": "2026-10-18T19:26:47.599Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005460",
+            "name": "麦香鱼套餐",
+            "priceCents": 3350,
+            "verifiedAt": "2026-10-18T19:26:48.199Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005462",
+            "name": "板烧鸡腿堡三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:26:48.699Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005464",
+            "name": "双层吉士汉堡套餐",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:26:49.083Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "双层吉士汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005466",
+            "name": "巨无霸三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:26:49.609Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005449",
+            "name": "吉士汉堡包套餐",
+            "priceCents": 2600,
+            "verifiedAt": "2026-10-18T19:26:51.553Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005451",
+            "name": "麦辣鸡翅4块套餐",
+            "priceCents": 3700,
+            "verifiedAt": "2026-10-18T19:26:42.054Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅4块",
+                "kind": "main",
+                "unitPriceCents": 2600
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005453",
+            "name": "麦香鸡套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:26:52.232Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鸡",
+                "kind": "main",
+                "unitPriceCents": 1700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900006332",
+            "name": "薄皮V翅双拼十翅",
+            "priceCents": 4990,
+            "verifiedAt": "2026-10-18T19:26:52.756Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005468",
+            "name": "培根蔬萃双层牛堡三件套",
+            "priceCents": 3550,
+            "verifiedAt": "2026-10-18T19:26:53.277Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016081",
+            "name": "“我就喜欢”鸡薯双全盒",
+            "priceCents": 1590,
+            "verifiedAt": "2026-10-18T19:26:53.642Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "5块心形薯饼",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "5块麦乐鸡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "甜酸酱",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005413",
+            "name": "双层深海鳕鱼堡三件套",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:26:54.327Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "原味双层深海鳕鱼堡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015730",
+            "name": "BFF四宫格小食盘",
+            "priceCents": 3980,
+            "verifiedAt": "2026-10-18T19:26:54.852Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004835",
+            "name": "麦乐鸡套餐",
+            "priceCents": 2550,
+            "verifiedAt": "2026-10-18T19:26:43.018Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦乐鸡5块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011126",
+            "name": "酥脆无双套餐",
+            "priceCents": 2000,
+            "verifiedAt": "2026-10-18T19:26:55.507Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "迷你薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015602",
+            "name": "大堡口福三件套",
+            "priceCents": 2290,
+            "verifiedAt": "2026-10-18T19:26:56.424Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "Hold不住鸡排堡（椒盐风味）",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011128",
+            "name": "“堡”你欢乐套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:26:56.948Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011121",
+            "name": "“苹”水相“鱼”套餐",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:26:57.619Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": true,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "锡兰红茶",
+                "kind": "drink",
+                "unitPriceCents": 1100
+              }
+            ]
+          },
+          {
+            "code": "9900011123",
+            "name": "“辣”么快乐套餐",
+            "priceCents": 2400,
+            "verifiedAt": "2026-10-18T19:26:58.129Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005411",
+            "name": "不素之霸双层牛堡三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:26:58.671Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "不素之霸双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004066",
+            "name": "堡堡随心拼（7件任选）",
+            "priceCents": 7300,
+            "verifiedAt": "2026-10-18T19:26:59.194Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004064",
+            "name": "精选单人餐三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:26:59.572Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016055",
+            "name": "开心亲子双人餐",
+            "priceCents": 5950,
+            "verifiedAt": "2026-10-18T19:26:43.993Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "麦乐鸡-4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "纯牛奶",
+                "kind": "drink",
+                "unitPriceCents": 1050
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "海绵宝宝×航海王系列玩具",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009242",
+            "name": "“苹板”支撑Pro套餐",
+            "priceCents": 3950,
+            "verifiedAt": "2026-10-18T19:26:59.806Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009245",
+            "name": "牛气满满套餐",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:27:00.096Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005428",
+            "name": "培根安格斯厚牛堡三件套",
+            "priceCents": 4550,
+            "verifiedAt": "2026-10-18T19:27:00.365Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005430",
+            "name": "芝士安格斯厚牛堡三件套",
+            "priceCents": 4250,
+            "verifiedAt": "2026-10-18T19:27:01.667Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝士安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3200
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1420800",
+        "forRequestedPeriod": 24,
+        "fallback": 0,
+        "samples": 0,
+        "singlePricesComplete": 0,
+        "meals": [
+          {
+            "code": "9900005456",
+            "name": "麦辣鸡腿汉堡三件套",
+            "priceCents": 3350,
+            "verifiedAt": "2026-10-18T19:27:06.386Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005413",
+            "name": "双层深海鳕鱼堡三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:27:07.437Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "原味双层深海鳕鱼堡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015730",
+            "name": "BFF四宫格小食盘",
+            "priceCents": 4030,
+            "verifiedAt": "2026-10-18T19:27:07.959Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016075",
+            "name": "龙焰芝士棒鸡腿堡三件套",
+            "priceCents": 2990,
+            "verifiedAt": "2026-10-18T19:27:08.738Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰芝士棒鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016073",
+            "name": "龙焰鸡腿堡三件套",
+            "priceCents": 2690,
+            "verifiedAt": "2026-10-18T19:27:09.258Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005460",
+            "name": "麦香鱼套餐",
+            "priceCents": 3300,
+            "verifiedAt": "2026-10-18T19:27:10.174Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2200
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004835",
+            "name": "麦乐鸡套餐",
+            "priceCents": 2550,
+            "verifiedAt": "2026-10-18T19:27:03.241Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦乐鸡5块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005464",
+            "name": "双层吉士汉堡套餐",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:27:10.763Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "双层吉士汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005466",
+            "name": "巨无霸三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:27:11.243Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005449",
+            "name": "吉士汉堡包套餐",
+            "priceCents": 2650,
+            "verifiedAt": "2026-10-18T19:27:11.773Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011126",
+            "name": "酥脆无双套餐",
+            "priceCents": 2050,
+            "verifiedAt": "2026-10-18T19:27:12.303Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "迷你薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015602",
+            "name": "大堡口福三件套",
+            "priceCents": 2290,
+            "verifiedAt": "2026-10-18T19:27:13.202Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "Hold不住鸡排堡（椒盐风味）",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011123",
+            "name": "“辣”么快乐套餐",
+            "priceCents": 2400,
+            "verifiedAt": "2026-10-18T19:27:13.569Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005451",
+            "name": "麦辣鸡翅4块套餐",
+            "priceCents": 3650,
+            "verifiedAt": "2026-10-18T19:27:04.024Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅4块",
+                "kind": "main",
+                "unitPriceCents": 2550
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005453",
+            "name": "麦香鸡套餐",
+            "priceCents": 2750,
+            "verifiedAt": "2026-10-18T19:27:14.098Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鸡",
+                "kind": "main",
+                "unitPriceCents": 1650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005411",
+            "name": "不素之霸双层牛堡三件套",
+            "priceCents": 3650,
+            "verifiedAt": "2026-10-18T19:27:14.775Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "不素之霸双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2550
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004066",
+            "name": "堡堡随心拼（7件任选）",
+            "priceCents": 7300,
+            "verifiedAt": "2026-10-18T19:27:15.299Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004064",
+            "name": "精选单人餐三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:27:15.552Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009245",
+            "name": "牛气满满套餐",
+            "priceCents": 3450,
+            "verifiedAt": "2026-10-18T19:27:15.823Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1300
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900006332",
+            "name": "薄皮V翅双拼十翅",
+            "priceCents": 4990,
+            "verifiedAt": "2026-10-18T19:27:16.489Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005468",
+            "name": "培根蔬萃双层牛堡三件套",
+            "priceCents": 3550,
+            "verifiedAt": "2026-10-18T19:27:17.091Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005428",
+            "name": "培根安格斯厚牛堡三件套",
+            "priceCents": 4550,
+            "verifiedAt": "2026-10-18T19:27:17.396Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016081",
+            "name": "“我就喜欢”鸡薯双全盒",
+            "priceCents": 1590,
+            "verifiedAt": "2026-10-18T19:27:17.772Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "5块心形薯饼",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "5块麦乐鸡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "甜酸酱",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005430",
+            "name": "芝士安格斯厚牛堡三件套",
+            "priceCents": 4250,
+            "verifiedAt": "2026-10-18T19:27:18.612Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝士安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3150
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1420277",
+        "forRequestedPeriod": 30,
+        "fallback": 0,
+        "samples": 0,
+        "singlePricesComplete": 1,
+        "meals": [
+          {
+            "code": "9900005456",
+            "name": "麦辣鸡腿汉堡三件套",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:27:22.911Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016075",
+            "name": "龙焰芝士棒鸡腿堡三件套",
+            "priceCents": 2990,
+            "verifiedAt": "2026-10-18T19:27:26.683Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰芝士棒鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2750
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016073",
+            "name": "龙焰鸡腿堡三件套",
+            "priceCents": 2690,
+            "verifiedAt": "2026-10-18T19:27:27.363Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "龙焰鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005460",
+            "name": "麦香鱼套餐",
+            "priceCents": 3350,
+            "verifiedAt": "2026-10-18T19:27:27.882Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005462",
+            "name": "板烧鸡腿堡三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:27:28.406Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005464",
+            "name": "双层吉士汉堡套餐",
+            "priceCents": 3400,
+            "verifiedAt": "2026-10-18T19:27:28.676Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "双层吉士汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005466",
+            "name": "巨无霸三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:27:29.204Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巨无霸",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005449",
+            "name": "吉士汉堡包套餐",
+            "priceCents": 2600,
+            "verifiedAt": "2026-10-18T19:27:29.718Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005451",
+            "name": "麦辣鸡翅4块套餐",
+            "priceCents": 3700,
+            "verifiedAt": "2026-10-18T19:27:21.591Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅4块",
+                "kind": "main",
+                "unitPriceCents": 2600
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005453",
+            "name": "麦香鸡套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:27:30.307Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦香鸡",
+                "kind": "main",
+                "unitPriceCents": 1700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900006332",
+            "name": "薄皮V翅双拼十翅",
+            "priceCents": 4990,
+            "verifiedAt": "2026-10-18T19:27:30.749Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "薄皮焦香V翅",
+                "kind": "main",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005468",
+            "name": "培根蔬萃双层牛堡三件套",
+            "priceCents": 3550,
+            "verifiedAt": "2026-10-18T19:27:31.551Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016081",
+            "name": "“我就喜欢”鸡薯双全盒",
+            "priceCents": 1590,
+            "verifiedAt": "2026-10-18T19:27:31.927Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "5块心形薯饼",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "5块麦乐鸡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "甜酸酱",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005413",
+            "name": "双层深海鳕鱼堡三件套",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:27:32.751Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "原味双层深海鳕鱼堡",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015730",
+            "name": "BFF四宫格小食盘",
+            "priceCents": 3980,
+            "verifiedAt": "2026-10-18T19:27:33.268Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004835",
+            "name": "麦乐鸡套餐",
+            "priceCents": 2550,
+            "verifiedAt": "2026-10-18T19:27:22.430Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦乐鸡5块",
+                "kind": "main",
+                "unitPriceCents": 1450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015729",
+            "name": "蘸酱BFF四宫格小食盘",
+            "priceCents": 4280,
+            "verifiedAt": "2026-10-18T19:27:35.747Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅-2块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡-5块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "韩式烟熏芝士风味酱",
+                "kind": "other",
+                "unitPriceCents": 300
+              },
+              {
+                "name": "小薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011126",
+            "name": "酥脆无双套餐",
+            "priceCents": 2000,
+            "verifiedAt": "2026-10-18T19:27:36.271Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦麦脆汁鸡-琵琶腿",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "迷你薯条",
+                "kind": "other",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900015602",
+            "name": "大堡口福三件套",
+            "priceCents": 2290,
+            "verifiedAt": "2026-10-18T19:27:37.105Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "Hold不住鸡排堡（椒盐风味）",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011128",
+            "name": "“堡”你欢乐套餐",
+            "priceCents": 2800,
+            "verifiedAt": "2026-10-18T19:27:37.590Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "汉堡包",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900011121",
+            "name": "“苹”水相“鱼”套餐",
+            "priceCents": 3600,
+            "verifiedAt": "2026-10-18T19:27:38.194Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": true,
+            "parts": [
+              {
+                "name": "麦香鱼",
+                "kind": "main",
+                "unitPriceCents": 2250
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "锡兰红茶",
+                "kind": "drink",
+                "unitPriceCents": 1100
+              }
+            ]
+          },
+          {
+            "code": "9900011123",
+            "name": "“辣”么快乐套餐",
+            "priceCents": 2400,
+            "verifiedAt": "2026-10-18T19:27:38.659Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦乐鸡4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005411",
+            "name": "不素之霸双层牛堡三件套",
+            "priceCents": 3750,
+            "verifiedAt": "2026-10-18T19:27:39.147Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "不素之霸双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2650
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004066",
+            "name": "堡堡随心拼（7件任选）",
+            "priceCents": 7300,
+            "verifiedAt": "2026-10-18T19:27:40.466Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡腿汉堡",
+                "kind": "main",
+                "unitPriceCents": 2300
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "麦辣鸡翅2块",
+                "kind": "main",
+                "unitPriceCents": 1500
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900004064",
+            "name": "精选单人餐三件套",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:27:40.753Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900016055",
+            "name": "开心亲子双人餐",
+            "priceCents": 5950,
+            "verifiedAt": "2026-10-18T19:27:23.880Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "麦乐鸡-4块",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "纯牛奶",
+                "kind": "drink",
+                "unitPriceCents": 1050
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "海绵宝宝×航海王系列玩具",
+                "kind": "other",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009242",
+            "name": "“苹板”支撑Pro套餐",
+            "priceCents": 3950,
+            "verifiedAt": "2026-10-18T19:27:41.141Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "板烧鸡腿堡",
+                "kind": "main",
+                "unitPriceCents": 2400
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "苹果片一袋(60g)",
+                "kind": "other",
+                "unitPriceCents": 700
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900009245",
+            "name": "牛气满满套餐",
+            "priceCents": 3500,
+            "verifiedAt": "2026-10-18T19:27:41.513Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根蔬萃双层牛堡",
+                "kind": "main",
+                "unitPriceCents": 2450
+              },
+              {
+                "name": "小杯玉米杯",
+                "kind": "other",
+                "unitPriceCents": 1350
+              },
+              {
+                "name": "无糖可口可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005428",
+            "name": "培根安格斯厚牛堡三件套",
+            "priceCents": 4550,
+            "verifiedAt": "2026-10-18T19:27:41.815Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "培根安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3450
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900005430",
+            "name": "芝士安格斯厚牛堡三件套",
+            "priceCents": 4250,
+            "verifiedAt": "2026-10-18T19:27:42.308Z",
+            "reservationDate": "2026-10-19 19:00",
+            "forRequestedPeriod": true,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝士安格斯厚牛堡",
+                "kind": "main",
+                "unitPriceCents": 3200
+              },
+              {
+                "name": "中薯条",
+                "kind": "other",
+                "unitPriceCents": 1400
+              },
+              {
+                "name": "可乐中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "store": "1421248",
+        "forRequestedPeriod": 0,
+        "fallback": 4,
+        "samples": 7,
+        "singlePricesComplete": 1,
+        "meals": [
+          {
+            "code": "9900016136",
+            "name": "满分厚松饼堡双人餐",
+            "priceCents": 3990,
+            "verifiedAt": "2026-10-18T00:12:09.572Z",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "巧克力味厚松饼猪柳堡",
+                "kind": "main",
+                "unitPriceCents": 1800
+              },
+              {
+                "name": "原味板烧鸡腿麦满分",
+                "kind": "main",
+                "unitPriceCents": 1550
+              },
+              {
+                "name": "脆薯饼",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900013221",
+            "name": "一早现磨 超值二件套",
+            "priceCents": 1490,
+            "verifiedAt": "2026-10-18T00:12:10.614Z",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "吉士蛋麦满分",
+                "kind": "main",
+                "unitPriceCents": null
+              },
+              {
+                "name": "麦咖啡™冰美式中杯",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          },
+          {
+            "code": "9900003728",
+            "name": "脆香油条豆浆组合",
+            "priceCents": 1800,
+            "verifiedAt": "2026-10-18T19:30:21.532Z",
+            "reservationDate": "2026-10-19 08:00",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": true,
+            "parts": [
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "脆香油条",
+                "kind": "other",
+                "unitPriceCents": 800
+              },
+              {
+                "name": "优品豆浆大杯",
+                "kind": "drink",
+                "unitPriceCents": 1200
+              }
+            ]
+          },
+          {
+            "code": "9900011872",
+            "name": "芝芝火腿扒堡组合",
+            "priceCents": 990,
+            "verifiedAt": "2026-10-18T19:30:20.586Z",
+            "reservationDate": "2026-10-19 08:00",
+            "forRequestedPeriod": false,
+            "singlePricesComplete": false,
+            "parts": [
+              {
+                "name": "芝芝火腿扒堡",
+                "kind": "main",
+                "unitPriceCents": 1300
+              },
+              {
+                "name": "鲜萃冰咖",
+                "kind": "drink",
+                "unitPriceCents": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "errors": []
+}

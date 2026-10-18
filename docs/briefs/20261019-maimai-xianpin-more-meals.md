@@ -15,7 +15,32 @@
 5. npm test 全过；起演示服务确认某家店发起页 ≥ 10 个套餐，单品卡上出现纳纳的图标（不是全是拼单袋）。截 390 宽一张发起页。
 
 ## 分支
-在 ui/nana-mcd-theme 上做（当前 HEAD 4e873dd40e8cc554003f1f4a64f2001a60bb479f，我刚把托盘图标放大回来），推同一分支，main 仍由你单写，合并照 20261018-maimai-xianpin-ui-theme-merge.md。
+在 ui/nana-mcd-theme 上做（当前 HEAD 6773ce3ba076d62e97f4cfcd6c0cdada06bf0085，我刚把托盘图标放大回来），推同一分支，main 仍由你单写，合并照 20261018-maimai-xianpin-ui-theme-merge.md。
 
 ## 回执
 同目录写 20261019-maimai-xianpin-more-meals-DONE.md：两轮抓取时间、每家店可发起套餐数和名单、commit 号、截图路径。抓不到（比如某时段 MCP 报错）就如实写，别拿早餐数据凑。
+
+## 追加 10-19 02:3x（mini，HEAD 6773ce3ba076d62e97f4cfcd6c0cdada06bf0085）
+- 演示加了 src/sample-meals.ts：7 个标「示例」的套餐（参考价，非 MCP 核价），只在演示模式、当前时段真实可拼套餐 < 10 时补位；你中午真菜单够 10 个就自动不出现。请把采集 worktree 基线更新到 6773ce3ba076d62e97f4cfcd6c0cdada06bf0085 再跑 11:35 那轮，否则自动推会因远端前进而跳过。
+- 报名与转公开：纳纳查到官方规则，报名 issue 必须带公开仓库地址，排名按 star 截至 10-26 0 点。梅宝打算约 10-22 转公开并报名；README/声明文件/MCP_INTEGRATION 需在那之前就绪。
+
+## 转公开前清单（mini 10-19 02:5x 记，晚市采集结束后由 mini 自己改，codex 不用动）
+- README 末尾加「版权声明」：本项目仅为麦当劳 MCP 大赛参赛展示，保留所有权利；未经许可禁止复制、修改和商用；纳纳绘制的图片同样保留权利。
+- package.json 加 "license": "UNLICENSED"、"private": true；仓库不放 LICENSE 文件。
+- 若纳纳核到比赛规则要求开源许可证，以官方原文为准再改。
+
+## 转公开前清单·改定（mini 10-19 02:5x，纳纳核过规则：只要求「以开源形式发布至 GitHub」，不指定许可证）
+- 代码：PolyForm Noncommercial 1.0.0（仓库根放 LICENSE 原文，package.json license 写 "PolyForm-Noncommercial-1.0.0"）。
+- 纳纳的图（public/assets/theme/）：CC BY-NC-ND 4.0，在 public/assets/theme/LICENSE.md 和 README 里写明。
+- README 版权段：参赛展示、可看可学、禁止商用；不用 MIT/Apache。上一段的 UNLICENSED 作废。仍由 mini 在晚市采集结束后改。
+
+## 改期（mini 10-19 03:0x，梅宝定：为多攒 star，转公开提前到今晚）
+- 18:35 晚市采集推完后通知 mini（写 PROGRESS 即可）。mini 随即加许可证（代码 PolyForm Noncommercial 1.0.0、图 CC BY-NC-ND 4.0）和 README 版权段，推 ui/nana-mcd-theme。
+- 然后请你把 ui/nana-mcd-theme 合并进 main（main 现在还停在 81b0f0e，公开后访客默认看 main），跑测试、推送、回执写 commit。
+- main 合并完梅宝今晚转公开并发报名 issue。
+
+## 改定（mini 10-19 03:2x，梅宝定：现在就做，不等时段，核验全归 codex）
+- 原卡「必须在 11:30–14:30 / 18:30–21:30 内抓」是我（mini）写错的限制：你已实测可指定查询时间提前拿午晚市菜单。现在就用这条路把四家店午市+晚市的可拼套餐明细和核价补齐，接进演示，推 ui/nana-mcd-theme。11:35 / 18:35 两轮改为后台复查价格变化，不再是前置门槛。
+- 核验由你负责到底（测试、发起页 390 宽截图、每店套餐数、纳纳图标覆盖），mini 不再另行复核，回执写 PROGRESS 即可。
+- 分支单写者改为你：许可证（代码 PolyForm Noncommercial 1.0.0，全文从 polyformproject.org 原样取；纳纳的图 public/assets/theme/ 用 CC BY-NC-ND 4.0，写 LICENSE.md 并在 README 注明）和 README 版权段也由你加；mini 今天不再推这个分支。
+- 全部完成后把 ui/nana-mcd-theme 合进 main（main 停在 81b0f0e），推送，回执写 commit。之后梅宝转公开、发报名 issue。

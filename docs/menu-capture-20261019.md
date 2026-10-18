@@ -1,35 +1,47 @@
-# 10-19 本机午晚市采集
+# 10-19 午晚市菜单与后台价格复查
 
-当前状态：采集代码及多时段回放已准备，真实午市 / 晚市记录仍待时段到来；每店至少 10 套、图标覆盖及 390px 发起页截图尚未验收。
+执行依据是 [补菜单卡](briefs/20261019-maimai-xianpin-more-meals.md) 末尾「改定 03:2x」，本地原文 SHA-256 `761097c5c64bc9a767db4e040f9b5096e5ac74b81a90eea790d420845cc166a5`。此段取代原先必须等午晚市、mini 加许可证及另行复核的安排。Codex 为主题分支单写者，负责数据、浏览器验收、许可证、main 合并和 PROGRESS。
 
-任务输入：[补菜单卡](briefs/20261019-maimai-xianpin-more-meals.md)，SHA-256 `5f6caeb3a5ec5b91c40706c149c52f479f75be092612071fc0d162ff6e86ff40`；[主题合并卡](briefs/20261018-maimai-xianpin-ui-theme-merge.md)，SHA-256 `ea42db9360d32cc416fd98af3943bedc4b64cdee0ee225d46d8d09aaa2953da2`。
+## 已完成的提前查询
 
-## 运行安排
+官方菜单、明细、整套和单件算价都支持 `reservationDate`，可以在凌晨查询当天用餐时段。实际采集时间不改写成中午或晚上：
 
-MacBook 的 launchd 一次性任务计划在北京时间 **2026-10-19 11:35、18:35** 各运行一次。执行代码固定在本机独立 worktree `/Users/lulu/maimai-xianpin/.local/capture-runtime`，避免主工作目录切换分支影响采集。登录和网络需要可用；若休眠后醒来已超出该轮三小时时段，脚本拒绝补抓并记错过，不将其他时段冒充本轮。
+| 查询目标 | 实际开始 / 完成（北京时间） | 只读调用 | 状态 |
+| --- | --- | --- | --- |
+| 2026-10-19 12:00 | 10-19 03:25:40 / 10-19 03:26:39 | 293 | partial |
+| 2026-10-19 19:00 | 10-19 03:26:40 / 10-19 03:27:42 | 293 | partial |
+| 2026-10-19 08:00 | 10-19 03:30:18 / 10-19 03:30:21 | 11 | partial |
+
+早餐补查仅对神湾大道店。加上保留的 47 条旧记录和一次新门店诊断，公开脱敏夹具共 645 条调用；原始响应和 Token 不进入 Git。
+
+| 门店 | 午市真实可发起 | 晚市真实可发起 | 午晚市示例 / 历史回退 |
+| --- | ---: | ---: | --- |
+| 1420082 中山三乡 | 29 | 29 | 无 |
+| 1420800 谷都大道得来速 | 24 | 24 | 无 |
+| 1420277 新天地 | 30 | 30 | 无 |
+| 1421248 神湾大道 | 0 | 0 | 7 个示例 + 4 个早餐快照，均不算真实午晚市 |
+
+神湾大道两次返回 `600054`「预约时间不在可预约时间范围」。03:28 的新门店搜索仅给该店当天及次日 07:14–10:15 的早餐预约选项。这是当前 MCP 可查询范围，不推断实体店午晚市不营业。四店均尝试查询，但「四店每店至少 10 套」只实现前三店；第四店限制保留到后台复查，不伪造菜单。
+
+每套都必须有默认组成与匹配的整套报价才能出现。每个不同单件均尝试单点核价；上游成功但空商品行 / 零总额仍标未知，整单按件均分。逐套价格、单件缺价、分类和名单见 [完整 JSON](reviews/20261019-menu-capture-summary.json) 与 [可读表](reviews/20261019-menu-counts.md)。
+
+## 复现与演示
 
 ```sh
-node --env-file-if-exists=.env --import tsx scripts/capture-daypart.ts 2026-10-19 lunch
-node --env-file-if-exists=.env --import tsx scripts/capture-daypart.ts 2026-10-19 dinner
+npm run capture:daypart -- 2026-10-19 lunch --reserve
+npm run capture:daypart -- 2026-10-19 dinner --reserve
+npm run validate:catalog
+DEMO_MENU_PERIOD=lunch npm run dev
 ```
 
-脚本首先检查日期和时段，之后才读取 Token、连接 MCP。四店依次全量读菜单；优先抓桶、家庭餐、分享盒、麦乐鸡、麦辣双人餐及甜品组合，继续遍历符合任务名称或价格条件的所有候选。逐套保存明细和整套核价，每个不同单品都尝试单点核价；未知价保持未知。
+采集用本机 `.env`，只允许店级只读工具。预约参数同时传给菜单、明细、整套和单件算价；实际 `capturedAt` 另存。`DEMO_MENU_PERIOD` 仅选择演示快照，不修改拼单倒计时或 live 的时钟。`auto` 按北京时间早餐 / 午市 / 晚市切换。某店缺整段记录时允许明确提示的历史回退；已有该段菜单时不借其他时段的明细或价格补缺。
 
-原始文件用唯一时间前缀，旧文件不覆盖。导出将旧夹具与新记录合并、去重、脱敏并更新 manifest。明细或匹配整套核价不全的记录保留为证据，不放进可发起菜单。早餐 / 午晚市、同码不同价格和缓存跨 10:30 已有单测。
+## 11:35 / 18:35 的后台工作
 
-## 日志与交接
+两轮不再阻塞交付，改为当日现场价格复查，对比提前查询的整套价与单件价（含未知变已知）。独立 worktree 位于 `.local/capture-runtime`，launchd 任务带 caffeinate；连续防休眠保持至 21:40。机器仍需插电、开盖和联网。
 
-以下路径均相对于独立采集 worktree：
+启动允许不足 2 分钟正常延迟；迟到 2 分钟起记录 `MISSED_SCHEDULE`，不调用 MCP、不补抓。开始前检查网络、干净工作目录、远端基线、测试与类型检查。采集中远端主题分支变化则只保留结果，不强推；UI 和 main 都仍在同一基线时原子推送两个分支，main 单独前进则仅推 UI。
 
-- `.local/probes/`：原始只读调用；不进入 Git 或 HostDzire。
-- `.local/menu-captures/2026-10-19-lunch.json`、`2026-10-19-dinner.json`：真实开始 / 结束时间、四店候选与完成名单、未知价、单品分类及失败原因。
-- `.local/menu-captures/*-job.json`：自动检查、提交和推送状态。
-- `.local/menu-captures/*.log`：本机任务日志。
+私密运行报告在 `.local/menu-captures/2026-10-19-{lunch,dinner}.json` 及 `*-job.json` / `*-guard.json`；预约报告使用 `*-reserved.json`，不会把未发生的现场复查写成已完成。公开夹具只导出白名单字段，保留旧记录、合并去重，并更新 manifest。
 
-两次任务跑完后执行类型检查和测试；仅当 worktree 干净基线未变、远端主题分支仍等于该基线时，自动提交三个夹具文件并推 `ui/nana-mcd-theme`。远端已推进或检查失败则保留本机结果、要求人工整合，不强推。不会自动合并 main 或部署。
-
-进度回执写到 HostDzire：`/home/ajingops/mimo-work/tasks/20261019-maimai-xianpin-more-meals-PROGRESS.md`，上传后回读 SHA-256。实际采集和截图全部核验后再写任务要求的 `-DONE.md`。
-
-## 尚待完成
-
-真实两轮采集、每店至少 10 套的实际结果、新单品分类复核、390px 发起页图标截图、新主题媒体、main 合并及 mini 新一轮接收。代码准备和排程不等于这些项目已完成。
+PROGRESS 上传到 `/home/ajingops/mimo-work/tasks/20261019-maimai-xianpin-more-meals-PROGRESS.md` 后回读 SHA-256。它是传输完整性证据；本轮按最新任务由 Codex 自行核验，没有另称 mini 已复验。部署、转公开、报名与最终提交未执行。

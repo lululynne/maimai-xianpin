@@ -12,7 +12,8 @@ test('two browser cookies share SQLite state while ownership and account tools s
   const snapshot = JSON.parse(await readFile('fixtures/mcp-calls.json', 'utf8'));
   const repo = new Repository(':memory:', 'demo');
   try {
-    const catalog = new Catalog(new DemoMcpClient(snapshot));
+    const menuTime = () => Date.parse('2026-10-18T00:30:00Z');
+    const catalog = new Catalog(new DemoMcpClient(snapshot, menuTime), Date.now, 3000, undefined, menuTime);
     const app = createApp({ catalog, groups: new Groups(repo), mode: 'demo', now: Date.now, speed: 1, capturedAt: snapshot.calls[0].capturedAt });
     const first = await app.request('/api/config'); const setCookie = first.headers.get('set-cookie')!;
     assert.match(setCookie, /HttpOnly/); assert.match(setCookie, /SameSite=Strict/i);

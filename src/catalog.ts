@@ -1,10 +1,10 @@
 import type { McpReader } from './mcp/client.js';
-import { menuDaypart, type MenuDaypart } from './dayparts.js';
+import { menuDaypart, menuPeriod, type MenuDaypart, type MenuPeriod } from './dayparts.js';
 
 export interface Store { code: string; name: string; address: string; open: boolean; reservationTimeOptions: unknown[] }
-export interface MenuItem { code: string; name: string; image: string; menuPriceCents: number | null; tags: string[]; availableDayparts?: MenuDaypart[]; sample?: boolean }
+export interface MenuItem { code: string; name: string; image: string; menuPriceCents: number | null; tags: string[]; availableDayparts?: MenuDaypart[]; availablePeriods?: MenuPeriod[]; sample?: boolean }
 export interface Part { id: string; code: string; name: string; unitPriceCents: number | null; supportModify: boolean }
-export interface Meal extends MenuItem { priceCents: number; parts: Part[]; verifiedAt: number }
+export interface Meal extends MenuItem { priceCents: number; parts: Part[]; verifiedAt: number; reservationDate?: string }
 export const STORE_CODES = ['1420082', '1420800', '1420277', '1421248'];
 export const CACHE_MS = 10 * 60_000;
 
@@ -48,9 +48,11 @@ export function readProductPrice(data: any, code: string): number | null {
 
 export class Catalog {
   private cache = new Map<string, { until: number; value: Promise<any> }>();
-  constructor(private readonly reader: McpReader, private readonly now = Date.now, readonly minPriceCents = 3000, private readonly samples?: (now: number) => Meal[]) {
+  constructor(private readonly reader: McpReader, private readonly now = Date.now, readonly minPriceCents = 3000, private readonly samples?: (now: number) => Meal[], private readonly menuTime = now) {
     if (!Number.isSafeInteger(minPriceCents) || minPriceCents < 0 || minPriceCents > 10_000_000) throw new Error('INVALID_PRICE_THRESHOLD');
   }
+
+  activePeriod(): MenuPeriod { return menuPeriod(this.menuTime()); }
 
   private cached<T>(key: string, loader: () => Promise<T>): Promise<T> {
     const entry = this.cache.get(key);
@@ -71,13 +73,14 @@ export class Catalog {
 
   menu(store: string): Promise<MenuItem[]> {
     this.validateStore(store);
-    return this.cached(`menu:${store}:${menuDaypart(this.now())}`, async () => {
+    return this.cached(`menu:${store}:${menuPeriod(this.menuTime())}`, async () => {
       const result = await this.reader.call('query-meals', { storeCode: store, beType: 1, orderType: 1 });
       const data = unwrap(result);
       const availability = (result as any)?._availableDayparts as Record<string, MenuDaypart[]> | undefined;
+      const periods = (result as any)?._availablePeriods as Record<string, MenuPeriod[]> | undefined;
       const tags = new Map<string, string[]>();
       for (const c of data.categories ?? []) for (const item of c.meals ?? []) tags.set(item.code, item.tags ?? []);
-      return Object.entries(data.meals ?? {}).filter(([, v]: [string, any]) => !v.canWithOrder).map(([code, v]: [string, any]) => ({ code, name: String(v.name), image: /^https:\/\/(menu-img|img)\.mcd\.cn\//.test(v.image) ? v.image : '', menuPriceCents: yuanToCents(v.currentPrice), tags: tags.get(code) ?? [], ...(availability?.[code] ? { availableDayparts: availability[code] } : {}) }));
+      return Object.entries(data.meals ?? {}).filter(([, v]: [string, any]) => !v.canWithOrder).map(([code, v]: [string, any]) => ({ code, name: String(v.name), image: /^https:\/\/(menu-img|img)\.mcd\.cn\//.test(v.image) ? v.image : '', menuPriceCents: yuanToCents(v.currentPrice), tags: tags.get(code) ?? [], ...(availability?.[code] ? { availableDayparts: availability[code] } : {}), ...(periods?.[code] ? { availablePeriods: periods[code] } : {}) }));
     });
   }
 
@@ -90,17 +93,19 @@ export class Catalog {
 
   private async realShareableMenu(store: string): Promise<MenuItem[]> {
     const all = (await this.menu(store)).filter(m => /双人|多人|组合|件套|分享|桶|盒|套餐/.test(m.name + m.tags.join(' ')) || (m.menuPriceCents ?? 0) >= this.minPriceCents);
-    const current = all.filter(m => m.availableDayparts?.includes(menuDaypart(this.now())));
+    const specific = all.filter(m => m.availablePeriods?.includes(menuPeriod(this.menuTime())));
+    if (specific.length) return specific;
+    const current = all.filter(m => m.availableDayparts?.includes(menuDaypart(this.menuTime())));
     // Live menus have no snapshot metadata. Missing demo periods fall back to
     // all recorded, fully replayable meals without inventing availability.
     return current.length ? current : all;
   }
 
-  private price(store: string, item: Record<string, unknown>): Promise<{ cents: number | null; verifiedAt: number }> {
+  private price(store: string, item: Record<string, unknown>): Promise<{ cents: number | null; verifiedAt: number; reservationDate?: string }> {
     const code = String(item.productCode);
-    return this.cached(`price:${store}:${menuDaypart(this.now())}:${JSON.stringify(item)}`, async () => {
+    return this.cached(`price:${store}:${menuPeriod(this.menuTime())}:${JSON.stringify(item)}`, async () => {
       const result = await this.reader.call('calculate-price', { storeCode: store, beType: 1, orderType: 1, items: [item] });
-      return { cents: readProductPrice(unwrap(result), code), verifiedAt: (result as any)._sourceTimestamp ?? this.now() };
+      return { cents: readProductPrice(unwrap(result), code), verifiedAt: (result as any)._sourceTimestamp ?? this.now(), ...((result as any)._reservationDate ? { reservationDate: (result as any)._reservationDate } : {}) };
     });
   }
 
@@ -109,7 +114,7 @@ export class Catalog {
     const sample = this.samples?.(this.now()).find(m => m.code === code);
     if (sample) return Promise.resolve(sample);
     if (!/^\d{1,20}$/.test(code)) throw new Error('INVALID_MEAL');
-    return this.cached(`meal:${store}:${code}:${menuDaypart(this.now())}`, async () => {
+    return this.cached(`meal:${store}:${code}:${menuPeriod(this.menuTime())}`, async () => {
       const menu = (await this.menu(store)).find(m => m.code === code);
       if (!menu) throw new Error('MEAL_NOT_AVAILABLE');
       const detail = unwrap(await this.reader.call('query-meal-detail', { storeCode: store, beType: 1, orderType: 1, code }));
@@ -126,7 +131,7 @@ export class Catalog {
         for (let i = 0; i < c.quantity; i++) parts.push({ id: `${r.round}-${c.code}-${i}`, code: c.code, name: choice.name, unitPriceCents, supportModify: choice.supportModify === true });
       }
       if (parts.length < 2) throw new Error('MEAL_NOT_SHAREABLE');
-      return { ...menu, priceCents, parts, verifiedAt: quote.verifiedAt };
+      return { ...menu, priceCents, parts, verifiedAt: quote.verifiedAt, ...(quote.reservationDate ? { reservationDate: quote.reservationDate } : {}) };
     });
   }
 

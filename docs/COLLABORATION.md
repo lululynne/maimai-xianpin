@@ -19,3 +19,9 @@
 | 其余状态、占位互斥、踢人、确认条件等 | 没有报告可触发的新破坏路径；仍须 mini 独立运行验收，不能把这份有限范围审阅当成全系统保证。 |
 
 米末原文中把数据库 live/demo 隔离称为个人工具隔离，这不足以验证 MCP 工具白名单；真正的白名单、参数与账号字段隔离另由 Codex 源码和测试验证。
+
+## 10-19 预约回放审阅
+
+再次使用真实 `/Users/lulu/.mimocode/bin/mimo`，模型 `xiaomi/mimo-v2.6-pro`，会话 `ses_ffe5eaf8513e3ffefFSw0p6VdX`。在隔离目录仅提供五件 TS 源码，没有提供 Token、`.env`、原始业务响应或数据库。当前 Xiaomi 配置实际指向 `https://api.xiaomimimo.com/v1` 普通 API，本轮不记作已购 Token Plan，未更改计费设置。
+
+米末提出跨段借价、菜单合并、null 成功体等问题；Codex 修复当前段缺价不借其他段、当前段菜单筛选、null 校验，并补回归。整段缺失时历史回退是卡中明定规则，因此保留但加 API / UI 提示；匹配的真实零价不应一律拒绝；未知单点价继续采用已认可的整单按件均分。完整原文及六条裁决见 [20261019-mimo-reservation-review.md](reviews/20261019-mimo-reservation-review.md)。米末有限审阅不代替 Codex 的数据及浏览器核验。

@@ -1,6 +1,6 @@
 'use strict';
 const $ = selector => document.querySelector(selector);
-const state = { stores: [], meals: [], board: [], mine: [], tab: 'board', selectedMeal: null, draft: null, detail: null, config: null, clockAt: 0, clockRealAt: 0 };
+const state = { stores: [], meals: [], board: [], mine: [], done: [], tab: 'board', selectedMeal: null, draft: null, detail: null, config: null, clockAt: 0, clockRealAt: 0 };
 // Reserved for the art batch. Adding files later does not change business logic.
 const ART = { waiting: '/assets/jelly-waiting.png', full: '/assets/jelly-full.png', urgent: '/assets/jelly-urgent.png', expired: '/assets/jelly-expired.png', empty: '/assets/empty-plaza.png', ticket: '/assets/ticket.png' };
 let artManifest = {};
@@ -126,10 +126,11 @@ function cornerText(deadline) { const seconds = Math.max(0, Math.ceil((deadline 
 function timerText(deadline) { const seconds = Math.max(0, Math.ceil((deadline - now()) / 1000)); return seconds ? `⏱ 还剩 ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}` : '已截止'; }
 function leftText(deadline) { const seconds = Math.max(0, Math.ceil((deadline - now()) / 1000)); return seconds ? `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')} 后截止` : '已截止'; }
 function render() {
-  $('#board-count').textContent = state.board.length;
+  $('#board-count').textContent = state.board.filter(g => g.state === 'open').length;
   $('#mine-count').textContent = state.mine.length;
-  $('#board-note').textContent = state.tab === 'board' ? '按截止时间排序，先帮快到点的那一单。' : '保留这张卡片，到店核对。取到提醒最多延迟 30 秒。';
-  const groups = state[state.tab];
+  $('#done-count').textContent = state.done.length;
+  $('#board-note').textContent = state.tab === 'board' ? '按截止时间排序，先帮快到点的那一单。' : state.tab === 'done' ? '这些单子人已经凑齐，等着下单或取餐。' : '保留这张卡片，到店核对。取到提醒最多延迟 30 秒。';
+  const groups = state.tab === 'board' ? state.board.filter(g => g.state === 'open') : state[state.tab];
   $('#board').innerHTML = groups.length ? groups.map(g => {
     const remaining = g.meal.parts.filter(p => g.remainingPartIds.includes(p.id));
     const restCents = g.meal.priceCents - g.members.reduce((sum, m) => sum + m.cents, 0);
@@ -144,8 +145,8 @@ function render() {
     const price = own ? `<span class="price"><small>我出</small>${money(own.cents)}</span>` : each !== null ? `<span class="price"><small>每人约</small>${money(each)}</span>` : '<span class="price"></span>';
     const need = g.state === 'open' ? `还可加入 ${missing} 人` : escape(labels[g.state]);
     const tag = g.isHost ? '<em>我发起的</em>' : own ? '<em>我参与的</em>' : '';
-    return `<article class="card v2 ${g.deadline - now() < 10 * 60000 && g.state === 'open' ? 'urgent' : ''} ${own ? 'mine' : ''}"><div class="c-head"><img class="food" src="${ICON}pickup-tray-icon.png" alt=""><div class="who"><b>@${escape(host.nickname)}</b><span class="need">${need}</span>${tag}</div>${corner}</div><div class="c-meal"><span class="meal-name">${escape(g.meal.name)}</span><span class="allow">最多允许 ${g.people - 1} 人一起拼单</span></div><div class="c-parts"><small>${remaining.length ? '剩下' : '整套'}</small>${chipHtml}</div><div class="c-foot">${price}<button class="${own ? 'btn-y' : g.state === 'open' ? 'primary' : ''}" data-detail="${g.id}">${action}</button></div></article>`;
-  }).join('') : `<div class="empty"><img src="${ICON}fries-game-icon.png" alt=""><b>${state.tab === 'mine' ? '你还没有参与拼单' : '这家店还没人在拼'}</b><span>${state.tab === 'mine' ? '去看看店里的人正在拼什么。' : '当前无人跟您有相似拼单，来当第一个吧'}</span>${state.tab === 'mine' ? '' : '<button class="primary" data-empty-new>发起拼单</button>'}</div>`;
+    return `<article class="card v2 ${g.deadline - now() < 10 * 60000 && g.state === 'open' ? 'urgent' : ''} ${own ? 'mine' : ''}"><div class="c-head"><img class="food" src="${ICON}pinpin-coupon-icon.png" alt=""><div class="who"><b>@${escape(host.nickname)}</b><span class="need">${need}</span>${tag}</div>${corner}</div><img class="side" src="${ICON}${g.state === 'open' ? 'pickup-tray-icon' : 'pin-success-icon'}.png" alt=""><div class="c-meal"><span class="meal-name">${escape(g.meal.name)}</span><span class="allow">最多允许 ${g.people - 1} 人一起拼单</span></div><div class="c-parts"><small>${remaining.length ? '剩下' : '整套'}</small>${chipHtml}</div><div class="c-foot">${price}<button class="${own ? 'btn-y' : g.state === 'open' ? 'primary' : ''}" data-detail="${g.id}">${action}</button></div></article>`;
+  }).join('') : `<div class="empty"><img src="${ICON}fries-game-icon.png" alt=""><b>${state.tab === 'mine' ? '你还没有参与拼单' : state.tab === 'done' ? '这家店还没有拼成的单' : '这家店还没人在拼'}</b><span>${state.tab === 'mine' ? '去看看店里的人正在拼什么。' : '当前无人跟您有相似拼单，来当第一个吧'}</span>${state.tab === 'mine' ? '' : '<button class="primary" data-empty-new>发起拼单</button>'}</div>`;
   document.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', guard(() => openDetail(b.dataset.detail))));
   $('[data-empty-new]')?.addEventListener('click', guard(compose));
   applyArt();
@@ -155,7 +156,12 @@ async function refreshBoard() {
   if (!state.board.length) $('#board').innerHTML = friesLoader();
   const data = await api('/groups?store=' + encodeURIComponent(store));
   if (store !== $('#store').value) return;
-  state.board = data.groups; syncClock(data.serverNow); render();
+  state.board = data.groups; syncClock(data.serverNow);
+  state.done = (await api('/groups/done?store=' + encodeURIComponent(store)).catch(() => ({ groups: [] }))).groups; render();
+}
+async function refreshDone() {
+  const data = await api('/groups/done?store=' + encodeURIComponent($('#store').value));
+  state.done = data.groups; render();
 }
 async function refreshMine() {
   const data = await api('/mine');
@@ -280,7 +286,7 @@ function renderDetail(g) {
   applyArt();
 }
 document.querySelectorAll('dialog .close').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
-document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', guard(async () => { state.tab = b.dataset.tab; document.querySelectorAll('[data-tab]').forEach(t => t.classList.toggle('active', t === b)); if (state.tab === 'mine') await refreshMine(); else await refreshBoard(); })));
+document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', guard(async () => { state.tab = b.dataset.tab; document.querySelectorAll('[data-tab]').forEach(t => t.classList.toggle('active', t === b)); if (state.tab === 'mine') await refreshMine(); else if (state.tab === 'done') await refreshDone(); else await refreshBoard(); })));
 $('#store').addEventListener('change', guard(async () => { state.board = []; renderStoreChips(); const s = state.stores.find(s => s.code === $('#store').value); $('#store-address').textContent = s.address + (s.open ? '' : ' · 当前暂停营业'); await refreshBoard(); }));
 $('#refresh').addEventListener('click', guard(() => Promise.all([refreshBoard(), refreshMine()])));
 $('#new-group').addEventListener('click', guard(compose));

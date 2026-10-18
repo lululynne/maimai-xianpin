@@ -79,6 +79,11 @@ export class Groups {
     this.repo.sweep(this.now());
     return this.repo.all().filter(g => g.storeCode === store && ['open', 'full'].includes(g.state) && g.deadline > this.now());
   }
+  // 已拼成功：人齐了（等下单）、已下单、已取完，按发起时间新的在前（梅宝 10-19 要的第三个分页）
+  done(store: string): Group[] {
+    this.repo.sweep(this.now());
+    return this.repo.all().filter(g => g.storeCode === store && ['full', 'ordered', 'picked-up'].includes(g.state)).sort((a, b) => b.createdAt - a.createdAt).slice(0, 20);
+  }
   similar(store: string, meal: string): Group[] { return this.list(store).filter(g => g.meal.code === meal && g.state === 'open').slice(0, 3); }
   mine(device: string): Group[] { this.repo.sweep(this.now()); return this.repo.all().filter(g => g.members.some(m => m.device === device)); }
   get(id: string): Group { return this.current(id); }

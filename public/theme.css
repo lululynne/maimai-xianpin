@@ -332,3 +332,9 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 .card.v2.mine .allow{color:var(--red-d)}
 .card.v2.mine .c-parts i{background:#ffffff26;color:#fff}
 .card.v2.mine .who em{background:var(--yel);color:var(--ink)}
+
+/* 10-19 01:3x：头部换「拼拼」券图标；右侧中间放大图——正在拼放取餐盘，拼成了放碰杯 */
+.card.v2 img.food{width:56px;height:56px}
+.card.v2 img.side{position:absolute;right:18px;top:50%;transform:translateY(-46%);width:96px;height:96px;object-fit:contain;pointer-events:none}
+.card.v2 .c-meal,.card.v2 .c-parts{padding-right:112px}
+@media(max-width:560px){.card.v2 img.food{width:48px;height:48px}.card.v2 img.side{width:76px;height:76px;right:12px}.card.v2 .c-meal,.card.v2 .c-parts{padding-right:88px}}

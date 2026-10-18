@@ -94,6 +94,22 @@ button{border-radius:99px;font-weight:800}
 .card .corner{background:#fff}
 .card.mine .corner{border-color:#fff}
 
+/* 卡片放大：字号、行距、图标（倒计时角标、我的卡片、拼！保持原样） */
+.card{gap:16px;padding:52px 18px 18px}
+.card img.food{width:104px;height:84px}
+.card .t b{font-size:20px;line-height:1.45}
+.card .t .meal-name{font-size:16px;margin-top:4px}
+.card .t .allow{font-size:14px;padding:2px 12px;margin:8px 0}
+.card .t span{font-size:15px;line-height:1.7}
+@media(max-width:560px){
+  .card{gap:12px;padding:50px 14px 16px}
+  .card img.food{width:80px;height:66px}
+  .card .t b{font-size:17px}
+  .card .t .meal-name{font-size:14px}
+  .card .t .allow{font-size:13px}
+  .card .t span{font-size:13px;line-height:1.65}
+}
+
 /* 空状态 */
 .empty{border:0;padding:30px 20px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:4px}
 .empty img{width:120px;filter:grayscale(.2)}

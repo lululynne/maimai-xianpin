@@ -4,14 +4,14 @@ body{background:var(--cream);color:var(--ink);font-family:"PingFang SC","Noto Sa
 .ico{width:22px;height:22px;object-fit:contain;vertical-align:-5px;margin-right:6px}
 
 /* 顶栏：经典深棕「麦麦」+ 麦麦红「现拼」，加高约 2.5 倍，底下红黄两道边 */
-.topbar{max-width:none;background:#fff;color:var(--ink);border:0;border-bottom:6px solid var(--red);box-shadow:0 4px 0 var(--yel);padding:34px max(18px,calc((100% - 1120px)/2 + 32px)) 30px;min-height:170px;margin-bottom:4px}
+.topbar{max-width:none;background:var(--yel);color:var(--ink);border:0;border-bottom:6px solid var(--red);box-shadow:0 3px 0 var(--red-d);padding:34px max(18px,calc((100% - 1120px)/2 + 32px)) 30px;min-height:170px;margin-bottom:4px}
 .wordmark{display:flex;align-items:center;gap:14px;letter-spacing:0}
 .wordmark img{width:96px;height:96px;object-fit:contain;flex-shrink:0}
 .wordmark .wm-text{color:var(--ink)}
 .wm-text b{display:block;font-size:40px;font-weight:900;letter-spacing:2px;line-height:1.15;color:var(--ink)}
 .wm-text b span{color:var(--red)}
-.wm-text small{display:block;color:var(--red);font-size:15px;font-weight:800;letter-spacing:1px;margin-top:6px}
-.badge{background:var(--yel);border:0;color:var(--ink);font-weight:700;align-self:start}
+.wm-text small{display:block;color:var(--red-d);font-size:15px;font-weight:800;letter-spacing:1px;margin-top:6px}
+.badge{background:#fff;border:0;color:var(--ink);font-weight:700;align-self:start}
 
 /* 首屏：除大标题外字号放大一倍 */
 h1 span{color:var(--red)}

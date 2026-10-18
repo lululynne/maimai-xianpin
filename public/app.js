@@ -40,7 +40,11 @@ function similarPartsText(parts) {
   return [...counts].map(([name, count]) => `${name}（数量：${count}）`).join('、');
 }
 const ICON = '/assets/theme/';
-function mealIcon(name = '') { return ICON + (/薯/.test(name) && !/堡/.test(name) ? 'fries-game-icon.png' : /堡|汉堡|鸡腿/.test(name) ? 'burger-icon.png' : 'pindan-icon.png'); }
+function mealIcon(name = '') {
+  // 按剩下的主要餐品配纳纳的食物图标；没有对应的就用拼单图标。
+  const rules = [[/桶|分享|家庭/, 'pindan-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
+  return ICON + (rules.find(([re]) => re.test(name))?.[1] ?? 'pindan-icon') + '.png';
+}
 function friesLoader(text = '正在查看这家店的拼单…') { return `<div class="fries-ld" role="status"><div class="box"><img class="grey" src="${ICON}fries-game-icon.png" alt=""><img class="color" src="${ICON}fries-game-icon.png" alt=""><span class="sp">✦</span><span class="sp">✦</span><span class="sp">✦</span></div><div class="bar"><i></i></div><p>${escape(text)}</p></div>`; }
 function renderStoreChips() {
   const current = $('#store').value;
@@ -77,7 +81,7 @@ function render() {
     const missing = g.people - g.members.length;
     const each = g.state === 'open' && missing > 0 ? Math.round(restCents / missing) : null;
     const action = own ? '我的卡片' : g.state === 'open' ? '拼！' : '看看';
-    return `<article class="card ${g.deadline - now() < 10 * 60000 && g.state === 'open' ? 'urgent' : ''} ${own ? 'mine' : ''}"><img class="food" src="${mealIcon(g.meal.name + remaining.map(p => p.name).join(''))}" alt=""><div class="t"><b>@${escape(host.nickname)} ${g.state === 'open' ? `还可加入 ${missing} 人` : escape(labels[g.state])}${g.isHost ? '<em>我发起的</em>' : own ? '<em>我参与的</em>' : ''}</b><span class="meal-name">${escape(g.meal.name)}</span><span class="allow">最多允许 ${g.people - 1} 人一起拼单</span><span>${escape(remaining.length ? '剩下 ' + partsText(remaining) : partsText(g.meal.parts))}${own ? ` · 我出 ${money(own.cents)}` : each !== null ? ` · 每人约 ${money(each)}` : ''}</span><div class="timer" data-deadline="${g.deadline}" data-style="timer">${escape(timerText(g.deadline))}</div></div><button class="${own ? 'btn-y' : g.state === 'open' ? 'primary' : ''}" data-detail="${g.id}">${action}</button></article>`;
+    return `<article class="card ${g.deadline - now() < 10 * 60000 && g.state === 'open' ? 'urgent' : ''} ${own ? 'mine' : ''}"><img class="food" src="${mealIcon(remaining[0]?.name ?? g.meal.name)}" alt=""><div class="t"><b>@${escape(host.nickname)} ${g.state === 'open' ? `还可加入 ${missing} 人` : escape(labels[g.state])}${g.isHost ? '<em>我发起的</em>' : own ? '<em>我参与的</em>' : ''}</b><span class="meal-name">${escape(g.meal.name)}</span><span class="allow">最多允许 ${g.people - 1} 人一起拼单</span><span>${escape(remaining.length ? '剩下 ' + partsText(remaining) : partsText(g.meal.parts))}${own ? ` · 我出 ${money(own.cents)}` : each !== null ? ` · 每人约 ${money(each)}` : ''}</span><div class="timer" data-deadline="${g.deadline}" data-style="timer">${escape(timerText(g.deadline))}</div></div><button class="${own ? 'btn-y' : g.state === 'open' ? 'primary' : ''}" data-detail="${g.id}">${action}</button></article>`;
   }).join('') : `<div class="empty"><img src="${ICON}fries-game-icon.png" alt=""><b>${state.tab === 'mine' ? '你还没有参与拼单' : '这家店还没人在拼'}</b><span>${state.tab === 'mine' ? '去看看店里的人正在拼什么。' : '当前无人跟您有相似拼单，来当第一个吧'}</span>${state.tab === 'mine' ? '' : '<button class="primary" data-empty-new>发起拼单</button>'}</div>`;
   document.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', guard(() => openDetail(b.dataset.detail))));
   $('[data-empty-new]')?.addEventListener('click', guard(compose));

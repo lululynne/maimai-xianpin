@@ -42,7 +42,7 @@ function similarPartsText(parts) {
 const ICON = '/assets/theme/';
 function mealIcon(name = '') {
   // 按剩下的主要餐品配纳纳的食物图标；没有对应的就用拼单图标。
-  const rules = [[/桶|分享|家庭|双人|三人|组合|套/, 'pindan-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡|麦满分/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
+  const rules = [[/桶|分享|家庭|双人|三人|组合|套/, 'pindan-icon'], [/油条/, 'youtiao-icon'], [/营养卷|卷/, 'wrap-icon'], [/豆浆/, 'soymilk-icon'], [/牛奶|燕麦奶|奶铁/, 'milk-icon'], [/红茶|奶茶|柠檬红茶|茶/, 'black-tea-icon'], [/橙|美汁源|苹果汁|果汁/, 'orange-juice-icon'], [/柠|雪碧|怡泉|气泡/, 'lemon-soda-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡|麦满分/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
   return ICON + (rules.find(([re]) => re.test(name))?.[1] ?? 'pindan-icon') + '.png';
 }
 function friesLoader(text = '正在查看这家店的拼单…') { return `<div class="fries-ld" role="status"><div class="box"><img class="grey" src="${ICON}fries-game-icon.png" alt=""><img class="color" src="${ICON}fries-game-icon.png" alt=""><span class="sp">✦</span><span class="sp">✦</span><span class="sp">✦</span></div><div class="bar"><i></i></div><p>${escape(text)}</p></div>`; }
@@ -61,7 +61,7 @@ function pushBanner(title, body) {
 }
 function simBlock(g, own) {
   if (!sim()) return '';
-  const counter = ['ordered', 'picked-up'].includes(g.state) ? (state.counter?.id === g.id ? `<div class="counter"><div class="counter-head">门店视角 · 一单 ${state.counter.members.length} 个取餐码<em>理想版模拟</em></div>${state.counter.members.map(m => `<div class="code-row ${own && m.nickname === own.nickname ? 'me' : ''}"><b>${escape(m.pickupCode)}</b><span>@${escape(m.nickname)} · ${escape(m.parts.join('、'))}</span><small>尾号 ${escape(m.tail4)} · ${m.collected ? '已取走' : '待取'}</small></div>`).join('')}<p>只有门店能看到这张表。每个码只对应自己那几样，凭一个码拿不走整份。</p></div>` : '<button class="sm-link" data-counter>演示：切到门店视角（只有门店看得到所有尾号和取餐码）</button>') : '';
+  const counter = ['ordered', 'picked-up'].includes(g.state) ? (state.counter?.id === g.id ? `<div class="counter"><div class="counter-head">门店视角 · 一单 ${state.counter.members.length} 个取餐码<em>理想版模拟</em></div>${state.counter.members.map(m => `<div class="code-row ${own && m.nickname === own.nickname ? 'me' : ''}"><b><img class="bell sm" src="${ICON}pickup-bell-icon.png" alt="">${escape(m.pickupCode)}</b><span>@${escape(m.nickname)} · ${escape(m.parts.join('、'))}</span><small>尾号 ${escape(m.tail4)} · ${m.collected ? '已取走' : '待取'}</small></div>`).join('')}<p>只有门店能看到这张表。每个码只对应自己那几样，凭一个码拿不走整份。</p></div>` : '<button class="sm-link" data-counter>演示：切到门店视角（只有门店看得到所有尾号和取餐码）</button>') : '';
   if (!g.isHost) return counter;
   const yuan = g.idealCouponYuan;
   const coupon = yuan ? `<div class="coupon"><div class="c-amt">¥${yuan}</div><div class="c-txt"><b>等拼补偿券 · 发起人专享</b><span>${g.state === 'expired' ? '没拼成也不白等' : '你这单已经等了 ' + Math.floor(g.waitedMs / 60000) + ' 分钟'}</span><small>等满 15 分钟送 2 元 · 等满 30 分钟还可选单点 8.5 折或继续等每样立减 1.5 元 · 每人每天一张 · 自己取消不给 · 理想版模拟，不是真券</small></div></div>` : (g.state === 'open' ? `<p class="muted">已等待 ${Math.floor(g.waitedMs / 60000)} 分钟。等满 15 分钟，理想版会给发起人 2 元补偿券；等满 30 分钟会弹窗让你选单点 8.5 折或继续等待立减。</p>` : '');
@@ -72,7 +72,7 @@ function simBlock(g, own) {
     k.waitBonusCents ? `<div class="perk"><b>继续等待立减 ${money(k.waitBonusCents)}</b><span>你拼的 ${k.waitBonusCents / 150} 样里，每样立减 1.5 元${k.takeAll ? '' : '，已锁定'}</span></div>` : '',
     k.takeAll ? `<div class="perk"><b>不等了 · 整套餐下单</b><span>${g.members.length === 1 ? `一人拿下整套：套餐 ${money(g.meal.priceCents)} − 立减 ${money(k.waitBonusCents ?? 0)}` : '剩下的你包了：你这份按 8.5 折结算，同单拼友照原来的份额付，没有额外优惠'}</span></div>` : '',
   ].join('');
-  const pay = !k.solo && (k.waitBonusCents || k.takeAll) ? `<div class="pay">我实付约 <b>${money(k.hostPayCents)}</b><small>理想版模拟，实际以官方结算为准</small></div>` : k.solo ? `<div class="pay">我实付约 <b>${money(k.hostPayCents ?? 0)}</b><small>拿 8.5 折单张券，自己单点</small></div>` : '';
+  const pay = !k.solo && (k.waitBonusCents || k.takeAll) ? `<div class="pay-line">我实付约 <b>${money(k.hostPayCents)}</b><small>理想版模拟，实际以官方结算为准</small></div>` : k.solo ? `<div class="pay-line">我实付约 <b>${money(k.hostPayCents ?? 0)}</b><small>拿 8.5 折单张券，自己单点</small></div>` : '';
   const acts = g.state === 'open' ? [
     sim() && !k.prompt && g.waitedMs < 30 * 60000 ? '<button class="sm-link" data-age>演示：快进到这单等满 31 分钟</button>' : '',
     k.prompt ? '<button class="btn-y" data-wait-prompt>等满 30 分钟了：选继续等还是单点</button>' : '',
@@ -80,6 +80,38 @@ function simBlock(g, own) {
   ].join('') : '';
   const coupon2 = coupon + perks + pay + (acts ? `<div class="actions">${acts}</div>` : '');
   return counter + coupon2;
+}
+// 付款结算（理想版模拟）：拼友加入后确认自己那份，发起人拼满后整单下单。网页不收款，正式使用在麦当劳官方 App 付款。
+function openPay(g, kind) {
+  const me = g.members.find(m => m.id === g.viewerId); if (!me) return;
+  const items = g.meal.parts.filter(p => me.partIds.includes(p.id));
+  const k = g.isHost ? (g.perk ?? {}) : {};
+  const base = me.cents;
+  const lines = [];
+  if (g.isHost && k.waitBonusCents && !k.takeAll) lines.push(['继续等待立减', -k.waitBonusCents]);
+  if (g.isHost && k.takeAll && g.members.length === 1 && k.waitBonusCents) lines.push(['继续等待立减', -k.waitBonusCents]);
+  if (g.isHost && k.takeAll && g.members.length > 1) lines.push(['整套餐下单 8.5 折', (k.hostPayCents ?? base) - base]);
+  const coupon = g.isHost && g.idealCouponYuan ? g.idealCouponYuan * 100 : 0;
+  const before = g.isHost && k.hostPayCents != null && (k.waitBonusCents || k.takeAll) ? k.hostPayCents : base;
+  if (coupon) lines.push(['等拼补偿券', -Math.min(coupon, before)]);
+  const total = Math.max(0, before - Math.min(coupon, before));
+  const hostOrder = kind === 'ordered';
+  $('#pay-body').innerHTML = `<div class="pay-head"><img src="${mealIcon(items[0]?.name ?? g.meal.name)}" alt=""><div><b>${escape(g.meal.name)}</b><small>${hostOrder ? `整单 ${money(g.meal.priceCents)} · ${g.members.length} 人拼成` : '我这份'} · 到店自取</small></div></div>
+    <ul class="pay-items">${items.map(p => `<li><img src="${mealIcon(p.name)}" alt=""><span>${escape(p.name)}</span><small>${p.unitPriceCents === null ? '—' : '单点 ' + money(p.unitPriceCents)}</small></li>`).join('')}</ul>
+    <div class="pay-row"><span>${g.method === 'equal-items' ? '按件均分的份额' : '按单点价比例分摊'}</span><b>${money(base)}</b></div>
+    ${lines.map(([t, c]) => `<div class="pay-row off"><span>${escape(t)}</span><b>${c < 0 ? '−' : '+'}${money(Math.abs(c))}</b></div>`).join('')}
+    <div class="pay-total"><span>${hostOrder ? '我应付' : '我这份应付'}</span><b>${money(total)}</b></div>
+    <p class="pay-note">${state.config.mode === 'demo' ? '演示：点「模拟付款」不会扣款。正式使用时在麦当劳官方 App / 小程序付款，本网页不收款。' : '本网页不收款：请在麦当劳官方 App / 小程序付款后，再回来点确认。'}</p>`;
+  $('#pay-go').textContent = state.config.mode === 'demo' ? `模拟付款 ${money(total)}` : (hostOrder ? '我已在官方 App 付款下单' : '我已核对，确认我这份');
+  $('#pay-go').onclick = guard(async () => {
+    await api(`/groups/${g.id}/${kind}`, {});
+    $('#pay-done-title').textContent = hostOrder ? '下单成功' : '拼单成功';
+    $('#pay-sheet').classList.add('done'); $('#pay-done-amt').textContent = money(total);
+    await new Promise(r => setTimeout(r, 1600));
+    $('#pay-sheet').close(); $('#pay-sheet').classList.remove('done');
+    await Promise.all([refreshBoard(), refreshMine()]); await openDetail(g.id);
+  });
+  $('#pay-sheet').showModal();
 }
 function openWaitPrompt(g) {
   const own = g.members.find(m => m.id === g.hostId);
@@ -219,14 +251,14 @@ function renderDetail(g) {
   const remaining = g.meal.parts.filter(p => g.remainingPartIds.includes(p.id));
   const own = g.members.find(m => m.id === g.viewerId);
   const fallback = g.method === 'equal-items';
-  $('#detail-content').innerHTML = `<h3>${escape(g.meal.name)}</h3><p>${escape(labels[g.state])} · <span class="clock" data-deadline="${g.deadline}">${escape(leftText(g.deadline))}</span></p><p class="muted">规定时间不延长 · 套餐核价 ${money(g.meal.priceCents)} · 到店自取<br>核价时间 ${chinaDate(g.meal.verifiedAt)}，实际以官方下单为准。</p>${fallback ? '<p class="hint">单件价格有缺失：整单按餐品件数均分，零头归发起人。</p>' : '<p class="hint">按每人单点价占比分摊套餐价，零头归发起人。</p>'}${own ? (() => { const m = own; const coded = ['ordered', 'picked-up'].includes(g.state) && m.pickupCode; return `<div class="ticket own"><div class="who">我这份 · @${escape(m.nickname)}${m.id === g.hostId ? '（发起人）' : ''}</div><div class="lbl">${coded ? '我的取餐码' : '我的尾号'}</div><div class="num">${escape(coded ? m.pickupCode : m.tail4)}</div><p>${escape(partsText(g.meal.parts.filter(p => m.partIds.includes(p.id))))}</p><div class="chips"><span class="tag">我出 ${money(g.isHost && g.perk && (g.perk.waitBonusCents || g.perk.takeAll || g.perk.solo) && g.perk.hostPayCents !== null ? g.perk.hostPayCents : m.cents)}</span><span class="tag off">${m.collected ? '已取走' : m.confirmed ? '已确认' : '待确认'}</span></div><small class="ticket-note">${coded ? '到柜台报这个码，只能取走你自己这份。' : '下单后门店会给你一个只属于你的取餐码。'}</small></div>`; })() : ''}${g.members.filter(m => m.id !== g.viewerId).map(m => `<div class="mate"><b>@${escape(m.nickname)}${m.id === g.hostId ? '（发起人）' : ''}</b><span>${escape(partsText(g.meal.parts.filter(p => m.partIds.includes(p.id))))}</span><span class="tag">${own ? 'TA 出' : '已认领'} ${money(m.cents)}</span><small>${m.collected ? '已取走' : m.confirmed ? '已确认' : '待本人确认'}${g.isHost && !m.confirmed && ['open','full'].includes(g.state) ? `　<button class="sm-link" data-kick="${m.id}">移出</button>` : ''}</small></div>`).join('')}${own && g.members.length > 1 ? '<p class="muted">同单拼友的尾号和取餐码只有本人和门店能看到，你只看得到昵称。</p>' : ''}${sim() ? simBlock(g, own) : `<p class="muted">已等待 ${Math.floor(g.waitedMs / 60000)} 分钟。按理想版${g.idealCouponYuan ? '可对应 ' + g.idealCouponYuan + ' 元券档位' : '尚未达到补偿券档位'}。此处仅展示，不发券。</p>`}${g.state === 'expired' ? `<div class="hint">到点了，这单已经下架。可以改成自己单点：<br>${g.meal.parts.filter(p => !own || own.partIds.includes(p.id)).map(p => `${escape(p.name)}：${p.unitPriceCents === null ? '价格暂缺' : money(p.unitPriceCents)}`).join('<br>')}<br>自己的可用券，请到官方 App 查看。</div>` : ''}<div class="actions">${g.isHost && g.state === 'open' && state.config.mode === 'demo' ? '<button data-demo-fill>演示：模拟拼友加入并确认</button>' : ''}${own ? '<button id="copy-card">复制我的小卡片</button>' : ''}${own && !own.confirmed && ['open','full'].includes(g.state) ? '<button class="primary" data-action="confirm">确认我这份和金额</button>' : ''}${g.isHost && g.state === 'full' ? `<button class="primary" data-action="ordered">${state.config.mode === 'demo' ? '演示：模拟官方渠道已下单' : '我已在官方渠道下单'}</button>` : ''}${own && g.state === 'ordered' && !own.collected ? '<button class="primary" data-action="collect">我已凭取餐码取走我这份</button>' : ''}${own && g.state === 'ordered' && sim() && g.members.some(m => m.id !== own.id && !m.collected) ? '<button data-demo-collect>演示：模拟拼友取走 TA 那份</button>' : ''}</div>${g.state === 'picked-up' ? '<p class="hint">这单每个人都取走了自己那份，拼单完成。</p>' : own?.collected ? `<p class="hint">你这份已经取走，拼单对你来说已完成。还有 ${g.members.filter(m => !m.collected).length} 人会凭自己的取餐码去柜台取。</p>` : ''}${!own && g.state === 'open' ? `<hr><form id="join-form"><h3>我来拼剩下这份</h3>${checks(remaining, g.people - g.members.length === 1 ? remaining.map(p => p.id) : [])}<div class="form-row"><label>昵称<input name="nickname" maxlength="20" required></label><label>手机尾号后四位<input name="tail4" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></label></div><button class="primary wide" type="submit">加入这单，再核对金额</button></form>` : ''}`;
+  $('#detail-content').innerHTML = `<h3>${escape(g.meal.name)}</h3><p>${escape(labels[g.state])} · <span class="clock" data-deadline="${g.deadline}">${escape(leftText(g.deadline))}</span></p><p class="muted">规定时间不延长 · 套餐核价 ${money(g.meal.priceCents)} · 到店自取<br>核价时间 ${chinaDate(g.meal.verifiedAt)}，实际以官方下单为准。</p>${fallback ? '<p class="hint">单件价格有缺失：整单按餐品件数均分，零头归发起人。</p>' : '<p class="hint">按每人单点价占比分摊套餐价，零头归发起人。</p>'}${own ? (() => { const m = own; const coded = ['ordered', 'picked-up'].includes(g.state) && m.pickupCode; return `<div class="ticket own"><div class="who">我这份 · @${escape(m.nickname)}${m.id === g.hostId ? '（发起人）' : ''}</div><div class="lbl">${coded ? '我的取餐码' : '我的尾号'}</div><div class="num">${coded ? `<img class="bell" src="${ICON}pickup-bell-icon.png" alt="">` : ''}${escape(coded ? m.pickupCode : m.tail4)}</div><p>${escape(partsText(g.meal.parts.filter(p => m.partIds.includes(p.id))))}</p><div class="chips"><span class="tag">我出 ${money(g.isHost && g.perk && (g.perk.waitBonusCents || g.perk.takeAll || g.perk.solo) && g.perk.hostPayCents !== null ? g.perk.hostPayCents : m.cents)}</span><span class="tag off">${m.collected ? '已取走' : m.confirmed ? '已确认' : '待确认'}</span></div><small class="ticket-note">${coded ? '到柜台报这个码，只能取走你自己这份。' : '下单后门店会给你一个只属于你的取餐码。'}</small></div>`; })() : ''}${g.members.filter(m => m.id !== g.viewerId).map(m => `<div class="mate"><b>@${escape(m.nickname)}${m.id === g.hostId ? '（发起人）' : ''}</b><span>${escape(partsText(g.meal.parts.filter(p => m.partIds.includes(p.id))))}</span><span class="tag">${own ? 'TA 出' : '已认领'} ${money(m.cents)}</span><small>${m.collected ? '已取走' : m.confirmed ? '已确认' : '待本人确认'}${g.isHost && !m.confirmed && ['open','full'].includes(g.state) ? `　<button class="sm-link" data-kick="${m.id}">移出</button>` : ''}</small></div>`).join('')}${own && g.members.length > 1 ? '<p class="muted">同单拼友的尾号和取餐码只有本人和门店能看到，你只看得到昵称。</p>' : ''}${sim() ? simBlock(g, own) : `<p class="muted">已等待 ${Math.floor(g.waitedMs / 60000)} 分钟。按理想版${g.idealCouponYuan ? '可对应 ' + g.idealCouponYuan + ' 元券档位' : '尚未达到补偿券档位'}。此处仅展示，不发券。</p>`}${g.state === 'expired' ? `<div class="hint">到点了，这单已经下架。可以改成自己单点：<br>${g.meal.parts.filter(p => !own || own.partIds.includes(p.id)).map(p => `${escape(p.name)}：${p.unitPriceCents === null ? '价格暂缺' : money(p.unitPriceCents)}`).join('<br>')}<br>自己的可用券，请到官方 App 查看。</div>` : ''}<div class="actions">${g.isHost && g.state === 'open' && state.config.mode === 'demo' ? '<button data-demo-fill>演示：模拟拼友加入并确认</button>' : ''}${own ? '<button id="copy-card">复制我的小卡片</button>' : ''}${own && !own.confirmed && ['open','full'].includes(g.state) ? '<button class="primary" data-action="confirm">确认我这份和金额</button>' : ''}${g.isHost && g.state === 'full' ? `<button class="primary" data-action="ordered">${state.config.mode === 'demo' ? '演示：模拟官方渠道已下单' : '我已在官方渠道下单'}</button>` : ''}${own && g.state === 'ordered' && !own.collected ? '<button class="primary" data-action="collect">我已凭取餐码取走我这份</button>' : ''}${own && g.state === 'ordered' && sim() && g.members.some(m => m.id !== own.id && !m.collected) ? '<button data-demo-collect>演示：模拟拼友取走 TA 那份</button>' : ''}</div>${g.state === 'picked-up' ? '<p class="hint">这单每个人都取走了自己那份，拼单完成。</p>' : own?.collected ? `<p class="hint">你这份已经取走，拼单对你来说已完成。还有 ${g.members.filter(m => !m.collected).length} 人会凭自己的取餐码去柜台取。</p>` : ''}${!own && g.state === 'open' ? `<hr><form id="join-form"><h3>我来拼剩下这份</h3>${checks(remaining, g.people - g.members.length === 1 ? remaining.map(p => p.id) : [])}<div class="form-row"><label>昵称<input name="nickname" maxlength="20" required></label><label>手机尾号后四位<input name="tail4" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></label></div><button class="primary wide" type="submit">加入这单，再核对金额</button></form>` : ''}`;
   $('#join-form')?.addEventListener('submit', guard(async event => {
     event.preventDefault(); const data = new FormData(event.currentTarget);
-    await api(`/groups/${g.id}/join`, { nickname: data.get('nickname'), tail4: data.get('tail4'), partIds: data.getAll('partIds') });
-    await Promise.all([refreshBoard(), refreshMine()]); await openDetail(g.id);
+    const { group: joined } = await api(`/groups/${g.id}/join`, { nickname: data.get('nickname'), tail4: data.get('tail4'), partIds: data.getAll('partIds') });
+    await Promise.all([refreshBoard(), refreshMine()]); await openDetail(g.id); openPay(joined, 'confirm');
   }));
   document.querySelectorAll('[data-action]').forEach(b => b.addEventListener('click', guard(async () => {
-    if (state.config.mode !== 'demo' && b.dataset.action === 'ordered' && !confirm('确认已经在麦当劳官方 App / 小程序完成真实下单？本网页不会代下单。')) return;
+    if (b.dataset.action === 'confirm' || b.dataset.action === 'ordered') return openPay(g, b.dataset.action);
     await api(`/groups/${g.id}/${b.dataset.action}`, {}); await Promise.all([refreshBoard(), refreshMine()]); await openDetail(g.id);
   })));
   document.querySelectorAll('[data-kick]').forEach(b => b.addEventListener('click', guard(async () => { await api(`/groups/${g.id}/kick`, { memberId: b.dataset.kick }); await Promise.all([refreshBoard(), refreshMine()]); await openDetail(g.id); })));

@@ -181,10 +181,42 @@ dialog.sheet>form{flex:1;overflow:auto;padding:6px 16px 0}
 .ticket .ticket-note{display:block;color:var(--mut);font-size:12px;margin-top:8px}
 .card .t .allow{display:inline-block;width:auto;font-size:12px;font-weight:700;color:var(--ink);background:#FFF1CF;border-radius:99px;padding:1px 9px;margin:3px 0;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 
+/* 取餐码铃铛 */
+.ticket .num{display:flex;align-items:center;justify-content:center;gap:8px}
+.bell{width:48px;height:48px;object-fit:contain}.bell.sm{width:26px;height:26px;vertical-align:-5px;margin-right:2px}
+.code-row b{display:flex;align-items:center}
+
+/* 付款结算：红色圆润框 */
+dialog.pay{width:min(400px,calc(100% - 24px));margin:auto;padding:0;border-radius:28px;background:var(--red);color:#fff;border:0;box-shadow:0 10px 0 var(--red-d),0 24px 60px #3a1a0e55;overflow:hidden}
+dialog.pay::backdrop{background:#3A1A0E99}
+.pay-top{display:flex;align-items:center;gap:8px;padding:16px 18px 6px}
+.pay-top b{font-size:20px;font-weight:900;letter-spacing:2px}
+.pay-top small{background:var(--yel);color:var(--ink);border-radius:99px;padding:1px 9px;font-size:11px;font-weight:800}
+.pay-top .close{margin-left:auto;color:#fff;font-size:26px;box-shadow:none}
+#pay-body{margin:8px 12px 0;background:#fff;color:var(--ink);border-radius:22px;padding:14px 14px 10px}
+.pay-head{display:flex;gap:10px;align-items:center;padding-bottom:10px;border-bottom:2px dashed var(--yel-l)}
+.pay-head img{width:54px;height:54px;object-fit:contain}.pay-head b{display:block;font-size:16px}.pay-head small{color:var(--mut);font-size:12px}
+.pay-items{list-style:none;margin:8px 0;padding:0}
+.pay-items li{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:8px;padding:5px 0;font-size:14px}
+.pay-items img{width:34px;height:34px;object-fit:contain}.pay-items small{color:var(--mut);font-size:12px}
+.pay-row{display:flex;justify-content:space-between;font-size:14px;padding:4px 0}.pay-row.off b{color:var(--red)}
+.pay-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;padding-top:10px;border-top:2px solid var(--yel-l)}
+.pay-total span{font-weight:800}.pay-total b{font-size:32px;font-weight:900;color:var(--red)}
+.pay-note{font-size:11px;color:var(--mut);margin:8px 0 0}
+.pay-foot{padding:14px 16px 18px}
+.pay-btn{width:100%;background:var(--yel);color:var(--ink);border:0;border-radius:99px;padding:15px;font-size:18px;font-weight:900;box-shadow:0 4px 0 var(--yel-d)}
+.pay-btn:active{transform:translateY(4px);box-shadow:none}
+.pay-done{display:none;position:absolute;inset:0;background:var(--red);flex-direction:column;align-items:center;justify-content:center;gap:6px}
+dialog.pay.done .pay-done{display:flex;animation:pop .35s}
+.pay-cheers{width:170px;height:170px;object-fit:contain;animation:cheers .9s ease-out}
+@keyframes cheers{0%{transform:scale(.4) rotate(-8deg);opacity:0}55%{transform:scale(1.12) rotate(3deg);opacity:1}100%{transform:none}}
+.pay-check{width:84px;height:84px;border-radius:50%;background:var(--yel);color:var(--red);font-size:48px;font-weight:900;display:grid;place-items:center;box-shadow:0 5px 0 var(--yel-d)}
+.pay-done b{font-size:22px}.pay-done span{font-size:28px;font-weight:900;color:var(--yel)}.pay-done small{font-size:12px;opacity:.85}
+
 /* 发起人等待补偿 */
 .perk{background:#FFF8EC;border:2px solid var(--yel);border-radius:14px;padding:10px 12px;margin:10px 0;display:flex;flex-direction:column}
 .perk b{font-size:15px;color:var(--red)}.perk span{font-size:13px}.perk em{font-style:normal;font-weight:900;color:var(--red)}
-.pay{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:14px}.pay b{font-size:24px;color:var(--red)}.pay small{color:var(--mut);font-size:12px}
+.pay-line{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:14px}.pay-line b{font-size:24px;color:var(--red)}.pay-line small{color:var(--mut);font-size:12px}
 #wait-body{padding:12px 18px 4px;font-size:15px}#wait-body p{margin:6px 0}
 .window-note{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;background:#fff;border:2px dashed var(--red);border-radius:14px;padding:10px 14px;font-size:15px;margin:0 0 20px}
 .window-note b{color:var(--red)}.window-note small{color:var(--mut);font-size:12px;width:100%}

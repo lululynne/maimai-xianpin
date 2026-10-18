@@ -338,3 +338,6 @@ dialog.pay.done .pay-done{display:flex;animation:pop .35s}
 .card.v2 img.side{position:absolute;right:18px;top:50%;transform:translateY(-46%);width:96px;height:96px;object-fit:contain;pointer-events:none}
 .card.v2 .c-meal,.card.v2 .c-parts{padding-right:112px}
 @media(max-width:560px){.card.v2 img.food{width:48px;height:48px}.card.v2 img.side{width:76px;height:76px;right:12px}.card.v2 .c-meal,.card.v2 .c-parts{padding-right:88px}}
+
+/* 旧样式给 .card img 加了 multiply 混色，红底卡上的图会被染成红色；v2 卡里的图一律原色 */
+.card.v2 img{mix-blend-mode:normal}

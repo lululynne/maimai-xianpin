@@ -5,7 +5,8 @@ import { allocateShares } from './shares.js';
 
 export type State = 'open' | 'full' | 'ordered' | 'picked-up' | 'expired';
 export interface Member { id: string; device: string; nickname: string; tail4: string; partIds: string[]; confirmed: boolean; pickupCode?: string; collectedAt?: number }
-export interface Group { id: string; storeCode: string; meal: Meal; createdAt: number; deadline: number; endedAt: number | null; people: number; state: State; hostId: string; members: Member[]; pickedUpAt?: number }
+export interface Perk { waitBonusCents?: number; solo?: boolean; takeAll?: boolean }
+export interface Group { perk?: Perk; id: string; storeCode: string; meal: Meal; createdAt: number; deadline: number; endedAt: number | null; people: number; state: State; hostId: string; members: Member[]; pickedUpAt?: number }
 export class DomainError extends Error { constructor(readonly code: string, readonly status = 400) { super(code); } }
 function fail(code: string, status = 400): never { throw new DomainError(code, status); }
 
@@ -24,6 +25,20 @@ function choose(ids: unknown, available: string[]): string[] {
 }
 
 export const MAX_PEOPLE = 3;
+// 梅宝定的等待补偿（理想版，只给发起人）：等满 15 分钟 2 元、超 30 分钟 5 元券；
+// 等满 30 分钟弹窗：单点 8.5 折，或继续等待按自己那几样每样立减 1.5 元；继续等待后也可「不等了，整套餐下单」。
+export const WAIT_PROMPT_MS = 30 * 60_000;
+export const PER_ITEM_BONUS_CENTS = 150;
+export const SOLO_RATE = 0.85;
+// 只在午高峰、晚高峰开放拼单（北京时间）。
+export const WINDOWS = [[11 * 60 + 30, 14 * 60 + 30], [18 * 60 + 30, 21 * 60 + 30]] as const;
+export function windowAt(at: number): { open: boolean; end?: number; next: string } {
+  const bj = new Date(at + 8 * 3600_000); const minute = bj.getUTCHours() * 60 + bj.getUTCMinutes();
+  const dayStart = at - (minute * 60_000 + bj.getUTCSeconds() * 1000 + bj.getUTCMilliseconds());
+  for (const [a, b] of WINDOWS) if (minute >= a && minute < b) return { open: true, end: dayStart + b * 60_000, next: '' };
+  const upcoming = WINDOWS.find(([a]) => minute < a);
+  return { open: false, next: upcoming ? `${Math.floor(upcoming[0] / 60)}:${String(upcoming[0] % 60).padStart(2, '0')}` : '明天 11:30' };
+}
 
 export class Groups {
   constructor(readonly repo: Repository, private readonly now = Date.now) {}
@@ -77,7 +92,7 @@ export class Groups {
     });
   }
 
-  action(id: string, device: string, action: 'confirm' | 'kick' | 'ordered' | 'picked-up' | 'collect', memberId?: string): Group {
+  action(id: string, device: string, action: 'confirm' | 'kick' | 'ordered' | 'picked-up' | 'collect' | 'keep-waiting' | 'solo' | 'take-all', memberId?: string): Group {
     return this.repo.transaction(() => {
       const g = this.current(id);
       const member = g.members.find(m => m.device === device) ?? fail('只有本单成员可以操作', 403);
@@ -92,6 +107,25 @@ export class Groups {
         if (g.members.every(m => m.collectedAt)) { g.state = 'picked-up'; g.pickedUpAt = this.now(); g.endedAt = Math.min(this.now(), g.deadline); }
       } else {
         if (member.id !== g.hostId) fail('只有发起人可以操作', 403);
+        if (action === 'keep-waiting' || action === 'solo' || action === 'take-all') {
+          if (g.state !== 'open') fail('这单已经拼满或结束', 409);
+          if (this.now() - g.createdAt < WAIT_PROMPT_MS) fail('等满 30 分钟后才能选择', 409);
+          g.perk ??= {};
+          if (action === 'keep-waiting') {
+            if (g.perk.waitBonusCents) fail('已经领过继续等待的立减', 409);
+            g.perk.waitBonusCents = PER_ITEM_BONUS_CENTS * member.partIds.length;
+          } else if (action === 'solo') {
+            if (g.members.length > 1) fail('已经有人加入，不能改单点；可以选「不等了，整套餐下单」', 409);
+            g.perk.solo = true; g.state = 'expired'; g.endedAt = this.now();
+          } else {
+            const used = new Set(g.members.flatMap(m => m.partIds));
+            member.partIds.push(...g.meal.parts.filter(p => !used.has(p.id)).map(p => p.id));
+            g.perk.takeAll = true; g.people = g.members.length;
+            g.state = 'full';
+          }
+          this.repo.save(g);
+          return g;
+        }
         if (action === 'kick') {
           if (!['open', 'full'].includes(g.state)) fail('这单不能再移出成员', 409);
           const target = g.members.find(m => m.id === memberId);
@@ -129,13 +163,24 @@ export class Groups {
     if (unclaimed.length) allocations.push({ id: 'unclaimed', items: unclaimed.map(p => ({ unitPriceCents: p.unitPriceCents, quantity: 1 })) });
     const allocation = allocateShares(g.meal.priceCents, allocations, g.hostId);
     const viewer = g.members.find(m => m.device === device);
-    const waitedMs = Math.max(0, Math.min(this.now(), g.deadline, g.pickedUpAt ?? Infinity) - g.createdAt);
+    const waitedMs = Math.max(0, Math.min(this.now(), g.deadline, g.pickedUpAt ?? Infinity, g.perk?.takeAll || g.perk?.solo ? (g.endedAt ?? Infinity) : Infinity) - g.createdAt);
+    const isHost = viewer?.id === g.hostId;
+    const host = g.members.find(m => m.id === g.hostId)!;
+    const hostShare = allocation.shares.find(s => s.id === g.hostId)!.cents;
+    const unit = host.partIds.map(id => g.meal.parts.find(p => p.id === id)!.unitPriceCents);
+    const soloBase = unit.every(c => c !== null) ? unit.reduce((a, c) => a! + c!, 0)! : null;
+    // 发起人实付（理想版模拟）：一人整套 = 套餐价 − 继续等待立减；有人同单 = 自己那份 × 8.5 折；单点 = 单点价 × 8.5 折；其余 = 分摊 − 立减。
+    const perk = g.perk ?? {};
+    const hostPay = perk.solo ? (soloBase === null ? null : Math.round(soloBase * SOLO_RATE))
+      : perk.takeAll ? (g.members.length === 1 ? Math.max(0, g.meal.priceCents - (perk.waitBonusCents ?? 0)) : Math.round(hostShare * SOLO_RATE))
+      : Math.max(0, hostShare - (perk.waitBonusCents ?? 0));
     return {
       id: g.id, storeCode: g.storeCode, meal: g.meal, createdAt: g.createdAt, deadline: g.deadline, people: g.people, state: g.state, hostId: g.hostId,
       // 尾号和取餐码只给本人；同单的其他人只看到昵称、餐品和金额，防止凭别人的尾号或码把那份领走。
       members: g.members.map(({ device: _device, tail4, pickupCode, collectedAt, ...m }) => ({ ...m, tail4: viewer?.id === m.id ? tail4 : undefined, pickupCode: viewer?.id === m.id ? pickupCode : undefined, collected: Boolean(collectedAt), cents: allocation.shares.find(s => s.id === m.id)!.cents })),
       viewerId: viewer?.id, isHost: viewer?.id === g.hostId, remainingPartIds: unclaimed.map(p => p.id), method: allocation.method,
-      waitedMs, idealCouponYuan: waitedMs > 30 * 60_000 ? 5 : waitedMs >= 15 * 60_000 ? 2 : 0,
+      waitedMs, idealCouponYuan: isHost ? (waitedMs > 30 * 60_000 ? 5 : waitedMs >= 15 * 60_000 ? 2 : 0) : 0,
+      perk: isHost ? { ...perk, hostPayCents: hostPay, soloBaseCents: soloBase, prompt: g.state === 'open' && waitedMs >= WAIT_PROMPT_MS && !perk.waitBonusCents, canSolo: g.members.length === 1 } : undefined,
       pickedUpAt: g.pickedUpAt, serverNow: this.now(),
     };
   }

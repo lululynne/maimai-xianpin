@@ -176,6 +176,17 @@ dialog.sheet>form{flex:1;overflow:auto;padding:6px 16px 0}
 .ticket .ticket-note{display:block;color:var(--mut);font-size:12px;margin-top:8px}
 .card .t .allow{display:inline-block;width:auto;font-size:12px;font-weight:700;color:var(--ink);background:#FFF1CF;border-radius:99px;padding:1px 9px;margin:3px 0;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 
+/* 发起人等待补偿 */
+.perk{background:#FFF8EC;border:2px solid var(--yel);border-radius:14px;padding:10px 12px;margin:10px 0;display:flex;flex-direction:column}
+.perk b{font-size:15px;color:var(--red)}.perk span{font-size:13px}.perk em{font-style:normal;font-weight:900;color:var(--red)}
+.pay{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:14px}.pay b{font-size:24px;color:var(--red)}.pay small{color:var(--mut);font-size:12px}
+#wait-body{padding:12px 18px 4px;font-size:15px}#wait-body p{margin:6px 0}
+.window-note{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;background:#fff;border:2px dashed var(--red);border-radius:14px;padding:10px 14px;font-size:15px;margin:0 0 20px}
+.window-note b{color:var(--red)}.window-note small{color:var(--mut);font-size:12px;width:100%}
+.title-tag{position:absolute;top:6px;left:50%;transform:translateX(-50%) rotate(-4deg);z-index:2;background:var(--red);color:var(--yel);font-weight:900;font-size:18px;letter-spacing:3px;padding:6px 18px;border-radius:8px;box-shadow:0 3px 0 var(--red-d);white-space:nowrap}
+.title-tag:before,.title-tag:after{content:'';position:absolute;top:50%;width:14px;height:20px;margin-top:-4px;background:var(--red-d);z-index:-1}
+.title-tag:before{left:-10px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,40% 50%)}.title-tag:after{right:-10px;clip-path:polygon(0 0,100% 0,60% 50%,100% 100%,0 100%)}
+
 /* 理想版模拟 */
 .sm-link{background:none;border:1.5px dashed var(--yel);padding:6px 12px;font-size:12px;color:var(--ink);box-shadow:none}
 .counter{background:#FFF8EC;border:2px solid var(--yel-l);border-radius:16px;padding:12px 14px;margin:12px 0}

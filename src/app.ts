@@ -3,7 +3,7 @@ import { getCookie, setCookie } from 'hono/cookie';
 import { bodyLimit } from 'hono/body-limit';
 import { randomUUID } from 'node:crypto';
 import type { Catalog } from './catalog.js';
-import { DomainError, type Groups } from './domain/groups.js';
+import { windowAt, DomainError, type Groups } from './domain/groups.js';
 
 export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string }) {
   const { catalog, groups, mode, now } = options;
@@ -32,7 +32,9 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     const known = /^(INVALID_STORE|INVALID_MEAL|MEAL_NOT_AVAILABLE|MEAL_NOT_SHAREABLE|MEAL_TOO_LARGE|MEAL_PRICE_UNAVAILABLE|MCD_[A-Z_]+|DEMO_CAPTURE_NOT_AVAILABLE)$/;
     return c.json({ error: known.test(error.message) ? error.message : '服务暂时不可用，请稍后重试' }, 502);
   });
-  app.get('/api/config', c => c.json({ mode, serverNow: now(), clockSpeed: options.speed, capturedAt: options.capturedAt, couponsEnabled: false }));
+  app.get('/api/config', c => c.json({ mode, serverNow: now(), clockSpeed: options.speed, capturedAt: options.capturedAt, couponsEnabled: false, window: windowAt(now()), windowSimulated: mode === 'demo' }));
+  // 午市 11:30–14:30、晚市 18:30–21:30 才开放发起和加入；演示模式按开放时段模拟。
+  const requireWindow = () => { if (mode !== 'demo' && !windowAt(now()).open) throw new DomainError(`拼单只在午市 11:30–14:30、晚市 18:30–21:30 开放，下一场 ${windowAt(now()).next}`, 409); };
   app.get('/api/stores', async c => c.json({ stores: await catalog.stores() }));
   app.get('/api/stores/:store/meals', async c => c.json({ meals: await catalog.shareableMenu(c.req.param('store')) }));
   app.get('/api/stores/:store/meals/:meal', async c => c.json({ meal: await catalog.meal(c.req.param('store'), c.req.param('meal')) }));
@@ -43,6 +45,9 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     const body = await c.req.json();
     if (!body || typeof body !== 'object' || Array.isArray(body)) throw new DomainError('请求格式不正确');
     if (body.confirmedSimilar !== true) throw new DomainError('请先确认相似拼单', 409);
+    requireWindow();
+    const w = windowAt(now());
+    if (mode !== 'demo' && w.end && Number.isInteger(body.minutes) && now() + body.minutes * 60_000 > w.end) body.minutes = Math.max(10, Math.floor((w.end - now()) / 60_000));
     const meal = await catalog.meal(String(body.storeCode), String(body.mealCode));
     const g = groups.create(c.get('device'), String(body.storeCode), meal, body);
     return c.json({ group: groups.view(g, c.get('device')) }, 201);
@@ -65,6 +70,25 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     }
     return c.json({ group: groups.view(g, c.get('device')) });
   });
+  // 演示：给每台设备在「我的拼单」里放一单自己发起、已等了 18 分钟的单；以及把自己那单快进到等满 31 分钟。
+  if (mode === 'demo') app.post('/api/demo/mine/seed', async c => {
+    const device = c.get('device');
+    if (groups.mine(device).some(g => g.hostId === g.members.find(m => m.device === device)?.id)) return c.json({ seeded: false });
+    const body = await c.req.json().catch(() => ({}));
+    const store = typeof body?.storeCode === 'string' ? body.storeCode : '1420082';
+    const meal = await catalog.meal(store, '9900016136');
+    groups.create(device, store, meal, { nickname: '我', tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: meal.parts.slice(0, 2).map(p => p.id), people: 2, minutes: 60 }, now() - 18 * 60_000);
+    return c.json({ seeded: true });
+  });
+  if (mode === 'demo') app.post('/api/demo/groups/:id/age', c => {
+    const g = groups.get(c.req.param('id'));
+    if (!groups.view(g, c.get('device')).isHost) throw new DomainError('只有发起人可以操作', 403);
+    if (g.state !== 'open') throw new DomainError('这单已拼满或结束', 409);
+    g.createdAt = Math.min(g.createdAt, now() - 31 * 60_000);
+    if (g.deadline <= now() + 60_000) throw new DomainError('这单快到点了，换一单演示', 409);
+    groups.repo.save(g);
+    return c.json({ group: groups.view(g, c.get('device')) });
+  });
   if (mode === 'demo') app.get('/api/demo/groups/:id/counter', c => {
     const g = groups.get(c.req.param('id'));
     if (!groups.view(g, c.get('device')).viewerId) throw new DomainError('只有本单成员可以打开演示的门店视角', 403);
@@ -78,10 +102,11 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     return c.json({ group: groups.view(g, c.get('device')) });
   });
   app.post('/api/groups/:id/join', async c => {
+    requireWindow();
     const g = groups.join(c.req.param('id'), c.get('device'), await c.req.json());
     return c.json({ group: groups.view(g, c.get('device')) });
   });
-  for (const action of ['confirm', 'kick', 'ordered', 'picked-up', 'collect'] as const) app.post(`/api/groups/:id/${action}`, async c => {
+  for (const action of ['confirm', 'kick', 'ordered', 'picked-up', 'collect', 'keep-waiting', 'solo', 'take-all'] as const) app.post(`/api/groups/:id/${action}`, async c => {
     const body = await c.req.json();
     const g = groups.action(c.req.param('id'), c.get('device'), action, body?.memberId);
     return c.json({ group: groups.view(g, c.get('device')) });

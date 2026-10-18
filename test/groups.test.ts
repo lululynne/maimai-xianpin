@@ -4,7 +4,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Repository } from '../src/db.js';
-import { Groups, identity } from '../src/domain/groups.js';
+import { Groups, identity, windowAt } from '../src/domain/groups.js';
 import type { Meal } from '../src/catalog.js';
 
 const repos: Repository[] = [];
@@ -163,4 +163,54 @@ test('each member collects their own share; the group ends when everyone has', (
   assert.equal(s.groups.view(half, 'host').members.find(m => m.id !== half.hostId)!.collected, true);
   assert.throws(() => s.groups.action(g.id, 'guest', 'collect'), /已经取过/);
   assert.equal(s.groups.action(g.id, 'host', 'collect').state, 'picked-up');
+});
+
+test('waiting coupons and 30-minute choices belong to the host only', () => {
+  const s = setup();
+  const g = s.create('host', '1000', 60, 3);
+  s.advance(16 * 60_000);
+  assert.equal(s.groups.view(s.groups.get(g.id), 'host').idealCouponYuan, 2);
+  s.groups.join(g.id, 'guest', { nickname: '小圆', tail4: '2000', partIds: ['p2'] });
+  assert.equal(s.groups.view(s.groups.get(g.id), 'guest').idealCouponYuan, 0);
+  assert.equal(s.groups.view(s.groups.get(g.id), 'guest').perk, undefined);
+  assert.throws(() => s.groups.action(g.id, 'host', 'keep-waiting'), /30 分钟/);
+  s.advance(15 * 60_000);
+  const view = s.groups.view(s.groups.get(g.id), 'host');
+  assert.equal(view.perk!.prompt, true);
+  assert.throws(() => s.groups.action(g.id, 'guest', 'keep-waiting'), /发起人/);
+  assert.throws(() => s.groups.action(g.id, 'host', 'solo'), /已经有人加入/);
+  const kept = s.groups.action(g.id, 'host', 'keep-waiting');
+  assert.equal(kept.perk!.waitBonusCents, 300);
+  assert.equal(s.groups.view(kept, 'host').perk!.prompt, false);
+  const all = s.groups.action(g.id, 'host', 'take-all');
+  assert.equal(all.state, 'full');
+  assert.deepEqual(all.members[0]!.partIds, ['p0', 'p1', 'p3', 'p4']);
+  const hostView = s.groups.view(all, 'host');
+  const share = hostView.members.find(m => m.id === hostView.hostId)!.cents;
+  assert.equal(hostView.perk!.hostPayCents, Math.round(share * 0.85));
+});
+
+test('solo after 30 minutes gives 85% of the host single-item price; alone take-all subtracts the bonus', () => {
+  const s = setup();
+  const g = s.create('host', '1000', 60);
+  s.advance(31 * 60_000);
+  const solo = s.groups.action(g.id, 'host', 'solo');
+  assert.equal(solo.state, 'expired');
+  assert.equal(s.groups.view(solo, 'host').perk!.hostPayCents, Math.round(2000 * 0.85));
+  const h = s.create('host2', '1001', 60);
+  s.advance(31 * 60_000);
+  s.groups.action(h.id, 'host2', 'keep-waiting');
+  const alone = s.groups.action(h.id, 'host2', 'take-all');
+  assert.equal(s.groups.view(alone, 'host2').perk!.hostPayCents, 3990 - 300);
+});
+
+test('peak windows are 11:30-14:30 and 18:30-21:30 Beijing time', () => {
+  const at = (h: number, m: number) => Date.UTC(2026, 9, 19, h - 8, m);
+  assert.equal(windowAt(at(11, 29)).open, false);
+  assert.equal(windowAt(at(11, 30)).open, true);
+  assert.equal(windowAt(at(14, 29)).end, at(14, 30));
+  assert.equal(windowAt(at(14, 30)).open, false);
+  assert.equal(windowAt(at(15, 0)).next, '18:30');
+  assert.equal(windowAt(at(21, 30)).open, false);
+  assert.equal(windowAt(at(0, 30)).next, '11:30');
 });

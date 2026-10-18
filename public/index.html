@@ -15,9 +15,10 @@
   <main>
     <section class="hero">
       <div><p class="eyebrow">一份大套餐，两份好胃口</p><h1>刚好同一家店，<br>一起拼<span>刚刚好。</span></h1><p class="intro">大套餐一个人吃不完？<br>和同店的人拼一份，各取所需，少一点浪费。</p><div class="hero-notes"><span class="hang y">只到店自取</span><span class="hang r">各自选餐品</span><span class="hang c">算清每人那份</span></div></div>
-      <div class="hero-art" aria-label="戴小帽子拿薯条的小粉水母"><img class="mascot" src="/assets/theme/jelly-cap.png" alt=""><span class="art-note hang r">一人吃不完，两人刚刚好</span></div>
+      <div class="hero-art" aria-label="戴小帽子拿薯条的小粉水母"><span class="title-tag">拼拼大使</span><img class="mascot" src="/assets/theme/jelly-cap.png" alt=""><span class="art-note hang r">一人吃不完，两人刚刚好</span></div>
     </section>
     <div id="demo-note" class="notice" hidden></div>
+    <p id="window-note" class="window-note"></p>
     <section class="store-panel"><div><label class="eyebrow" for="store"><img class="ico" src="/assets/theme/pin-store-icon.png" alt="">先看看你在的这家店</label><div id="store-chips" class="chips" role="group" aria-label="选门店"></div><select id="store" aria-label="选择门店" disabled><option>正在查看门店…</option></select><p id="store-address" class="muted"></p></div><button id="new-group" class="btn-y" disabled><img class="ico" src="/assets/theme/pindan-icon.png" alt="">发起拼单</button></section>
     <nav class="tabs" aria-label="拼单列表"><button class="active" data-tab="board">店里正在拼 <span id="board-count">0</span></button><button data-tab="mine">我的拼单 <span id="mine-count">0</span></button><button id="refresh" class="refresh">刷新</button></nav>
     <p class="section-note" id="board-note">按截止时间排序，先帮快到点的那一单。</p>
@@ -35,6 +36,7 @@
     <div class="sheet-bar"><div id="compose-sum"><b>先选一个套餐</b><small>选好后这里算你出多少</small></div><button type="submit" class="primary">看看有没有相似拼单</button></div>
   </form></dialog>
   <dialog id="similar"><div class="dialog-head ph2"><h2>是否确认下单？</h2><button class="close" aria-label="关闭">×</button></div><div id="similar-content"></div><p class="muted">这里只创建拼单。实际下单由发起人在官方 App / 小程序完成。</p><div class="ft"><button id="similar-back" class="btn-y">再看看</button><button id="confirm-create" class="primary">确认下单</button></div></dialog>
+  <dialog id="wait-prompt"><div class="dialog-head ph2"><h2>是否选择继续等待拼单？</h2><button class="close" aria-label="关闭">×</button></div><div id="wait-body"></div><div class="ft"><button id="wait-solo" class="btn-y">单点下单（8.5 折）</button><button id="wait-keep" class="primary">继续等待</button></div></dialog>
   <dialog id="detail"><div class="dialog-head"><h2>我的小卡片</h2><button class="close" aria-label="关闭">×</button></div><div id="detail-content"></div></dialog>
   <div id="toast" role="status" aria-live="polite" hidden></div>
 </body>

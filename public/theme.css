@@ -170,6 +170,11 @@ dialog.sheet>form{flex:1;overflow:auto;padding:6px 16px 0}
 .sheet-bar button{flex-shrink:0}
 @media(max-width:560px){dialog.sheet{width:100%;max-width:100%;height:100dvh;max-height:100dvh;border-radius:0}}
 
+/* 发起人选餐规则 */
+.rule{background:#3A1A0E;color:#FFE7A3;border-radius:12px;padding:8px 12px;font-size:13px;margin:4px 0 8px}.rule b{color:var(--yel)}
+.item-card .kind{position:absolute;top:6px;left:6px;font-style:normal;font-size:10px;font-weight:800;border-radius:99px;padding:0 6px;background:#FFF1CF;color:var(--mut)}
+.item-card .kind.drink{background:#E3F1FF;color:#1f5d99}.item-card .kind.main{background:#FFE1DD;color:var(--red-d)}
+
 /* 拼友卡：只露昵称、餐品、金额 */
 .mate{display:grid;grid-template-columns:1fr auto;gap:2px 10px;background:#FFF8EC;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:13px}
 .mate b{font-size:14px}.mate span:not(.tag){grid-column:1}.mate .tag{grid-column:2;grid-row:1/3;align-self:center}.mate small{grid-column:1/-1;color:var(--mut);font-size:12px}

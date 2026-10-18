@@ -3,7 +3,7 @@ import { getCookie, setCookie } from 'hono/cookie';
 import { bodyLimit } from 'hono/body-limit';
 import { randomUUID } from 'node:crypto';
 import type { Catalog } from './catalog.js';
-import { windowAt, DomainError, type Groups } from './domain/groups.js';
+import { windowAt, pickHostDefault, DomainError, type Groups } from './domain/groups.js';
 
 export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string }) {
   const { catalog, groups, mode, now } = options;
@@ -77,7 +77,7 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     const body = await c.req.json().catch(() => ({}));
     const store = typeof body?.storeCode === 'string' ? body.storeCode : '1420082';
     const meal = await catalog.meal(store, '9900016136');
-    groups.create(device, store, meal, { nickname: '我', tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: meal.parts.slice(0, 2).map(p => p.id), people: 2, minutes: 60 }, now() - 18 * 60_000);
+    groups.create(device, store, meal, { nickname: '我', tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal), people: 2, minutes: 60 }, now() - 18 * 60_000);
     return c.json({ seeded: true });
   });
   if (mode === 'demo') app.post('/api/demo/groups/:id/age', c => {

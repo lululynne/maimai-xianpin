@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { pickHostDefault } from '../src/domain/groups.js';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { createApp } from '../src/app.js';
@@ -22,13 +23,13 @@ test('two browser cookies share SQLite state while ownership and account tools s
     assert.equal((await app.request('/api/tools/call', json(visitor, { name: 'create-order' }))).status, 404);
     assert.equal((await app.request('/api/groups', { method: 'POST', body: '{}' })).status, 415);
     const meal = await catalog.meal('1420082', '9900016136');
-    const created = await app.request('/api/groups', json(host, { storeCode: '1420082', mealCode: meal.code, nickname: '发起人', tail4: '1234', minutes: 30, people: 2, partIds: meal.parts.slice(0, 2).map(p => p.id), confirmedSimilar: true }));
+    const created = await app.request('/api/groups', json(host, { storeCode: '1420082', mealCode: meal.code, nickname: '发起人', tail4: '1234', minutes: 30, people: 2, partIds: pickHostDefault(meal), confirmedSimilar: true }));
     assert.equal(created.status, 201);
     const { group } = await created.json();
     const board = await (await app.request('/api/groups?store=1420082', { headers: { Cookie: visitor } })).json();
     assert.equal(board.groups[0].id, group.id);
     assert.equal(board.groups[0].members[0].tail4, undefined);
-    const response = await app.request(`/api/groups/${group.id}/join`, json(visitor, { nickname: '来拼的', tail4: '5678', partIds: meal.parts.slice(2).map(p => p.id) }));
+    const response = await app.request(`/api/groups/${group.id}/join`, json(visitor, { nickname: '来拼的', tail4: '5678', partIds: meal.parts.map(p => p.id).filter(id => !pickHostDefault(meal).includes(id)) }));
     assert.equal(response.status, 200);
     assert.equal((await response.json()).group.state, 'full');
     assert.equal((await app.request(`/api/groups/${group.id}/confirm`, json(visitor, {}))).status, 200);
@@ -39,7 +40,7 @@ test('two browser cookies share SQLite state while ownership and account tools s
     assert.equal(mine.groups[0].state, 'picked-up');
     assert.equal(mine.groups[0].viewerId, mine.groups[0].members[1].id);
     assert.ok(!JSON.stringify(mine).includes('device'));
-    const draft = await (await app.request('/api/groups', json(host, { storeCode: '1420082', mealCode: meal.code, nickname: '演示发起人', tail4: '2468', partIds: meal.parts.slice(0, 2).map(p => p.id), people: 3, confirmedSimilar: true }))).json();
+    const draft = await (await app.request('/api/groups', json(host, { storeCode: '1420082', mealCode: meal.code, nickname: '演示发起人', tail4: '2468', partIds: pickHostDefault(meal), people: 3, confirmedSimilar: true }))).json();
     assert.equal((await app.request(`/api/demo/groups/${draft.group.id}/fill`, json(visitor, {}))).status, 403);
     const simulated = await app.request(`/api/demo/groups/${draft.group.id}/fill`, json(host, {}));
     assert.equal(simulated.status, 200);

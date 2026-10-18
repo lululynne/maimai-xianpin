@@ -25,6 +25,20 @@ function choose(ids: unknown, available: string[]): string[] {
 }
 
 export const MAX_PEOPLE = 3;
+// 梅宝 10-19 定：4 件及以上的中大套餐，发起人至少拿「1 饮料 + 1 主食」，不能只挑主食——
+// 发起人享受最大的等待优惠，也要承担饮料的溢价（高风险高收益）。
+export const DRINK = /可乐|雪碧|芬达|咖|美式|拿铁|奶铁|卡布|浓缩|茶|饮|豆浆|牛奶|奶昔|果汁|橙|柠|水|怡泉/;
+export const MAIN = /堡|麦满分|营养卷|卷|鸡腿|鸡翅|鸡块|麦乐鸡|鸡排|粥|饭|面|扒|肠/;
+export const kindOf = (name: string): 'drink' | 'main' | 'other' => DRINK.test(name) ? 'drink' : MAIN.test(name) ? 'main' : 'other';
+export function hostPickRule(meal: Meal) {
+  const kinds = meal.parts.map(p => kindOf(p.name));
+  return meal.parts.length >= 4 && kinds.includes('drink') && kinds.includes('main');
+}
+export function pickHostDefault(meal: Meal, count = 2): string[] {
+  const main = meal.parts.find(p => kindOf(p.name) === 'main'); const drink = meal.parts.find(p => kindOf(p.name) === 'drink');
+  const first = hostPickRule(meal) && main && drink ? [main.id, drink.id] : [];
+  return [...first, ...meal.parts.map(p => p.id).filter(id => !first.includes(id))].slice(0, Math.max(count, first.length));
+}
 // 梅宝定的等待补偿（理想版，只给发起人）：等满 15 分钟送 2 元券（10-19 并档：原 30 分钟 5 元档并入 30 分钟弹窗）；
 // 等满 30 分钟弹窗：单点 8.5 折，或继续等待按自己那几样每样立减 1.5 元；继续等待后也可「不等了，整套餐下单」。
 export const WAIT_PROMPT_MS = 30 * 60_000;
@@ -62,6 +76,10 @@ export class Groups {
     if (!Number.isInteger(people) || people < 2 || people > Math.min(MAX_PEOPLE, meal.parts.length)) fail('一份套餐最多三人拼：发起人最多再允许 2 人加入');
     const partIds = choose(input.partIds, meal.parts.map(p => p.id));
     if (partIds.length > meal.parts.length - people + 1) fail('请为其他每个人至少留一件餐品');
+    if (hostPickRule(meal)) {
+      const kinds = partIds.map(id => kindOf(meal.parts.find(p => p.id === id)!.name));
+      if (!kinds.includes('drink') || !kinds.includes('main')) fail('4 件以上的套餐，发起人至少要拿 1 份饮料 + 1 份主食');
+    }
     return this.repo.transaction(() => {
       this.repo.sweep(this.now());
       const member: Member = { id: randomUUID(), device, ...who, partIds, confirmed: true };

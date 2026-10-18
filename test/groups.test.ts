@@ -4,7 +4,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Repository } from '../src/db.js';
-import { Groups, identity, windowAt } from '../src/domain/groups.js';
+import { Groups, identity, windowAt, hostPickRule, pickHostDefault } from '../src/domain/groups.js';
 import type { Meal } from '../src/catalog.js';
 
 const repos: Repository[] = [];
@@ -215,4 +215,17 @@ test('peak windows are 11:30-14:30 and 18:30-21:30 Beijing time', () => {
   assert.equal(windowAt(at(15, 0)).next, '18:30');
   assert.equal(windowAt(at(21, 30)).open, false);
   assert.equal(windowAt(at(0, 30)).next, '11:30');
+});
+
+test('host of a 4+ item meal must take at least one drink and one main', () => {
+  const s = setup();
+  const named: Meal = { ...meal, parts: [['猪柳堡', 1800], ['板烧鸡腿麦满分', 1450], ['脆薯饼', 850], ['鲜萃冰咖', 900], ['鲜萃冰咖', 900]].map(([name, c], i) => ({ id: `n${i}`, name: name as string, code: String(i), unitPriceCents: c as number, supportModify: false })) };
+  assert.equal(hostPickRule(named), true);
+  const make = (partIds: string[]) => s.groups.create('h', '1420082', named, { nickname: '小林', tail4: '1000', partIds, people: 2 });
+  assert.throws(() => make(['n0', 'n1']), /1 份饮料 \+ 1 份主食/);
+  assert.throws(() => make(['n3']), /1 份饮料 \+ 1 份主食/);
+  assert.ok(make(['n0', 'n3']));
+  assert.deepEqual(pickHostDefault(named), ['n0', 'n3']);
+  const small: Meal = { ...named, parts: named.parts.slice(0, 3) };
+  assert.equal(hostPickRule(small), false);
 });

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createApp } from './app.js';
 import { Catalog, STORE_CODES } from './catalog.js';
 import { Repository } from './db.js';
-import { Groups } from './domain/groups.js';
+import { Groups, pickHostDefault } from './domain/groups.js';
 import { McdMcpClient } from './mcp/client.js';
 import { DemoMcpClient } from './mcp/demo.js';
 
@@ -35,9 +35,9 @@ if (mode === 'demo') {
       { nickname: '豆豆', tail4: '3307', take: 1, people: 2, minutes: 35, ago: 16 },
       { nickname: '阿禾', tail4: '9461', take: 3, people: 2, minutes: 45, ago: 12 },
       { nickname: '糖糖', tail4: '6150', take: 2, people: 3, minutes: 55, ago: 2 },
-    ].filter(x => x.people <= meal.parts.length && x.take <= meal.parts.length - x.people + 1);
+    ].map(x => ({ ...x, take: Math.max(x.take, 2) })).filter(x => x.people <= meal.parts.length && x.take <= meal.parts.length - x.people + 1);
     for (const [index, x] of seeds.entries()) {
-      groups.create(`demo-host-${store}-${index}`, store, meal, { nickname: x.nickname, tail4: x.tail4, partIds: meal.parts.slice(0, x.take).map(p => p.id), people: x.people, minutes: x.minutes }, now() - x.ago * 60_000);
+      groups.create(`demo-host-${store}-${index}`, store, meal, { nickname: x.nickname, tail4: x.tail4, partIds: pickHostDefault(meal, x.take), people: x.people, minutes: x.minutes }, now() - x.ago * 60_000);
     }
   }
 }

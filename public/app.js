@@ -132,8 +132,18 @@ async function refreshMine() {
   state.mine = data.groups; render();
   if ($('#detail').open && state.detail?.viewerId) { const fresh = data.groups.find(g => g.id === state.detail.id); if (fresh) renderDetail(fresh); }
 }
+// 与服务端 src/domain/groups.ts 同一套分类：4 件以上的套餐，发起人至少 1 饮料 + 1 主食。
+const DRINK = /可乐|雪碧|芬达|咖|美式|拿铁|奶铁|卡布|浓缩|茶|饮|豆浆|牛奶|奶昔|果汁|橙|柠|水|怡泉/;
+const MAIN = /堡|麦满分|营养卷|卷|鸡腿|鸡翅|鸡块|麦乐鸡|鸡排|粥|饭|面|扒|肠/;
+const kindOf = name => DRINK.test(name) ? 'drink' : MAIN.test(name) ? 'main' : 'other';
+const KIND_LABEL = { drink: '饮料', main: '主食', other: '小食' };
+const hostRule = meal => meal.parts.length >= 4 && meal.parts.some(p => kindOf(p.name) === 'drink') && meal.parts.some(p => kindOf(p.name) === 'main');
+function hostDefault(meal) {
+  const main = meal.parts.find(p => kindOf(p.name) === 'main'), drink = meal.parts.find(p => kindOf(p.name) === 'drink');
+  return hostRule(meal) && main && drink ? [main.id, drink.id] : meal.parts.slice(0, 2).map(p => p.id);
+}
 function checks(parts, selected = [], name = 'partIds') {
-  return `<div class="item-grid">${parts.map(p => `<label class="item"><input type="checkbox" name="${name}" value="${escape(p.id)}" ${selected.includes(p.id) ? 'checked' : ''}><span class="item-card"><i class="tick">✓</i><img src="${mealIcon(p.name)}" alt=""><b>${escape(p.name)}</b><small>${p.unitPriceCents === null ? '单点价暂缺' : '单点 ' + money(p.unitPriceCents)}${p.supportModify ? ' · 可特调' : ''}</small></span></label>`).join('')}</div>`;
+  return `<div class="item-grid">${parts.map(p => `<label class="item"><input type="checkbox" name="${name}" value="${escape(p.id)}" ${selected.includes(p.id) ? 'checked' : ''}><span class="item-card"><i class="tick">✓</i><em class="kind ${kindOf(p.name)}">${KIND_LABEL[kindOf(p.name)]}</em><img src="${mealIcon(p.name)}" alt=""><b>${escape(p.name)}</b><small>${p.unitPriceCents === null ? '单点价暂缺' : '单点 ' + money(p.unitPriceCents)}${p.supportModify ? ' · 可特调' : ''}</small></span></label>`).join('')}</div>`;
 }
 // 发起页底栏：按单点价比例估算我出多少（最终以服务端分摊为准；缺价时按件均分）。
 function updateSum() {
@@ -144,8 +154,9 @@ function updateSum() {
   const known = meal.parts.every(p => p.unitPriceCents !== null);
   const est = known ? Math.round(meal.priceCents * mine.reduce((a, p) => a + p.unitPriceCents, 0) / meal.parts.reduce((a, p) => a + p.unitPriceCents, 0)) : Math.round(meal.priceCents * mine.length / meal.parts.length);
   const left = meal.parts.length - mine.length;
-  const ok = mine.length && left >= people - 1;
-  $('#compose-sum').innerHTML = ok ? `<b>我出约 ${money(est)}</b><small>拿 ${mine.length} 件 · 留 ${left} 件给最多 ${people - 1} 位拼友</small>` : `<b>${mine.length ? '给拼友多留一件' : '点选你要的'}</b><small>${mine.length ? `允许 ${people - 1} 人时至少留 ${people - 1} 件` : '至少选一件'}</small>`;
+  const needMix = hostRule(meal) && !(mine.some(p => kindOf(p.name) === 'drink') && mine.some(p => kindOf(p.name) === 'main'));
+  const ok = mine.length && left >= people - 1 && !needMix;
+  $('#compose-sum').innerHTML = ok ? `<b>我出约 ${money(est)}</b><small>拿 ${mine.length} 件 · 留 ${left} 件给最多 ${people - 1} 位拼友</small>` : `<b>${!mine.length ? '点选你要的' : needMix ? '还差饮料或主食' : '给拼友多留一件'}</b><small>${!mine.length ? '至少选一件' : needMix ? '发起人至少 1 饮料 + 1 主食' : `允许 ${people - 1} 人时至少留 ${people - 1} 件`}</small>`;
   $('#compose-form button[type="submit"]').disabled = !ok;
 }
 async function selectMeal() {
@@ -159,7 +170,7 @@ async function selectMeal() {
     if (code !== $('#meal-select').value) return;
     state.selectedMeal = data.meal;
     const meal = data.meal;
-    $('#meal-info').innerHTML = `${checks(meal.parts, meal.parts.slice(0, 2).map(p => p.id))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
+    $('#meal-info').innerHTML = `${hostRule(meal) ? '<p class="rule">这是 4 件以上的套餐：发起人至少拿 <b>1 份饮料 + 1 份主食</b>。等待补偿归你，饮料的溢价也由你担。</p>' : ''}${checks(meal.parts, hostDefault(meal))}<p class="muted">套餐核价 <strong>${money(meal.priceCents)}</strong> · 共 ${meal.parts.length} 件 · ${meal.parts.some(p => p.unitPriceCents === null) ? '部分单件缺单点价，整单按件数均分，零头归发起人' : '按单点价占比分摊，算到分，零头归发起人'}</p>`;
     const max = Math.min(3, meal.parts.length);
     document.querySelectorAll('#people-grid input').forEach(r => { r.disabled = Number(r.value) > max; if (r.disabled && r.checked) document.querySelector('#people-grid input[value="2"]').checked = true; });
   } catch (e) { $('#meal-info').innerHTML = `<p class="hint">${escape(e.message)}</p>`; }

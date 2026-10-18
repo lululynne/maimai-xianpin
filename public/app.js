@@ -42,7 +42,7 @@ function similarPartsText(parts) {
 const ICON = '/assets/theme/';
 function mealIcon(name = '') {
   // 按剩下的主要餐品配纳纳的食物图标；没有对应的就用拼单图标。
-  const rules = [[/桶|分享|家庭/, 'pindan-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
+  const rules = [[/桶|分享|家庭/, 'pindan-icon'], [/麦辣|鸡腿堡/, 'spicy-chicken-burger-icon'], [/堡|麦满分/, 'burger-icon'], [/翅|鸡块|麦乐鸡/, 'wing-icon'], [/薯/, 'fries-game-icon'], [/圣代|甜筒|冰淇淋|麦旋风/, 'cone-icon'], [/可乐|咖|饮|豆浆|茶|雪碧|芬达/, 'cola-icon']];
   return ICON + (rules.find(([re]) => re.test(name))?.[1] ?? 'pindan-icon') + '.png';
 }
 function friesLoader(text = '正在查看这家店的拼单…') { return `<div class="fries-ld" role="status"><div class="box"><img class="grey" src="${ICON}fries-game-icon.png" alt=""><img class="color" src="${ICON}fries-game-icon.png" alt=""><span class="sp">✦</span><span class="sp">✦</span><span class="sp">✦</span></div><div class="bar"><i></i></div><p>${escape(text)}</p></div>`; }

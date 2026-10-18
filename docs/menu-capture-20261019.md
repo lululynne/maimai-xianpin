@@ -44,4 +44,4 @@ DEMO_MENU_PERIOD=lunch npm run dev
 
 私密运行报告在 `.local/menu-captures/2026-10-19-{lunch,dinner}.json` 及 `*-job.json` / `*-guard.json`；预约报告使用 `*-reserved.json`，不会把未发生的现场复查写成已完成。公开夹具只导出白名单字段，保留旧记录、合并去重，并更新 manifest。
 
-PROGRESS 上传到 `/home/ajingops/mimo-work/tasks/20261019-maimai-xianpin-more-meals-PROGRESS.md` 后回读 SHA-256。它是传输完整性证据；本轮按最新任务由 Codex 自行核验，没有另称 mini 已复验。部署、转公开、报名与最终提交未执行。
+PROGRESS 上传到 `/home/ajingops/mimo-work/tasks/20261019-maimai-xianpin-more-meals-PROGRESS.md` 后回读 SHA-256。它是传输完整性证据；本轮按最新任务由 Codex 自行核验，没有另称 mini 已复验。后续梅宝已明确授权代码及纳纳图片一并公开；部署、报名与最终提交未执行。

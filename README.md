@@ -2,9 +2,9 @@
 
 到店自取，让同一家店的陌生人现场拼一个大套餐。
 
-![真实页面步骤演示](docs/images/demo-walkthrough.gif)
+![不同套餐的演示广场](docs/images/varied-plaza-desktop.jpg)
 
-上图为 10-19 纳纳红黄主题的真实浏览器步骤截图序列；菜单已经接入午、晚市预约查询快照。
+上图为 10-19 纳纳红黄主题的真实浏览器页面。演示广场的五位发起人随机拼不同套餐，剩余餐品和金额使用各自的快照；人物为虚构。旧单到点结束后会补上新单，「我的拼单」也会循环补充新的体验卡，后来的访客随时能试玩。
 
 大套餐一个人吃不完，就和同店的人各选几样，算清每人的那份，到店对卡片取餐。网页不碰支付，不代下单，不领券、不绑券。
 
@@ -19,9 +19,11 @@ npm run dev
 
 打开命令打印的 `http://127.0.0.1:8787`。默认是 **演示模式**，无需 Token，不会调用上游。菜单和套餐是真实采集的快照，拼单人、昵称和尾号为虚构。
 
+自动循环只在 demo 启用：新单使用新 ID 和新截止时间，旧单不延长；已经参与的卡片保留到正常结束和清理；「我的拼单」优先显示进行中的卡片。
+
 演示完整流程：发起（最多再允许 1 或 2 人）→ 相似拼单确认 → 模拟拼友加入 → 模拟已下单（每人得到自己的取餐码）→ 我已凭码取走我这份 → 模拟拼友取走 TA 那份。所有模拟入口只在 demo 模式注册。
 
-[桌面截图](docs/images/demo-desktop.jpg) · [手机截图](docs/images/demo-mobile.jpg) · [界面步骤视频](docs/images/demo-walkthrough.mp4)。动图和视频由真实界面状态截图序列组成，非连续屏幕录像。
+[步骤动图](docs/images/demo-walkthrough.gif) · [多套餐手机广场](docs/images/varied-plaza-mobile-390.jpg) · [桌面截图](docs/images/demo-desktop.jpg) · [手机截图](docs/images/demo-mobile.jpg) · [界面步骤视频](docs/images/demo-walkthrough.mp4)。动图和视频由真实界面状态截图序列组成，非连续屏幕录像。
 
 ## 真实菜单模式
 
@@ -104,7 +106,7 @@ npm run typecheck
 - [开发者大赛](https://github.com/M-China/mcd-developer-innovation-challenge)
 - `CONTEST_DECLARATION.md` 为官方模板原字节副本，来源与哈希见 [校验记录](docs/official-sources.md)。
 
-仓库当前保持私有。转公开、报名 issue 和最终提交由梅宝处理。
+代码与纳纳的图片按梅宝决定一并公开；许可范围见下文。报名 issue 和最终提交由梅宝本人处理。
 
 ## 版权声明
 

@@ -4,6 +4,7 @@ import { bodyLimit } from 'hono/body-limit';
 import { randomUUID } from 'node:crypto';
 import type { Catalog } from './catalog.js';
 import { windowAt, pickHostDefault, DomainError, type Groups } from './domain/groups.js';
+import { demoMealChoices, demoNickname, seedDemoBoard } from './demo-board.js';
 
 export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string; menuPreview?: string }) {
   const { catalog, groups, mode, now } = options;
@@ -44,9 +45,18 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     return c.json({ meals, period, fallback });
   });
   app.get('/api/stores/:store/meals/:meal', async c => c.json({ meal: await catalog.meal(c.req.param('store'), c.req.param('meal')) }));
-  app.get('/api/groups', c => c.json({ groups: groups.list(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() }));
-  app.get('/api/mine', c => c.json({ groups: groups.mine(c.get('device')).map(g => groups.view(g, c.get('device'))) }));
-  app.get('/api/groups/done', c => c.json({ groups: groups.done(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() }));
+  app.get('/api/groups', async c => {
+    if (mode === 'demo') await seedDemoBoard(catalog, groups, now);
+    return c.json({ groups: groups.list(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() });
+  });
+  app.get('/api/mine', async c => {
+    if (mode === 'demo') await seedMine(c.get('device'), c.req.query('store') ?? '1420082');
+    return c.json({ groups: groups.mine(c.get('device')).map(g => groups.view(g, c.get('device'))) });
+  });
+  app.get('/api/groups/done', async c => {
+    if (mode === 'demo') await seedDemoBoard(catalog, groups, now);
+    return c.json({ groups: groups.done(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() });
+  });
   app.get('/api/groups/similar', c => c.json({ groups: groups.similar(c.req.query('store') ?? '', c.req.query('meal') ?? '').map(g => groups.view(g, c.get('device'))) }));
   app.post('/api/groups', async c => {
     const body = await c.req.json();
@@ -77,23 +87,34 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     }
     return c.json({ group: groups.view(g, c.get('device')) });
   });
-  // 演示发起人名字：最多五个字，同一家店正在拼的单里不重名（梅宝 10-19）
-  const DEMO_NAMES = ['午休水母', '加班猫猫', '等饭小鹿', '路过狐狸', '奶茶续命', '小番茄', '早八人', '阿乌', '芝士', '可乐冰', '薯条控', '麦旋风'];
-  const demoHostName = (store: string) => {
-    const taken = new Set(groups.list(store).flatMap(g => g.members.filter(m => m.id === g.hostId).map(m => m.nickname)));
-    const free = DEMO_NAMES.filter(n => !taken.has(n));
-    return free.length ? free[Math.floor(Math.random() * free.length)] : `拼友${Math.floor(100 + Math.random() * 900)}`;
-  };
-  // 演示：给每台设备在「我的拼单」里放一单自己发起、已等了 18 分钟的单；以及把自己那单快进到等满 31 分钟。
+  // Refill a fresh personal demo only after its previous recruiting card ends.
+  // Per-device locking keeps the POST and 30-second mine poll from duplicating it.
+  const mineSeeds = new Map<string, Promise<boolean>>();
+  async function seedMine(device: string, store: string): Promise<boolean> {
+    const key = `${device}:${store}`, pending = mineSeeds.get(key);
+    if (pending) return pending;
+    const task = createMine(device, store).finally(() => mineSeeds.delete(key));
+    mineSeeds.set(key, task);
+    return task;
+  }
+  async function createMine(device: string, store: string): Promise<boolean> {
+    if (groups.mine(device).some(g => g.storeCode === store && g.state === 'open' && g.deadline > now() && g.members.some(m => m.id === g.hostId && m.device === device))) return false;
+    const menu = await demoMealChoices(catalog, store);
+    const real = menu.filter(m => !m.sample), choices = real.length ? real : menu;
+    const board = groups.list(store);
+    const useCount = (code: string) => board.filter(g => g.meal.code === code).length;
+    const leastUsed = Math.min(...choices.map(m => useCount(m.code)));
+    const pool = choices.filter(m => useCount(m.code) === leastUsed);
+    const code = pool[Math.floor(Math.random() * pool.length)]?.code;
+    if (!code) throw new DomainError('这个时段还没有适合拆分的套餐', 409);
+    const meal = await catalog.meal(store, code);
+    const minutes = [35, 45, 60][Math.floor(Math.random() * 3)]!;
+    groups.create(device, store, meal, { nickname: demoNickname(groups, store, now), tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal, Math.min(2, meal.parts.length - 1)), people: 2, minutes }, now() - 18 * 60_000);
+    return true;
+  }
   if (mode === 'demo') app.post('/api/demo/mine/seed', async c => {
-    const device = c.get('device');
-    if (groups.mine(device).some(g => g.hostId === g.members.find(m => m.device === device)?.id)) return c.json({ seeded: false });
     const body = await c.req.json().catch(() => ({}));
-    const store = typeof body?.storeCode === 'string' ? body.storeCode : '1420082';
-    const menu = await catalog.shareableMenu(store);
-    const meal = await catalog.meal(store, menu.find(m => /双人|分享|桶/.test(m.name))?.code ?? menu[0]?.code ?? '9900016136');
-    groups.create(device, store, meal, { nickname: demoHostName(store), tail4: String(1000 + Math.floor(Math.random() * 9000)), partIds: pickHostDefault(meal), people: 2, minutes: 60 }, now() - 18 * 60_000);
-    return c.json({ seeded: true });
+    return c.json({ seeded: await seedMine(c.get('device'), typeof body?.storeCode === 'string' ? body.storeCode : '1420082') });
   });
   if (mode === 'demo') app.post('/api/demo/groups/:id/age', c => {
     const g = groups.get(c.req.param('id'));

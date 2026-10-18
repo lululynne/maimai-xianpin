@@ -6,7 +6,7 @@
 
 - 官方只读调用脱敏夹具 645 条，35 个工具 schema。预约午、晚市各有 29 / 24 / 30 / 0 个真实可发起套餐；第四店 `600054` 与仅早餐预约的限制如实保留。名单及每套价见 [核验表](reviews/20261019-menu-counts.md)。
 - `npm run validate:catalog` 逐店逐时段加载真实明细、整套价、单点价，并用实际 `Groups.create` 建单：0 错误。午、晚市同码不同价和缓存按目标时段隔离；没有当前时段单点价时不会借另一时段补。
-- `npm test`：67/67；`npm run typecheck` 通过；`node --check public/app.js` / `scripts/run-daypart-job.mjs` 通过。
+- `npm test`：72/72；`npm run typecheck` 通过；`node --check public/app.js` / `scripts/run-daypart-job.mjs` 通过。
 - 新增回归覆盖预约时间与实际采集时间分离、午晚市价格隔离、缺当前单价不跨段借价、失败菜单历史回退、success=true/data=null、真实鱼堡主食限制。原有权限、分摊、状态机、24h、持久化等检查仍通过。
 - 单点询价空商品列表 / 零总额是未知，不是免费；真实匹配商品行的零价保留。所有套餐具备整套匹配报价，但不声称单点价全部齐全。
 
@@ -19,11 +19,20 @@
 - 个人视角只显示自己的尾号 / 取餐码，拼友隐私未暴露；演示付款明确不扣款。浏览器测试只在 `.local/qa-20261019.sqlite`，不写 live 数据库。
 - 新主题截图：`docs/images/demo-desktop.jpg`、`demo-mobile.jpg`、`compose-mobile-390.jpg`、`compose-parts-mobile-390.jpg`、`fallback-mobile-390.jpg`、`demo-card.jpg`。动图 / MP4 由实际界面步骤截图组成，非连续录屏。
 
+## 多套餐广场修复
+
+- 五张自动演示单按真实菜单选择不同风格的套餐，午市前三店优先真实餐；不足时才用明确标示例的内容补位。「拼单成功」也分配不同套餐；「我的拼单」自动样例优先选广场出现较少的真实套餐。
+- 新增五项回归：四店×三时段各五种套餐及合法份额；旧同餐示例升级时保留个人/已加入卡片、再次启动不重置卡片和截止；两位新访客的「我的拼单」使用不同真实套餐；并发到点刷新只补一次、旧截止不延长且已加入单保留；个人体验卡过期自动换新、live 不补演示。共 72/72 测试和 typecheck 通过。
+- 现有演示库原地升级前留存本机副本；3 张个人或已参与卡片的 payload 对比完全一致。四店自动五单分别具有五个不同套餐。
+- Chrome 手机 390×844：页面 clientWidth=scrollWidth=390，卡片图片加载失败 0，控制台 warn/error 0。三乡实际显示吉士汉堡包套餐、巨无霸三件套、麦香鸡套餐、双层吉士汉堡套餐、薄皮V翅双拼十翅；原先个人的亲子餐继续保留。
+- 另起 demo 专库并设置 60 倍计时，真实运行 47 秒后检查到广场和个人卡片均自动补新，旧卡保持原截止并变 expired；客户端一秒到点检测及常规轮询继续补位；Chrome 不刷新页面也观测到个人卡片两次更换新 ID，控制台无异常。进行中的卡片排在结束记录前面。
+- 当前截图：`docs/images/varied-plaza-desktop.jpg`、`varied-plaza-mobile-390.jpg`、`looping-mine-demo.jpg`。原步骤 GIF/MP4 仍保留为完整取餐流程记录。
+
 ## 来源与范围
 
 代码和图片许可证官方文本、比赛声明原文字节及 fixture manifest 均按 SHA-256 校验。提交前检查实际 Token 和私密文件未入 Git。真实米末仅作五件文件有限审阅，Codex 逐条裁决，见 [审阅原文和处置](reviews/20261019-mimo-reservation-review.md)。
 
-本轮无需 mini 再验；HostDzire PROGRESS 是交付回执。尚未部署、改公开或报名；这些不因本机测试通过而被写成已执行。
+本轮无需 mini 再验；HostDzire PROGRESS 是交付回执。本轮按梅宝最新明确指令，将代码及纳纳图片一并公开；仓库全历史 366 个对象已扫描，实际 Token、常见凭据模式和私密数据库未命中。部署及报名未执行。
 
 ---
 

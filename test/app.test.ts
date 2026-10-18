@@ -28,8 +28,8 @@ test('two browser cookies share SQLite state while ownership and account tools s
     assert.equal(created.status, 201);
     const { group } = await created.json();
     const board = await (await app.request('/api/groups?store=1420082', { headers: { Cookie: visitor } })).json();
-    assert.equal(board.groups[0].id, group.id);
-    assert.equal(board.groups[0].members[0].tail4, undefined);
+    assert.ok(board.groups.some((g: any) => g.id === group.id));
+    assert.equal(board.groups.find((g: any) => g.id === group.id).members[0].tail4, undefined);
     const response = await app.request(`/api/groups/${group.id}/join`, json(visitor, { nickname: '来拼的', tail4: '5678', partIds: meal.parts.map(p => p.id).filter(id => !pickHostDefault(meal).includes(id)) }));
     assert.equal(response.status, 200);
     assert.equal((await response.json()).group.state, 'full');
@@ -38,8 +38,9 @@ test('two browser cookies share SQLite state while ownership and account tools s
     assert.equal((await app.request(`/api/groups/${group.id}/ordered`, json(host, {}))).status, 200);
     assert.equal((await app.request(`/api/groups/${group.id}/picked-up`, json(host, {}))).status, 200);
     const mine = await (await app.request('/api/mine', { headers: { Cookie: visitor } })).json();
-    assert.equal(mine.groups[0].state, 'picked-up');
-    assert.equal(mine.groups[0].viewerId, mine.groups[0].members[1].id);
+    const completed = mine.groups.find((g: any) => g.id === group.id);
+    assert.equal(completed.state, 'picked-up');
+    assert.equal(completed.viewerId, completed.members[1].id);
     assert.ok(!JSON.stringify(mine).includes('device'));
     const draft = await (await app.request('/api/groups', json(host, { storeCode: '1420082', mealCode: meal.code, nickname: '演示发起人', tail4: '2468', partIds: pickHostDefault(meal), people: 3, confirmedSimilar: true }))).json();
     assert.equal((await app.request(`/api/demo/groups/${draft.group.id}/fill`, json(visitor, {}))).status, 403);

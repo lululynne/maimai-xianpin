@@ -139,7 +139,8 @@ function render() {
   $('#mine-count').textContent = state.mine.length;
   $('#done-count').textContent = state.done.length;
   $('#board-note').textContent = state.tab === 'board' ? '按截止时间排序，先帮快到点的那一单。' : state.tab === 'done' ? '这些单子人已经凑齐，等着下单或取餐。' : '保留这张卡片，到店核对。取到提醒最多延迟 30 秒。';
-  const groups = state.tab === 'board' ? state.board.filter(g => g.state === 'open') : state[state.tab];
+  const mineOrder = { ordered: 0, full: 1, open: 2, 'picked-up': 3, expired: 4 };
+  const groups = state.tab === 'board' ? state.board.filter(g => g.state === 'open') : state.tab === 'mine' ? [...state.mine].sort((a, b) => mineOrder[a.state] - mineOrder[b.state] || b.createdAt - a.createdAt) : state[state.tab];
   $('#board').innerHTML = groups.length ? groups.map(g => {
     const remaining = g.meal.parts.filter(p => g.remainingPartIds.includes(p.id));
     const restCents = g.meal.priceCents - g.members.reduce((sum, m) => sum + m.cents, 0);
@@ -173,7 +174,9 @@ async function refreshDone() {
   state.done = data.groups; render();
 }
 async function refreshMine() {
-  const data = await api('/mine');
+  const store = $('#store').value;
+  const data = await api('/mine?store=' + encodeURIComponent(store));
+  if (store !== $('#store').value) return;
   const previous = new Map(state.mine.map(g => [g.id, g.state]));
   for (const g of data.groups) {
     const was = previous.get(g.id); if (!previous.has(g.id) || was === g.state) continue;
@@ -299,7 +302,7 @@ function renderDetail(g) {
 }
 document.querySelectorAll('dialog .close').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
 document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', guard(async () => { state.tab = b.dataset.tab; document.querySelectorAll('[data-tab]').forEach(t => t.classList.toggle('active', t === b)); if (state.tab === 'mine') await refreshMine(); else if (state.tab === 'done') await refreshDone(); else await refreshBoard(); })));
-$('#store').addEventListener('change', guard(async () => { state.board = []; renderStoreChips(); const s = state.stores.find(s => s.code === $('#store').value); $('#store-address').textContent = s.address + (s.open ? '' : ' · 当前暂停营业'); await refreshBoard(); }));
+$('#store').addEventListener('change', guard(async () => { state.board = []; renderStoreChips(); const s = state.stores.find(s => s.code === $('#store').value); $('#store-address').textContent = s.address + (s.open ? '' : ' · 当前暂停营业'); await Promise.all([refreshBoard(), refreshMine()]); }));
 $('#refresh').addEventListener('click', guard(() => Promise.all([refreshBoard(), refreshMine()])));
 $('#new-group').addEventListener('click', guard(compose));
 $('#compose-form').addEventListener('change', event => { if (event.target.name === 'partIds' || event.target.name === 'people') updateSum(); });
@@ -307,7 +310,14 @@ $('#compose-form').addEventListener('submit', guard(reviewDraft));
 $('#confirm-create').addEventListener('click', guard(createGroup));
 $('#similar-back').addEventListener('click', () => { $('#similar').close(); $('#compose').showModal(); });
 setInterval(() => {
-  if (state.board.some(g => g.deadline <= now())) { state.board = state.board.filter(g => g.deadline > now()); render(); }
+  if (state.board.some(g => g.deadline <= now())) {
+    state.board = state.board.filter(g => g.deadline > now()); render();
+    if (sim() && !document.hidden) refreshBoard().catch(e => toast(e.message));
+  }
+  if (sim() && !document.hidden && !state.mineExpiryRefreshing && state.mine.some(g => g.state === 'open' && g.deadline <= now())) {
+    state.mineExpiryRefreshing = true;
+    refreshMine().catch(e => toast(e.message)).finally(() => { state.mineExpiryRefreshing = false; });
+  }
   document.querySelectorAll('[data-deadline]').forEach(el => el.textContent = (el.dataset.style === 'timer' ? timerText : el.dataset.style === 'corner' ? cornerText : leftText)(Number(el.dataset.deadline)));
   const g = state.detail;
   if ($('#detail').open && g && ['open', 'full'].includes(g.state) && g.deadline <= now() && !g.expiryRefreshSent) {

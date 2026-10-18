@@ -49,7 +49,7 @@ export function writeProgress() {
     text.push('');
   }
   if (existsSync('.local/menu-captures/base-handoff.md')) text.push('', readFileSync('.local/menu-captures/base-handoff.md', 'utf8'));
-  text.push('边界：仅门店/菜单/明细/算价；不查券、不下单；未部署、未转公开、未报名。');
+  text.push('边界：仅门店/菜单/明细/算价；不查券、不下单；代码及纳纳图片按梅宝决定公开，未部署、未报名。');
   const path = `.local/menu-captures/20261019-maimai-xianpin-more-meals-PROGRESS.md`;
   const body = text.join('\n') + '\n';
   writeFileSync(path, body, { mode: 0o600 });

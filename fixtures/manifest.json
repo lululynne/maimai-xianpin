@@ -1,0 +1,13 @@
+{
+  "files": {
+    "mcp-calls.json": "006e31bf60bf7209a4ad6927f06221bff896d684d09df4b90e3ddaf0afa7fc40",
+    "mcp-tools.json": "1ef8400577eb80cef894220e97b20c59953d4e44b85d5e12623b195f1f31ff7e"
+  },
+  "callCount": 47,
+  "stores": [
+    "1420082",
+    "1420800",
+    "1420277",
+    "1421248"
+  ]
+}

@@ -1,0 +1,79 @@
+import { Hono } from 'hono';
+import { getCookie, setCookie } from 'hono/cookie';
+import { bodyLimit } from 'hono/body-limit';
+import { randomUUID } from 'node:crypto';
+import type { Catalog } from './catalog.js';
+import { DomainError, type Groups } from './domain/groups.js';
+
+export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string }) {
+  const { catalog, groups, mode, now } = options;
+  const app = new Hono<{ Variables: { device: string } }>();
+  app.use('*', async (c, next) => {
+    c.header('X-Content-Type-Options', 'nosniff');
+    c.header('Referrer-Policy', 'no-referrer');
+    c.header('Content-Security-Policy', "default-src 'self'; img-src 'self' https://menu-img.mcd.cn https://img.mcd.cn data:; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+    await next();
+  });
+  app.use('/api/*', bodyLimit({ maxSize: 16 * 1024 }));
+  app.use('/api/*', async (c, next) => {
+    c.header('Cache-Control', 'no-store');
+    const origin = c.req.header('Origin');
+    if ((origin && origin !== new URL(c.req.url).origin) || c.req.header('Sec-Fetch-Site') === 'cross-site') return c.json({ error: '不接受跨站请求' }, 403);
+    if (c.req.method === 'POST' && !c.req.header('Content-Type')?.startsWith('application/json')) return c.json({ error: '请使用 JSON 请求' }, 415);
+    let device = getCookie(c, 'maimai_device');
+    if (!device || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(device)) device = randomUUID();
+    setCookie(c, 'maimai_device', device, { httpOnly: true, sameSite: 'Strict', secure: new URL(c.req.url).protocol === 'https:', path: '/', maxAge: 24 * 60 * 60 });
+    c.set('device', device);
+    await next();
+  });
+  app.onError((error, c) => {
+    if (error instanceof DomainError) return c.json({ error: error.code }, error.status as 400);
+    if (error instanceof SyntaxError) return c.json({ error: '请求格式不正确' }, 400);
+    const known = /^(INVALID_STORE|INVALID_MEAL|MEAL_NOT_AVAILABLE|MEAL_NOT_SHAREABLE|MEAL_TOO_LARGE|MEAL_PRICE_UNAVAILABLE|MCD_[A-Z_]+|DEMO_CAPTURE_NOT_AVAILABLE)$/;
+    return c.json({ error: known.test(error.message) ? error.message : '服务暂时不可用，请稍后重试' }, 502);
+  });
+  app.get('/api/config', c => c.json({ mode, serverNow: now(), clockSpeed: options.speed, capturedAt: options.capturedAt, couponsEnabled: false }));
+  app.get('/api/stores', async c => c.json({ stores: await catalog.stores() }));
+  app.get('/api/stores/:store/meals', async c => c.json({ meals: await catalog.shareableMenu(c.req.param('store')) }));
+  app.get('/api/stores/:store/meals/:meal', async c => c.json({ meal: await catalog.meal(c.req.param('store'), c.req.param('meal')) }));
+  app.get('/api/groups', c => c.json({ groups: groups.list(c.req.query('store') ?? '').map(g => groups.view(g, c.get('device'))), serverNow: now() }));
+  app.get('/api/mine', c => c.json({ groups: groups.mine(c.get('device')).map(g => groups.view(g, c.get('device'))) }));
+  app.get('/api/groups/similar', c => c.json({ groups: groups.similar(c.req.query('store') ?? '', c.req.query('meal') ?? '').map(g => groups.view(g, c.get('device'))) }));
+  app.post('/api/groups', async c => {
+    const body = await c.req.json();
+    if (!body || typeof body !== 'object' || Array.isArray(body)) throw new DomainError('请求格式不正确');
+    if (body.confirmedSimilar !== true) throw new DomainError('请先确认相似拼单', 409);
+    const meal = await catalog.meal(String(body.storeCode), String(body.mealCode));
+    const g = groups.create(c.get('device'), String(body.storeCode), meal, body);
+    return c.json({ group: groups.view(g, c.get('device')) }, 201);
+  });
+  app.get('/api/groups/:id', c => c.json({ group: groups.view(groups.get(c.req.param('id')), c.get('device')) }));
+  if (mode === 'demo') app.post('/api/demo/groups/:id/fill', c => {
+    let g = groups.get(c.req.param('id'));
+    if (!groups.view(g, c.get('device')).isHost) throw new DomainError('只有发起人可以操作', 403);
+    if (g.state !== 'open') throw new DomainError('这单已拼满或结束', 409);
+    while (g.members.length < g.people) {
+      const used = new Set(g.members.flatMap(m => m.partIds));
+      const remaining = g.meal.parts.filter(p => !used.has(p.id));
+      const last = g.members.length === g.people - 1;
+      const partIds = (last ? remaining : remaining.slice(0, 1)).map(p => p.id);
+      let tail = 1;
+      while (g.members.some(m => m.tail4 === String(tail).padStart(4, '0'))) tail++;
+      const simulatedDevice = randomUUID();
+      g = groups.join(g.id, simulatedDevice, { nickname: `演示拼友${g.members.length}`, tail4: String(tail).padStart(4, '0'), partIds });
+      g = groups.action(g.id, simulatedDevice, 'confirm');
+    }
+    return c.json({ group: groups.view(g, c.get('device')) });
+  });
+  app.post('/api/groups/:id/join', async c => {
+    const g = groups.join(c.req.param('id'), c.get('device'), await c.req.json());
+    return c.json({ group: groups.view(g, c.get('device')) });
+  });
+  for (const action of ['confirm', 'kick', 'ordered', 'picked-up'] as const) app.post(`/api/groups/:id/${action}`, async c => {
+    const body = await c.req.json();
+    const g = groups.action(c.req.param('id'), c.get('device'), action, body?.memberId);
+    return c.json({ group: groups.view(g, c.get('device')) });
+  });
+  app.notFound(c => c.json({ error: '没有这个页面' }, 404));
+  return app;
+}

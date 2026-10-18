@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { McdMcpClient } from '../src/mcp/client.js';
-import { assertPublicArguments, assertPublicReadTool, PUBLIC_READ_TOOLS } from '../src/mcp/policy.js';
+import { assertPublicArguments, assertPublicCall, assertPublicReadTool, PUBLIC_READ_TOOLS } from '../src/mcp/policy.js';
 
 test('only public menu/store reads pass the fixed allowlist', () => {
   for (const name of PUBLIC_READ_TOOLS) assert.doesNotThrow(() => assertPublicReadTool(name));
@@ -25,4 +25,17 @@ test('client rejects a forbidden call before any connection, including JS caller
 
 test('missing token fails closed', () => {
   assert.throws(() => new McdMcpClient('  '), /MCD_MCP_TOKEN_MISSING/);
+});
+
+test('nearby-store lookup can never query account favorites', () => {
+  assert.throws(() => assertPublicCall('query-nearby-stores', { beType: 1, searchType: 1 }), /MCP_LOCATION_SEARCH_REQUIRED/);
+  assert.throws(() => assertPublicCall('query-nearby-stores', { beType: 1 }), /MCP_LOCATION_SEARCH_REQUIRED/);
+  assert.doesNotThrow(() => assertPublicCall('query-nearby-stores', { beType: 1, searchType: 2, city: '中山', keyword: '三乡' }));
+});
+
+test('menu and price reads are restricted to pickup without account cards', () => {
+  for (const name of ['query-meals', 'calculate-price']) {
+    assert.throws(() => assertPublicCall(name, { storeCode: '1420082', orderType: 2, beType: 2 }), /MCP_PICKUP_ONLY/);
+    assert.throws(() => assertPublicCall(name, { storeCode: '1420082', orderType: 1, beType: 1, withOrder: {} }), /MCP_ACCOUNT_ARGUMENT_FORBIDDEN/);
+  }
 });

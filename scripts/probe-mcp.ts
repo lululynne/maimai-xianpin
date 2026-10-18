@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { McdMcpClient } from '../src/mcp/client.js';
-import { assertPublicArguments, assertPublicReadTool } from '../src/mcp/policy.js';
+import { assertPublicCall } from '../src/mcp/policy.js';
 
 // No token in arguments, logs, tool arguments, fixtures, or Markdown.
 const token = process.env.MCD_MCP_TOKEN?.trim();
@@ -25,8 +25,7 @@ try {
     // Validate the entire batch before making any call.
     for (const call of calls) {
       if (!call || typeof call.name !== 'string' || !call.arguments || typeof call.arguments !== 'object' || Array.isArray(call.arguments)) throw new Error('INVALID_PROBE_CALL');
-      assertPublicReadTool(call.name);
-      assertPublicArguments(call.arguments);
+      assertPublicCall(call.name, call.arguments);
       if (!tools.some(tool => tool.name === call.name)) throw new Error('UNKNOWN_REMOTE_TOOL');
     }
     for (const [index, call] of calls.entries()) {

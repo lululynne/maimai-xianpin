@@ -9,7 +9,9 @@
   "scripts": {
     "test": "node --import tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "probe:mcp": "node --env-file-if-exists=.env --import tsx scripts/probe-mcp.ts"
+    "probe:mcp": "node --env-file-if-exists=.env --import tsx scripts/probe-mcp.ts",
+    "dev": "node --env-file-if-exists=.env --import tsx src/server.ts",
+    "capture:fixtures": "node --env-file-if-exists=.env --import tsx scripts/capture-fixtures.ts"
   },
   "dependencies": {
     "@hono/node-server": "2.1.5",

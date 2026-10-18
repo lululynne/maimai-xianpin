@@ -1,6 +1,6 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
-import { assertPublicArguments, assertPublicReadTool, type PublicReadTool } from './policy.js';
+import { assertPublicCall, type PublicReadTool } from './policy.js';
 
 export interface McpReader {
   call(name: PublicReadTool, args: Record<string, unknown>): Promise<unknown>;
@@ -44,11 +44,11 @@ export class McdMcpClient implements McpReader {
   }
 
   async call(name: PublicReadTool, args: Record<string, unknown>): Promise<unknown> {
-    assertPublicReadTool(name);
-    assertPublicArguments(args);
+    assertPublicCall(name, args);
     await this.connect();
     try {
-      return await this.client.callTool({ name, arguments: args }, undefined, { timeout: 20_000 });
+      const result = await this.client.callTool({ name, arguments: args }, undefined, { timeout: 20_000 });
+      return { ...result, _sourceTimestamp: Date.now() };
     } catch {
       // Never forward SDK errors, HTTP headers or upstream account data to a visitor.
       throw new Error('MCD_MCP_READ_FAILED');

@@ -1,10 +1,10 @@
-import { randomUUID } from 'node:crypto';
+import { randomInt, randomUUID } from 'node:crypto';
 import type { Meal } from '../catalog.js';
 import type { Repository } from '../db.js';
 import { allocateShares } from './shares.js';
 
 export type State = 'open' | 'full' | 'ordered' | 'picked-up' | 'expired';
-export interface Member { id: string; device: string; nickname: string; tail4: string; partIds: string[]; confirmed: boolean }
+export interface Member { id: string; device: string; nickname: string; tail4: string; partIds: string[]; confirmed: boolean; pickupCode?: string; collectedAt?: number }
 export interface Group { id: string; storeCode: string; meal: Meal; createdAt: number; deadline: number; endedAt: number | null; people: number; state: State; hostId: string; members: Member[]; pickedUpAt?: number }
 export class DomainError extends Error { constructor(readonly code: string, readonly status = 400) { super(code); } }
 function fail(code: string, status = 400): never { throw new DomainError(code, status); }
@@ -22,6 +22,8 @@ function choose(ids: unknown, available: string[]): string[] {
   if (!Array.isArray(ids) || !ids.length || ids.some(id => typeof id !== 'string') || new Set(ids).size !== ids.length || ids.some(id => !available.includes(id))) fail('餐品已被选走，请刷新后重选', 409);
   return ids;
 }
+
+export const MAX_PEOPLE = 3;
 
 export class Groups {
   constructor(readonly repo: Repository, private readonly now = Date.now) {}
@@ -42,7 +44,7 @@ export class Groups {
     const minutes = input.minutes ?? 30;
     const people = input.people ?? 2;
     if (!Number.isInteger(minutes) || minutes < 10 || minutes > 60) fail('规定时间须为 10–60 分钟');
-    if (!Number.isInteger(people) || people < 2 || people > meal.parts.length) fail('人数须在 2 人到餐品件数之间');
+    if (!Number.isInteger(people) || people < 2 || people > Math.min(MAX_PEOPLE, meal.parts.length)) fail('一份套餐最多三人拼：发起人最多再允许 2 人加入');
     const partIds = choose(input.partIds, meal.parts.map(p => p.id));
     if (partIds.length > meal.parts.length - people + 1) fail('请为其他每个人至少留一件餐品');
     return this.repo.transaction(() => {
@@ -75,13 +77,19 @@ export class Groups {
     });
   }
 
-  action(id: string, device: string, action: 'confirm' | 'kick' | 'ordered' | 'picked-up', memberId?: string): Group {
+  action(id: string, device: string, action: 'confirm' | 'kick' | 'ordered' | 'picked-up' | 'collect', memberId?: string): Group {
     return this.repo.transaction(() => {
       const g = this.current(id);
       const member = g.members.find(m => m.device === device) ?? fail('只有本单成员可以操作', 403);
       if (action === 'confirm') {
         if (!['open', 'full'].includes(g.state)) fail('这单已结束，不能再确认', 409);
         member.confirmed = true;
+      } else if (action === 'collect') {
+        // 每人凭自己的取餐码取走自己那份就算完成；全员取完整单结束。
+        if (g.state !== 'ordered') fail('还没下单，或这单已经取完', 409);
+        if (member.collectedAt) fail('你这份已经取过了', 409);
+        member.collectedAt = this.now();
+        if (g.members.every(m => m.collectedAt)) { g.state = 'picked-up'; g.pickedUpAt = this.now(); g.endedAt = Math.min(this.now(), g.deadline); }
       } else {
         if (member.id !== g.hostId) fail('只有发起人可以操作', 403);
         if (action === 'kick') {
@@ -93,16 +101,25 @@ export class Groups {
         } else if (action === 'ordered') {
           if (g.state !== 'full' || g.members.some(m => !m.confirmed)) fail('拼满且所有人确认后，才能标记已下单', 409);
           g.state = 'ordered';
+          // 理想版：门店为同一张单的每个人各出一个取餐码。码只给本人和门店看。
+          const used = new Set<string>();
+          for (const m of g.members) { let code; do code = String(randomInt(1000, 10000)); while (used.has(code)); used.add(code); m.pickupCode = code; }
         } else {
           if (g.state !== 'ordered') fail('请先在官方渠道下单并标记已下单', 409);
           g.state = 'picked-up';
           g.pickedUpAt = this.now();
+          for (const m of g.members) m.collectedAt ??= this.now();
           g.endedAt = Math.min(this.now(), g.deadline);
         }
       }
       this.repo.save(g);
       return g;
     });
+  }
+
+  // 门店视角：只有门店能看到同一张单下每个人的尾号和取餐码。v1 只在演示模式开放这个视角。
+  counter(g: Group) {
+    return { id: g.id, meal: g.meal.name, state: g.state, members: g.members.map(m => ({ nickname: m.nickname, tail4: m.tail4, pickupCode: m.pickupCode, parts: m.partIds.map(id => g.meal.parts.find(p => p.id === id)!.name), collected: Boolean(m.collectedAt) })) };
   }
 
   view(g: Group, device: string) {
@@ -115,7 +132,8 @@ export class Groups {
     const waitedMs = Math.max(0, Math.min(this.now(), g.deadline, g.pickedUpAt ?? Infinity) - g.createdAt);
     return {
       id: g.id, storeCode: g.storeCode, meal: g.meal, createdAt: g.createdAt, deadline: g.deadline, people: g.people, state: g.state, hostId: g.hostId,
-      members: g.members.map(({ device: _device, tail4, ...m }) => ({ ...m, tail4: viewer ? tail4 : undefined, cents: allocation.shares.find(s => s.id === m.id)!.cents })),
+      // 尾号和取餐码只给本人；同单的其他人只看到昵称、餐品和金额，防止凭别人的尾号或码把那份领走。
+      members: g.members.map(({ device: _device, tail4, pickupCode, collectedAt, ...m }) => ({ ...m, tail4: viewer?.id === m.id ? tail4 : undefined, pickupCode: viewer?.id === m.id ? pickupCode : undefined, collected: Boolean(collectedAt), cents: allocation.shares.find(s => s.id === m.id)!.cents })),
       viewerId: viewer?.id, isHost: viewer?.id === g.hostId, remainingPartIds: unclaimed.map(p => p.id), method: allocation.method,
       waitedMs, idealCouponYuan: waitedMs > 30 * 60_000 ? 5 : waitedMs >= 15 * 60_000 ? 2 : 0,
       pickedUpAt: g.pickedUpAt, serverNow: this.now(),

@@ -25,9 +25,19 @@ repo.sweep(now());
 if (mode === 'demo') {
   for (const store of STORE_CODES) {
     if (groups.list(store).length) continue;
-    const meal = await catalog.meal(store, '9900016136');
-    for (const [index, nickname] of ['小林', '小圆', '阿禾'].entries()) {
-      groups.create(`demo-host-${store}-${index}`, store, meal, { nickname, tail4: ['2716', '5832', '9461'][index], partIds: meal.parts.slice(0, 2).map(p => p.id), people: 2, minutes: [10, 25, 40][index] }, now() - [4, 7, 12][index]! * 60_000);
+    // 演示五单：有人赶时间只允许 1 人加入，有人等得起允许 2 人加入；快照里有全家桶/分享盒时优先用它。
+    const menu = await catalog.shareableMenu(store);
+    const big = menu.find(m => /桶|分享|家庭/.test(m.name));
+    const meal = await catalog.meal(store, big?.code ?? '9900016136');
+    const seeds = [
+      { nickname: '小林', tail4: '2716', take: 2, people: 2, minutes: 10, ago: 4 },
+      { nickname: '小圆', tail4: '5832', take: 1, people: 3, minutes: 30, ago: 7 },
+      { nickname: '豆豆', tail4: '3307', take: 1, people: 2, minutes: 35, ago: 16 },
+      { nickname: '阿禾', tail4: '9461', take: 3, people: 2, minutes: 45, ago: 12 },
+      { nickname: '糖糖', tail4: '6150', take: 2, people: 3, minutes: 55, ago: 2 },
+    ].filter(x => x.people <= meal.parts.length && x.take <= meal.parts.length - x.people + 1);
+    for (const [index, x] of seeds.entries()) {
+      groups.create(`demo-host-${store}-${index}`, store, meal, { nickname: x.nickname, tail4: x.tail4, partIds: meal.parts.slice(0, x.take).map(p => p.id), people: x.people, minutes: x.minutes }, now() - x.ago * 60_000);
     }
   }
 }

@@ -3,20 +3,39 @@
 body{background:var(--cream);color:var(--ink);font-family:"PingFang SC","Noto Sans CJK SC",system-ui,sans-serif}
 .ico{width:22px;height:22px;object-fit:contain;vertical-align:-5px;margin-right:6px}
 
-/* 顶栏 */
-.topbar{max-width:none;background:var(--red);color:#fff;border:0;padding:16px max(18px,calc((100% - 1120px)/2 + 32px)) 14px}
-.wordmark{display:flex;align-items:center;gap:10px;letter-spacing:0}
-.wordmark img{width:44px;height:44px;object-fit:contain}
-.wordmark .wm-text{color:#fff}
-.wm-text b{display:block;font-size:20px;letter-spacing:1px;line-height:1.2}
-.wm-text small{display:block;color:var(--yel);font-size:12px;font-weight:400}
-.badge{background:#fff2;border:1.5px solid var(--yel);color:#fff;font-weight:600}
+/* 顶栏：经典深棕「麦麦」+ 麦麦红「现拼」，加高约 2.5 倍，底下红黄两道边 */
+.topbar{max-width:none;background:#fff;color:var(--ink);border:0;border-bottom:6px solid var(--red);box-shadow:0 4px 0 var(--yel);padding:34px max(18px,calc((100% - 1120px)/2 + 32px)) 30px;min-height:170px;margin-bottom:4px}
+.wordmark{display:flex;align-items:center;gap:14px;letter-spacing:0}
+.wordmark img{width:96px;height:96px;object-fit:contain;flex-shrink:0}
+.wordmark .wm-text{color:var(--ink)}
+.wm-text b{display:block;font-size:40px;font-weight:900;letter-spacing:2px;line-height:1.15;color:var(--ink)}
+.wm-text b span{color:var(--red)}
+.wm-text small{display:block;color:var(--red);font-size:15px;font-weight:800;letter-spacing:1px;margin-top:6px}
+.badge{background:var(--yel);border:0;color:var(--ink);font-weight:700;align-self:start}
 
-/* 首屏 */
-h1 span,.eyebrow{color:var(--red)}
-.hero-art{background:radial-gradient(circle,#FFE7A3 0,#FFF1CF 62%,transparent 63%)}
-.mascot{width:86%;height:86%;object-fit:contain;filter:drop-shadow(0 6px 0 #0000000d)}
-.notice{background:#FFF1CF;border:2px solid var(--yel-l);border-radius:16px}
+/* 首屏：除大标题外字号放大一倍 */
+h1 span{color:var(--red)}
+.hero .eyebrow{font-size:22px;letter-spacing:2px}
+.hero .intro{font-size:22px;line-height:1.75;color:var(--mut)}
+.store-panel .eyebrow{font-size:20px;color:var(--red)}
+.store-panel .eyebrow .ico{width:44px;height:44px;vertical-align:-14px}
+.store-panel p.muted{font-size:16px}
+.hero-art{background:radial-gradient(circle,#FFE7A3 0,#FFF1CF 62%,transparent 63%);width:300px;height:300px}
+.mascot{width:86%;height:86%;object-fit:contain}
+.notice{background:#FFF1CF;border:2px solid var(--yel-l);border-radius:16px;font-size:15px}
+
+/* 衣服吊牌标签：尖头、穿绳孔、内圈缝线 */
+.hero-notes{display:flex;flex-wrap:wrap;gap:16px 14px;margin-top:26px}
+.hero-notes span:before{content:none}
+.hang{position:relative;display:inline-flex;align-items:center;font-size:18px;font-weight:800;padding:10px 18px 10px 34px;clip-path:polygon(16px 0,100% 0,100% 100%,16px 100%,0 50%);filter:drop-shadow(0 3px 0 #0000001a)}
+.hang:before{content:'';position:absolute;left:12px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--cream);box-shadow:inset 0 1px 2px #0004}
+.hang:after{content:'';position:absolute;inset:4px 5px 4px 20px;border:1.5px dashed currentColor;opacity:.45;pointer-events:none}
+.hang.y{background:var(--yel);color:var(--ink);transform:rotate(-3deg)}
+.hang.r{background:var(--red);color:#fff;transform:rotate(2deg)}
+.hang.c{background:#fff;color:var(--red);transform:rotate(-1.5deg);box-shadow:inset 0 0 0 2px var(--red)}
+.hero-art .art-note{position:absolute;bottom:-6px;right:-10px;left:auto;background:var(--red);border:0;border-radius:0;box-shadow:none;font-size:18px;padding:10px 18px 10px 34px;transform:rotate(-6deg)}
+.hero-art .art-note:before{background:#fff}
+.hero-art .art-note i{display:none}
 
 /* 按钮：厚游戏按钮 */
 button{border-radius:99px;font-weight:800}
@@ -103,8 +122,18 @@ input,form select,.checks{border:1.5px solid var(--yel-l);border-radius:12px;bac
 .actions{margin-top:12px}
 .actions button:not(.primary):not(.btn-y){background:#fff;border:1.5px solid var(--yel)}
 
-.how b{color:var(--red)}
+.how b{color:var(--red);font-size:16px}
+.how h2{font-size:24px}.how strong{font-size:18px}.how span{font-size:16px}
+footer{font-size:14px}
+.section-note{font-size:15px}
+.tabs button{font-size:16px}
 #toast{background:var(--ink);border-radius:99px}
+
+/* 拼友卡：只露昵称、餐品、金额 */
+.mate{display:grid;grid-template-columns:1fr auto;gap:2px 10px;background:#FFF8EC;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:13px}
+.mate b{font-size:14px}.mate span:not(.tag){grid-column:1}.mate .tag{grid-column:2;grid-row:1/3;align-self:center}.mate small{grid-column:1/-1;color:var(--mut);font-size:12px}
+.ticket .ticket-note{display:block;color:var(--mut);font-size:12px;margin-top:8px}
+.card .t .allow{display:inline-block;width:auto;font-size:12px;font-weight:700;color:var(--ink);background:#FFF1CF;border-radius:99px;padding:1px 9px;margin:3px 0;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 
 /* 理想版模拟 */
 .sm-link{background:none;border:1.5px dashed var(--yel);padding:6px 12px;font-size:12px;color:var(--ink);box-shadow:none}
@@ -128,9 +157,19 @@ input,form select,.checks{border:1.5px solid var(--yel-l);border-radius:12px;bac
 
 @media(max-width:820px){.grid{grid-template-columns:1fr}}
 @media(max-width:560px){
-  .topbar{padding:14px 16px 12px}
-  .badge{font-size:10px;padding:4px 9px}
-  .hero-art{width:110px;height:110px;opacity:1;bottom:70px}
+  .topbar{padding:30px 16px 24px;min-height:160px;align-items:start}
+  .wordmark img{width:76px;height:76px}
+  .wm-text b{font-size:34px}
+  .wm-text small{font-size:14px}
+  .badge{font-size:10px;padding:4px 9px;position:absolute;right:12px;top:10px}
+  .topbar{position:relative}
+  .hero{display:flex;flex-direction:column;align-items:stretch}
+  .hero .intro{font-size:20px;max-width:none}
+  .hero .eyebrow{font-size:20px}
+  .hero-notes{gap:12px 10px}.hang{font-size:16px}
+  .hero-art{position:relative;right:auto;bottom:auto;width:230px;height:230px;opacity:1;align-self:center;margin-top:10px}
+  .hero-art .art-note{display:inline-flex;font-size:16px;right:-30px;bottom:-4px}
+  .store-panel .eyebrow{font-size:18px}
   .card{display:flex}
   .card .t b{font-size:14px}
 }

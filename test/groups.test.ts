@@ -127,3 +127,40 @@ test('SQLite survives a separate connection and refuses mixing demo with live', 
     assert.throws(() => new Repository(join(dir, 'app.sqlite'), 'live'), /MODE_MISMATCH/);
   } finally { for (const r of repos.splice(0)) r.close(); rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('at most three people share one meal (host plus two)', () => {
+  const s = setup();
+  assert.equal(s.create('host', '1000', 30, 3).people, 3);
+  assert.throws(() => s.create('host', '1000', 30, 4), /最多三人/);
+});
+
+test('tail4 and pickup codes are visible only to their owner; counter sees all', () => {
+  const s = setup();
+  const g = s.create();
+  s.groups.join(g.id, 'guest', joinInput);
+  s.groups.action(g.id, 'guest', 'confirm');
+  const ordered = s.groups.action(g.id, 'host', 'ordered');
+  const codes = ordered.members.map(m => m.pickupCode);
+  assert.ok(codes.every(c => /^\d{4}$/.test(c!)) && new Set(codes).size === 2);
+  const hostView = s.groups.view(ordered, 'host');
+  const guestInHost = hostView.members.find(m => m.id !== hostView.hostId)!;
+  assert.equal(guestInHost.tail4, undefined);
+  assert.equal(guestInHost.pickupCode, undefined);
+  assert.equal(hostView.members.find(m => m.id === hostView.hostId)!.pickupCode, codes[0]);
+  assert.deepEqual(s.groups.counter(ordered).members.map(m => m.pickupCode), codes);
+  assert.equal(s.groups.counter(ordered).members[1]!.tail4, '2000');
+});
+
+test('each member collects their own share; the group ends when everyone has', () => {
+  const s = setup();
+  const g = s.create();
+  s.groups.join(g.id, 'guest', joinInput);
+  s.groups.action(g.id, 'guest', 'confirm');
+  assert.throws(() => s.groups.action(g.id, 'guest', 'collect'), /还没下单/);
+  s.groups.action(g.id, 'host', 'ordered');
+  const half = s.groups.action(g.id, 'guest', 'collect');
+  assert.equal(half.state, 'ordered');
+  assert.equal(s.groups.view(half, 'host').members.find(m => m.id !== half.hostId)!.collected, true);
+  assert.throws(() => s.groups.action(g.id, 'guest', 'collect'), /已经取过/);
+  assert.equal(s.groups.action(g.id, 'host', 'collect').state, 'picked-up');
+});

@@ -65,11 +65,23 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     }
     return c.json({ group: groups.view(g, c.get('device')) });
   });
+  if (mode === 'demo') app.get('/api/demo/groups/:id/counter', c => {
+    const g = groups.get(c.req.param('id'));
+    if (!groups.view(g, c.get('device')).viewerId) throw new DomainError('只有本单成员可以打开演示的门店视角', 403);
+    return c.json({ counter: groups.counter(g) });
+  });
+  if (mode === 'demo') app.post('/api/demo/groups/:id/collect-others', c => {
+    let g = groups.get(c.req.param('id'));
+    const me = groups.view(g, c.get('device')).viewerId ?? (() => { throw new DomainError('只有本单成员可以操作', 403); })();
+    if (g.state !== 'ordered') throw new DomainError('还没下单，或这单已经取完', 409);
+    for (const m of g.members) if (m.id !== me && !m.collectedAt && m.device !== c.get('device')) g = groups.action(g.id, m.device, 'collect');
+    return c.json({ group: groups.view(g, c.get('device')) });
+  });
   app.post('/api/groups/:id/join', async c => {
     const g = groups.join(c.req.param('id'), c.get('device'), await c.req.json());
     return c.json({ group: groups.view(g, c.get('device')) });
   });
-  for (const action of ['confirm', 'kick', 'ordered', 'picked-up'] as const) app.post(`/api/groups/:id/${action}`, async c => {
+  for (const action of ['confirm', 'kick', 'ordered', 'picked-up', 'collect'] as const) app.post(`/api/groups/:id/${action}`, async c => {
     const body = await c.req.json();
     const g = groups.action(c.req.param('id'), c.get('device'), action, body?.memberId);
     return c.json({ group: groups.view(g, c.get('device')) });

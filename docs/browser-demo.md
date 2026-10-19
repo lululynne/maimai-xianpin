@@ -29,3 +29,12 @@ https://lululynne.github.io/maimai-xianpin/
 - 390×844 手机视口：首页与发起弹窗无横向溢出；图片加载失败 0，浏览器 warn/error 0。
 
 上线状态以 GitHub Actions 成功的 Pages deployment 和公网地址回读为准。
+
+## 公网验收回执
+
+- 发布源提交：`b2a27598fec445254052598d151c97accecf7f72`。
+- [GitHub Actions 39221835186](https://github.com/lululynne/maimai-xianpin/actions/runs/39221835186) 的 build、76 项测试、类型检查、构建和 deploy 全部成功；部署于 2026-10-19 16:19（北京时间）完成。
+- 公网首页和两件内容哈希脚本返回 HTTP 200，下载字节与本地构建逐件一致。
+- Chrome 公网页面显示「在线试玩 · 独立模拟」、6 张当前招募卡（5 张广场演示 + 1 张自己的体验卡）；图片加载失败 0，warn/error 0。
+- README 顶部已经提供在线试玩链接，仓库 About 网站栏已设置同一地址。
+- 状态：已公开上线并通过上述验收；此回执不代表 `/mcp` 卡已完成。

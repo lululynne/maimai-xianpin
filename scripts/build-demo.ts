@@ -29,11 +29,13 @@ const engineName = await asset('demo-engine', 'js', compiled.outputFiles[0]!.con
 let js = await readFile(resolve(root, 'public/app.js'), 'utf8');
 js = js.replace(/(['"])\/assets\//g, '$1./assets/');
 const appName = await asset('app', 'js', js);
+const i18nName = await asset('i18n', 'js', await readFile(resolve(root, 'public/i18n.js')));
 const styleName = await asset('style', 'css', await readFile(resolve(root, 'public/style.css')));
 const themeName = await asset('theme', 'css', await readFile(resolve(root, 'public/theme.css')));
 let html = await readFile(resolve(root, 'public/index.html'), 'utf8');
 html = html.replace(/href="\/style\.css"/, `href="./${styleName}"`)
   .replace(/href="\/theme\.css[^\"]*"/, `href="./${themeName}"`)
+  .replace(/src="\/i18n\.js[^\"]*"/, `src="./${i18nName}"`)
   .replace(/<script src="\/app\.js[^\"]*" defer><\/script>/, `<script src="./${engineName}" defer></script>\n  <script src="./${appName}" defer></script>`)
   .replace(/(src|href)="\//g, '$1="./')
   .replace('</head>', '<meta name="description" content="麦麦现拼在线试玩：同店陌生人各选所需，现场拼一份大套餐。真实菜单快照，独立模拟，不会真实下单或扣款。">\n</head>')

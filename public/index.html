@@ -8,16 +8,18 @@
   <title>麦麦现拼 · 同店的人，一起吃刚刚好</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/theme.css?v=20261019-menu">
+  <script src="/i18n.js?v=20261019-language" defer></script>
   <script src="/app.js?v=20261019-loop" defer></script>
 </head>
 <body>
-  <header class="topbar"><a class="wordmark" href="/"><img src="/assets/theme/pindan-icon.png" alt=""><span class="wm-text"><b>麦麦<span>现拼</span></b><small>新鲜拼单 · 省钱满足 · 现场即取</small></span></a><span id="mode-badge" class="badge">连接中</span></header>
+  <header class="topbar"><a class="wordmark" href="/"><img src="/assets/theme/pindan-icon.png" alt=""><span class="wm-text"><b>麦麦<span>现拼</span></b><small>新鲜拼单 · 省钱满足 · 现场即取</small></span></a><div class="header-tools"><span id="mode-badge" class="badge">连接中</span><div class="language-switch" role="group" aria-label="Language" data-no-i18n><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button></div></div></header>
   <main>
     <section class="hero">
       <div><p class="eyebrow">一份大套餐，拼单享美味</p><h1>刚好同一家店，<br>一起拼<span>刚刚好。</span></h1><p class="intro">大套餐一个人吃不完？<br>和同店的人拼一份，各取所需，少一点浪费。</p><div class="hero-notes"><span class="hang y">只到店自取</span><span class="hang r">各自选餐品</span><span class="hang c">算清每人那份</span></div></div>
       <div class="hero-art" aria-label="戴小帽子拿薯条的小粉水母"><span class="title-tag">拼拼大使</span><img class="mascot" src="/assets/theme/jelly-cap.png" alt=""><span class="art-note hang r">一人吃不完，两人刚刚好</span></div>
     </section>
     <div id="demo-note" class="notice" hidden></div>
+    <p id="region-note" class="region-note">菜单来自中国门店，价格为人民币；英文餐名为便于理解的译名。</p>
     <p id="window-note" class="window-note"></p>
     <section class="store-panel"><div><label class="eyebrow" for="store"><img class="ico" src="/assets/theme/pin-store-icon.png" alt="">先看看你在的这家店</label><div id="store-chips" class="chips" role="group" aria-label="选门店"></div><select id="store" aria-label="选择门店" disabled><option>正在查看门店…</option></select><p id="store-address" class="muted"></p></div><button id="new-group" class="btn-y" disabled><img class="ico" src="/assets/theme/pindan-icon.png" alt="">发起拼单</button></section>
     <nav class="tabs" aria-label="拼单列表"><button class="active" data-tab="board">店里正在拼 <span id="board-count">0</span></button><button data-tab="mine">我的拼单 <span id="mine-count">0</span></button><button data-tab="done">拼单成功 <span id="done-count">0</span></button><button id="refresh" class="refresh">刷新</button></nav>

@@ -3,7 +3,21 @@ import { readFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import type { Group } from './domain/groups.js';
 
-export class Repository {
+export interface GroupRepository {
+  readonly mode: 'live' | 'demo';
+  transaction<T>(action: () => T): T;
+  sweep(now: number): void;
+  get(id: string): Group | undefined;
+  all(): Group[];
+  insert(group: Group): void;
+  save(group: Group): void;
+  joinCount(device: string, now: number): number;
+  recordJoin(device: string, now: number): void;
+  getMeta(key: string): string | undefined;
+  setMeta(key: string, value: string): void;
+}
+
+export class Repository implements GroupRepository {
   readonly db: DatabaseSync;
   constructor(path: string, readonly mode: 'live' | 'demo') {
     if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
@@ -42,5 +56,7 @@ export class Repository {
     return Number(this.db.prepare('SELECT COUNT(*) AS n FROM join_events WHERE device_id = ? AND at > ?').get(device, now - 10 * 60_000)?.n ?? 0);
   }
   recordJoin(device: string, now: number) { this.db.prepare('INSERT INTO join_events(device_id,at) VALUES(?,?)').run(device, now); }
+  getMeta(key: string): string | undefined { return this.db.prepare('SELECT value FROM app_meta WHERE key=?').get(key)?.value as string | undefined; }
+  setMeta(key: string, value: string) { this.db.prepare('INSERT OR REPLACE INTO app_meta(key,value) VALUES(?,?)').run(key, value); }
   close() { this.db.close(); }
 }

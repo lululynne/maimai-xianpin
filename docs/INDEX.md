@@ -1,6 +1,7 @@
 # 施工索引
 
 - `STATUS.md`：当前批次与下一步。
+- `browser-demo.md`：GitHub Pages 在线试玩的构建方式、独立模拟范围及验收。
 - `briefs/20261019-maimai-xianpin-more-meals.md`：当前午晚市补菜单卡。
 - `briefs/20261018-maimai-xianpin-ui-theme-merge.md`：主题及新规则的合并卡。
 - `menu-capture-20261019.md`：提前预约查询、后台价格复查及第四店上游限制。

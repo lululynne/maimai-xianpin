@@ -1,6 +1,6 @@
 import { randomInt, randomUUID } from 'node:crypto';
 import type { Meal } from '../catalog.js';
-import type { Repository } from '../db.js';
+import type { GroupRepository } from '../db.js';
 import { allocateShares } from './shares.js';
 
 export type State = 'open' | 'full' | 'ordered' | 'picked-up' | 'expired';
@@ -70,7 +70,7 @@ export function windowAt(at: number): { open: boolean; end?: number; next: strin
 }
 
 export class Groups {
-  constructor(readonly repo: Repository, private readonly now = Date.now) {}
+  constructor(readonly repo: GroupRepository, private readonly now = Date.now) {}
   private current(id: string): Group {
     this.repo.sweep(this.now());
     return this.repo.get(id) ?? fail('拼单不存在或已删除', 404);

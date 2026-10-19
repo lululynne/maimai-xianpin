@@ -22,7 +22,8 @@ const messages = { MCD_MCP_CONNECT_FAILED: '菜单连接暂时不可用，请稍
 let toastTimer;
 function toast(text) { $('#toast').textContent = text; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').hidden = true, 7000); }
 async function api(path, body) {
-  const res = await fetch('/api' + path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const request = globalThis.maimaiDemo?.fetch ?? fetch;
+  const res = await request('/api' + path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const data = await res.json();
   if (!res.ok) throw new Error(messages[data.error] ?? data.error ?? '暂时没有连上，请重试');
   return data;
@@ -331,8 +332,9 @@ setInterval(() => { if (!document.hidden && state.config) refreshBoard().catch(e
   try {
     artManifest = await fetch('/assets/manifest.json').then(r => r.json()).catch(() => ({})); applyArt();
     state.config = await api('/config'); syncClock(state.config.serverNow);
-    $('#mode-badge').textContent = state.config.mode === 'demo' ? '演示模式 · 真实菜单快照' : '实时菜单';
+    $('#mode-badge').textContent = globalThis.maimaiDemo ? '在线试玩 · 独立模拟' : state.config.mode === 'demo' ? '演示模式 · 真实菜单快照' : '实时菜单';
     if (state.config.mode === 'demo') { $('#demo-note').hidden = false; $('#demo-note').textContent = `演示模式${state.config.menuPreview !== 'auto' ? ' · ' + ({breakfast:'早餐',lunch:'午市',dinner:'晚市'}[state.config.menuPreview] ?? '') + '预览' : ''}：使用真实接口快照（最近采集 ${chinaDate(state.config.capturedAt)}），拼单、昵称和尾号为虚构。仅展示已采集套餐，不会真实下单${state.config.clockSpeed > 1 ? '；计时加速 ' + state.config.clockSpeed + ' 倍' : ''}。`; }
+    if (globalThis.maimaiDemo) $('#demo-note').textContent += ' 体验记录仅保存在当前标签页，每位访客互不影响；昵称和尾号可以随意填写。';
     state.stores = (await api('/stores')).stores;
     $('#store').innerHTML = state.stores.map(s => `<option value="${s.code}">${escape(s.name)}</option>`).join('');
     $('#store').disabled = false; $('#new-group').disabled = false; renderStoreChips();

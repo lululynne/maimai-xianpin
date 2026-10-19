@@ -48,7 +48,7 @@ async function refreshDemoBoard(catalog: Catalog, groups: Groups, now: () => num
   for (const store of STORE_CODES) {
     const version = `rotating-meals-v2:${catalog.activePeriod()}`;
     const key = `demo-board:${store}`;
-    const previous = groups.repo.db.prepare('SELECT value FROM app_meta WHERE key=?').get(key)?.value;
+    const previous = groups.repo.getMeta(key);
     groups.list(store); // Run normal expiry before finding vacant demo slots.
     const choices = await demoMealChoices(catalog, store);
     if (!choices.length) continue;
@@ -94,6 +94,6 @@ async function refreshDemoBoard(catalog: Catalog, groups: Groups, now: () => num
       groups.action(g.id, mate, 'confirm');
       if (x.order) groups.action(g.id, host, 'ordered');
     }
-    groups.repo.db.prepare('INSERT OR REPLACE INTO app_meta(key,value) VALUES(?,?)').run(key, version);
+    groups.repo.setMeta(key, version);
   }
 }

@@ -13,7 +13,8 @@
     "dev": "node --env-file-if-exists=.env --import tsx src/server.ts",
     "capture:fixtures": "node --env-file-if-exists=.env --import tsx scripts/capture-fixtures.ts",
     "capture:daypart": "node --env-file-if-exists=.env --import tsx scripts/capture-daypart.ts",
-    "validate:catalog": "node --import tsx scripts/validate-catalog.ts"
+    "validate:catalog": "node --import tsx scripts/validate-catalog.ts",
+    "build:demo": "node --import tsx scripts/build-demo.ts"
   },
   "dependencies": {
     "@hono/node-server": "2.1.5",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
+    "esbuild": "0.28.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2"
   },

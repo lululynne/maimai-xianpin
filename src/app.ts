@@ -6,7 +6,7 @@ import type { Catalog } from './catalog.js';
 import { windowAt, pickHostDefault, DomainError, type Groups } from './domain/groups.js';
 import { demoMealChoices, demoNickname, seedDemoBoard } from './demo-board.js';
 
-export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string; menuPreview?: string }) {
+export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'live' | 'demo'; now: () => number; speed: number; capturedAt: string; menuPreview?: string; demoDevice?: string }) {
   const { catalog, groups, mode, now } = options;
   const app = new Hono<{ Variables: { device: string } }>();
   app.use('*', async (c, next) => {
@@ -22,7 +22,9 @@ export function createApp(options: { catalog: Catalog; groups: Groups; mode: 'li
     const origin = c.req.header('Origin');
     if ((origin && origin !== new URL(c.req.url).origin) || c.req.header('Sec-Fetch-Site') === 'cross-site') return c.json({ error: '不接受跨站请求' }, 403);
     if (c.req.method === 'POST' && !c.req.header('Content-Type')?.startsWith('application/json')) return c.json({ error: '请使用 JSON 请求' }, 415);
-    let device = getCookie(c, 'maimai_device');
+    // The browser-only demo cannot set a Cookie request header. Its tab identity
+    // is injected internally, never accepted from an API argument or in live mode.
+    let device = mode === 'demo' && options.demoDevice ? options.demoDevice : getCookie(c, 'maimai_device');
     if (!device || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(device)) device = randomUUID();
     setCookie(c, 'maimai_device', device, { httpOnly: true, sameSite: 'Strict', secure: new URL(c.req.url).protocol === 'https:', path: '/', maxAge: 24 * 60 * 60 });
     c.set('device', device);

@@ -2,9 +2,13 @@
 
 **[🍟 在线试玩：点开就能拼](https://lululynne.github.io/maimai-xianpin/)** · **[English demo](https://lululynne.github.io/maimai-xianpin/?lang=en)** · 无需安装、无需 Token，手机和电脑都能体验。
 
-> 🍟 **麦门整活，想把汉堡回车键带回家！**
+> **独立作品展示 · 2026**
 >
-> 这是我们的麦当劳 MCP 开发者大赛作品。喜欢「同店陌生人现场拼大套餐」这个点子的话，欢迎点亮右上角的 **⭐ Star**，帮我们冲进前 100 名。
+> 「麦麦现拼」是麦当劳 MCP 开发者大赛的独立参赛作品。本仓库保留 2026-10-19 完成的公开演示版本，供作品展示与按原许可复现。
+
+项目作者：**lululynne**；主题插画：**纳纳**。公开演示基线见 [public-demo-2026-10-19](https://github.com/lululynne/maimai-xianpin/tree/public-demo-2026-10-19)。
+
+后续新功能在独立私有工作区开发。本仓库保留已公开的代码、素材和原有许可，不再作为后续功能的公开开发入口。
 
 到店自取，让同一家店的陌生人现场拼一个大套餐。
 
@@ -138,7 +142,7 @@ npm run typecheck
 
 原始探路响应只留 `.local/probes/`，审阅脱敏后才导出 `fixtures/`。不要把新接口的任意响应直接推入仓库。
 
-## 施工与验收
+## 实现与验证（参赛版本）
 
 - [当前状态](docs/STATUS.md)、[验证记录](docs/validation.md)、[原方案和施工卡](docs/INDEX.md)。
 - [美术与图标覆盖](docs/art-slots.md)：纳纳主题和 27 件图片已接入；玉米、苹果等无专图时使用拼单袋。
@@ -151,7 +155,7 @@ npm run typecheck
 - [开发者大赛](https://github.com/M-China/mcd-developer-innovation-challenge)
 - `CONTEST_DECLARATION.md` 为官方模板原字节副本，来源与哈希见 [校验记录](docs/official-sources.md)。
 
-代码与纳纳的图片按梅宝决定一并公开；许可范围见下文。报名 issue 和最终提交由梅宝本人处理。
+本仓库保留参赛版本的公开代码与纳纳的图片；原有许可范围见下文。赛事链接与声明作为历史来源保留。
 
 ## 版权声明
 
